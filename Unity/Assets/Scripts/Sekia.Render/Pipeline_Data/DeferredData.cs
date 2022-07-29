@@ -100,13 +100,13 @@ namespace Sekia
         ProfilingSampler m_ProfilingSamplerDeferredFogPass = new ProfilingSampler(DeferredLights.k_DeferredPass);
         ProfilingSampler m_ProfilingSamplerClearStencilPartialPass = new ProfilingSampler(DeferredLights.k_SetupLightConstants);
 
-        private LightCookieManager m_LightCookieManager;
+        private LightCookieData m_LightCookieManager;
 
         internal struct InitParams
         {
             public Material stencilDeferredMaterial;
 
-            public LightCookieManager lightCookieManager;
+            public LightCookieData lightCookieManager;
         }
 
         internal DeferredData(InitParams initParams, bool useNativeRenderPass = false)

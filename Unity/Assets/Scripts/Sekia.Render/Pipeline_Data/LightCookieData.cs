@@ -465,7 +465,7 @@ namespace Sekia
 
         internal bool IsKeywordLightCookieEnabled { get; private set; }
 
-        public LightCookieManager(ref Settings settings)
+        public LightCookieData(ref Settings settings)
         {
             m_Settings = settings;
             m_WorkMem = new WorkMemory();

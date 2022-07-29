@@ -62,7 +62,7 @@ namespace Sekia
         NativeArray<uint> m_TileMasks;
         GraphicsBuffer m_TileMasksBuffer;
 
-        private LightCookieManager m_LightCookieManager;
+        private LightCookieData m_LightCookieManager;
         int m_WordsPerTile;
         float m_ZBinScale;
         float m_ZBinOffset;
@@ -72,14 +72,14 @@ namespace Sekia
 
         internal struct InitParams
         {
-            public LightCookieManager lightCookieManager;
+            public LightCookieData lightCookieManager;
             public bool forwardPlus;
 
             static internal InitParams Create()
             {
                 InitParams p;
                 {
-                    var settings = LightCookieManager.Settings.Create();
+                    var settings = LightCookieData.Settings.Create();
                     var asset = UniversalRenderPipeline.asset;
                     if (asset)
                     {
@@ -87,7 +87,7 @@ namespace Sekia
                         settings.atlas.resolution = asset.additionalLightsCookieResolution;
                     }
 
-                    p.lightCookieManager = new LightCookieManager(ref settings);
+                    p.lightCookieManager = new LightCookieData(ref settings);
                     p.forwardPlus = false;
                 }
                 return p;

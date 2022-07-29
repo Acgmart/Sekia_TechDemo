@@ -95,10 +95,10 @@ namespace Sekia
                 GlobalData.Instance.m_RenderingMode = asset.m_RenderingMode;
                 GlobalData.Instance.m_Clustering = asset.m_RenderingMode == RenderingMode.ForwardPlus;
 
-                var settings = LightCookieManager.Settings.Create();
+                var settings = LightCookieData.Settings.Create();
                 settings.atlas.format = asset.additionalLightsCookieFormat;
                 settings.atlas.resolution = asset.additionalLightsCookieResolution;
-                LightCookieManager m_LightCookieManager = new LightCookieManager(ref settings);
+                LightCookieData m_LightCookieManager = new LightCookieData(ref settings);
 
                 ForwardData.InitParams forwardInitParams;
                 forwardInitParams.lightCookieManager = m_LightCookieManager;
