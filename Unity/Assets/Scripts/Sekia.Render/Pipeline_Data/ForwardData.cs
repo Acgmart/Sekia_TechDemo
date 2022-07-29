@@ -80,7 +80,7 @@ namespace Sekia
                 InitParams p;
                 {
                     var settings = LightCookieData.Settings.Create();
-                    var asset = UniversalRenderPipeline.asset;
+                    var asset = SekiaPipeline.Instance.asset;
                     if (asset)
                     {
                         settings.atlas.format = asset.additionalLightsCookieFormat;

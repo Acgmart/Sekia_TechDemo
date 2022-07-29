@@ -1151,7 +1151,7 @@ namespace Sekia
 
             if (SekiaPipeline.Instance.asset)
             {
-                m_StoreActionsOptimizationSetting = UniversalRenderPipeline.asset.storeActionsOptimization;
+                m_StoreActionsOptimizationSetting = SekiaPipeline.Instance.asset.storeActionsOptimization;
             }
 
             m_UseOptimizedStoreActions = m_StoreActionsOptimizationSetting != StoreActionsOptimization.Store;
