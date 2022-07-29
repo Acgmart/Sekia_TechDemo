@@ -8,7 +8,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Sekia
 {
-    internal class LightCookieManager : IDisposable
+    internal class LightCookieData : IDisposable
     {
         static class ShaderProperty
         {
