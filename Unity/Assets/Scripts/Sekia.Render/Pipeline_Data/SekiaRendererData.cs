@@ -106,6 +106,9 @@ namespace Sekia
             if (!m_RendererFeatures.Contains(null))
                 return true;
 
+            if (m_RendererFeatures.Count == 0)
+                return true;
+
             Debug.LogError($"{name} is missing RendererFeatures\nThis could be due to missing scripts or compile error.", this);
             return false;
         }

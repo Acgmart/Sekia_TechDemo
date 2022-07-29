@@ -958,8 +958,8 @@ namespace Sekia
 
         void UploadAdditionalLights(CommandBuffer cmd, ref LightData lightData, ref WorkSlice<LightCookieMapping> validLightMappings, ref WorkSlice<Vector4> validUvRects)
         {
-            Assertions.Assert.IsTrue(m_AdditionalLightsCookieAtlas != null);
-            Assertions.Assert.IsTrue(m_AdditionalLightsCookieShaderData != null);
+            UnityEngine.Assertions.Assert.IsTrue(m_AdditionalLightsCookieAtlas != null);
+            UnityEngine.Assertions.Assert.IsTrue(m_AdditionalLightsCookieShaderData != null);
 
             cmd.SetGlobalTexture(ShaderProperty.additionalLightsCookieAtlasTexture, m_AdditionalLightsCookieAtlas.AtlasTexture);
             cmd.SetGlobalFloat(ShaderProperty.additionalLightsCookieAtlasTextureFormat, (float)GetLightCookieShaderFormat(m_AdditionalLightsCookieAtlas.AtlasTexture.rt.graphicsFormat));
