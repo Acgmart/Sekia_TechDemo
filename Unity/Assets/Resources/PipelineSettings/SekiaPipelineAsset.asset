@@ -15,8 +15,6 @@ MonoBehaviour:
   m_RendererDataList:
   - {fileID: 11400000, guid: 42fa936401fdd8943838e4ca706aefde, type: 2}
   m_DefaultRendererIndex: 0
-  m_RequireDepthTexture: 0
-  m_RequireOpaqueTexture: 0
   m_OpaqueDownsampling: 1
   m_SupportsTerrainHoles: 1
   m_SupportsHDR: 1
@@ -88,3 +86,4 @@ MonoBehaviour:
       passOperation: 2
       failOperation: 0
       zFailOperation: 0
+  postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
