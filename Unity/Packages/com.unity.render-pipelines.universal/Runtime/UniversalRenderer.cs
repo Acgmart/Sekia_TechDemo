@@ -39,11 +39,11 @@ namespace UnityEngine.Rendering.Universal
     public sealed partial class UniversalRenderer : ScriptableRenderer
     {
 #if UNITY_SWITCH
-        const GraphicsFormat k_DepthStencilFormat = GraphicsFormat.D24_UNorm_S8_UInt;
-        const int k_DepthBufferBits = 24;
+        public const GraphicsFormat k_DepthStencilFormat = GraphicsFormat.D24_UNorm_S8_UInt;
+        public const int k_DepthBufferBits = 24;
 #else
         public const GraphicsFormat k_DepthStencilFormat = GraphicsFormat.D32_SFloat_S8_UInt;
-        const int k_DepthBufferBits = 32;
+        public const int k_DepthBufferBits = 32;
 #endif
 
         static readonly List<ShaderTagId> k_DepthNormalsOnly = new List<ShaderTagId> { new ShaderTagId("DepthNormalsOnly") };
