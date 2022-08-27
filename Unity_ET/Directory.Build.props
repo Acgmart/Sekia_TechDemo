@@ -1,0 +1,8 @@
+﻿<Project>
+  <PropertyGroup>
+    <LangVersion>10.0</LangVersion>
+    <NoWarn>0169,0649,3021,0414</NoWarn>
+    <!-- 将过期属性/无用属性等IDE警告提升到错误级别 -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

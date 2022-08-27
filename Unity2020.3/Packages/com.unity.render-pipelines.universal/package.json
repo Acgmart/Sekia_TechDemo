@@ -1,0 +1,32 @@
+{
+  "name": "com.unity.render-pipelines.universal",
+  "description": "The Universal Render Pipeline (URP) is a prebuilt Scriptable Render Pipeline, made by Unity. URP provides artist-friendly workflows that let you quickly and easily create optimized graphics across a range of platforms, from mobile to high-end consoles and PCs.",
+  "version": "10.10.0",
+  "unity": "2020.3",
+  "unityRelease": "18f1",
+  "displayName": "Universal RP",
+  "dependencies": {
+    "com.unity.mathematics": "1.1.0",
+    "com.unity.render-pipelines.core": "10.10.0",
+    "com.unity.shadergraph": "10.10.0"
+  },
+  "keywords": [
+    "graphics",
+    "performance",
+    "rendering",
+    "mobile",
+    "render",
+    "pipeline"
+  ],
+  "_upm": {
+    "changelog": "### Fixed\n- Fixed an issue where ShadowCaster2Ds were sometimes being rendered twice in the editor while in playmode.\n- Fixed SSAO to work in VR mode. Normal buffer stores normals in world space.\n- Fixed an issue in where the _ScreenParams is not setup correctly."
+  },
+  "upmCi": {
+    "footprint": "c5efa0563f9d479effe96f493d7e96011ef7ba5a"
+  },
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/Graphics.git",
+    "type": "git",
+    "revision": "55a6a091fb748b0ee7095547407fb2d23364f089"
+  }
+}

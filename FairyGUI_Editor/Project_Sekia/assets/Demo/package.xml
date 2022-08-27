@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="hfevgwn7">
+  <resources>
+    <component id="xexc0" name="UILogin.xml" path="/" exported="true"/>
+    <component id="verw2" name="UILobby.xml" path="/" exported="true"/>
+    <component id="verw3" name="UIHelp.xml" path="/" exported="true"/>
+    <component id="verw6" name="InputLabel.xml" path="/资源/输入框/"/>
+    <image id="verw7" name="8.png" path="/资源/图片/" scale="9grid" scale9grid="30,25,60,50"/>
+    <component id="k7rt8" name="Button10.xml" path="/资源/按钮/"/>
+    <image id="k7rt9" name="b4.png" path="/资源/图片/" scale="9grid" scale9grid="40,38,93,5"/>
+    <image id="k7rta" name="b5.png" path="/资源/图片/" scale="9grid" scale9grid="40,31,83,5"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

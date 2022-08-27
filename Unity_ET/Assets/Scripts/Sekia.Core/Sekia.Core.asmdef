@@ -1,0 +1,16 @@
+{
+    "name": "Sekia.Core",
+    "rootNamespace": "",
+    "references": [
+        "Unity.ThirdParty"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

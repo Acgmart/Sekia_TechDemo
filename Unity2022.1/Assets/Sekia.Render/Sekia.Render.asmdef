@@ -1,0 +1,26 @@
+﻿{
+    "name": "Sekia.Render",
+    "rootNamespace": "",
+    "references": [
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipeline.Universal.ShaderLibrary",
+        "Unity.Mathematics",
+        "Unity.Burst",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.visualeffectgraph",
+            "expression": "0.0.1",
+            "define": "VISUAL_EFFECT_GRAPH_0_0_1_OR_NEWER"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,0 +1,4 @@
+[submodule "FairyGUI_Editor/FairyGUI-unity"]
+	path = FairyGUI_Editor/FairyGUI-unity
+	url = https://github.com/fairygui/FairyGUI-unity.git
+	ignore = all
