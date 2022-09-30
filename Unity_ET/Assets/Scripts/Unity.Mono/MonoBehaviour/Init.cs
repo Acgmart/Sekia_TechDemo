@@ -22,7 +22,7 @@ namespace ET
 				Log.Error(e.ExceptionObject.ToString());
 			};
 				
-			SynchronizationContext.SetSynchronizationContext(ThreadSynchronizationContext.Instance);
+			Game.AddSingleton<MainThreadSynchronizationContext>();
 
 			// 命令行参数
 			string[] args = "".Split(" ");
@@ -30,14 +30,13 @@ namespace ET
 				.WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
 				.WithParsed(Game.AddSingleton);
 			
-			Game.AddSingleton<RandomGenerator>();
 			Game.AddSingleton<TimeInfo>();
 			Game.AddSingleton<Logger>().ILog = new UnityLogger();
 			Game.AddSingleton<ObjectPool>();
 			Game.AddSingleton<IdGenerater>();
 			Game.AddSingleton<EventSystem>();
-			Game.AddSingleton<NetServices>();
-			Game.AddSingleton<Root>();
+			Game.AddSingleton<TimerComponent>();
+			Game.AddSingleton<CoroutineLockComponent>();
 			
 			ETTask.ExceptionHandler += Log.Error;
 
@@ -52,6 +51,7 @@ namespace ET
 		private void LateUpdate()
 		{
 			Game.LateUpdate();
+			Game.FrameFinishUpdate();
 		}
 
 		private void OnApplicationQuit()

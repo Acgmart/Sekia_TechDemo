@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading;
 
 namespace ET
 {
@@ -8,10 +8,7 @@ namespace ET
         [StaticField]
         public static NetThreadComponent Instance;
         
-        public const int checkInteral = 2000;
-        public const int recvMaxIdleTime = 60000;
-        public const int sendMaxIdleTime = 60000;
-
-        public ThreadSynchronizationContext ThreadSynchronizationContext { get; set; }
+        public Thread thread;
+        public bool isStop;
     }
 }

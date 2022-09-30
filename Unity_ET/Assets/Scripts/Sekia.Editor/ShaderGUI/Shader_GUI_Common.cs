@@ -1,18 +1,30 @@
-﻿using UnityEditor.Presets;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
-using UnityEngine.Experimental.Rendering;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 
 namespace UnityEditor
 {
     public class Shader_GUI_Common : ShaderGUI
     {
+        //全局状态
+        public static bool _ShowMateialTool = false; //默认显示材质工具
+        public static bool _UseOriginalInspector = false;
+        public static Material _CurrentTarget;
+
+        //合并贴图通道用属性
+        public static bool _ShowMateralTool_CombineCustomMap = false;
+        public static Texture texture1;
+        public static Texture texture2;
+        public static Texture texture3;
+        public static int texture1ChannelIndex;
+        public static int texture2ChannelIndex;
+        public static int texture3ChannelIndex;
+        public static float RChannelDefaultValue;
+        public static float GChannelDefaultValue;
+        public static float BChannelDefaultValue;
+        public static string _textureTargetFolder;
+        public static string _textureTargetName;
+
         //显示一个归一化的向量 用欧拉角表示
         public static void ShowNormalizeVector(MaterialEditor materialEditor, string _VectorName, string _Title)
         {
@@ -69,6 +81,181 @@ namespace UnityEditor
                 material.SetVector(_VectorName, new Vector4(_NewToDir.x, _NewToDir.y, _NewToDir.z, 0));
             }
         }
+
+        public static bool ShowDefaultOrCustomGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
+        {
+            Material material = materialEditor.target as Material;
+
+            if (material != _CurrentTarget)
+                _CurrentTarget = material; //更换材质时 检查新材质
+
+            if (_UseOriginalInspector)
+            {
+                if (GUILayout.Button("Change To Custom UI"))
+                    _UseOriginalInspector = false;
+                EditorGUILayout.Space();
+                materialEditor.PropertiesDefaultGUI(properties);
+                return true;
+            }
+
+            if (GUILayout.Button("Show All properties"))
+                _UseOriginalInspector = true;
+            EditorGUILayout.Space();
+            return false;
+        }
+
+        #region 公共代码 文件收集-读写-关键字设置
+        //对选中项 获取选中的所有非meta文件
+        public static List<string> GetAllSelectedFilesWithNoMeta()
+        {
+            List<string> allSelectedFiles = new List<string>();
+            List<string> allSelectedDirs = new List<string>();
+            foreach (var obj in Selection.objects)
+            {
+                string objPath = AssetDatabase.GetAssetPath(obj);
+                DirectoryInfo dir = new DirectoryInfo(objPath);
+
+                //Debug.LogError("遍历选中项(需要激活Inspector)：" + objPath);
+                if (dir.Exists) //判断是否是目录类型
+                    allSelectedDirs.Add(objPath);
+                else
+                    allSelectedFiles.Add(objPath);
+            }
+
+            foreach (var dir in allSelectedDirs)
+            {
+                foreach (var file in GetAllFiles(dir))
+                {
+                    if (!file.EndsWith(".meta"))
+                        allSelectedFiles.Add(file.Replace('\\', '/'));
+                }
+            }
+
+            return allSelectedFiles;
+        }
+
+        private static List<string> GetAllFiles(string path)
+        {
+            void GetAllFilesInDirectory(string current_path, List<string> container)
+            {
+                container.AddRange(Directory.GetFiles(current_path)); //收集本地文件
+                string[] dirs = Directory.GetDirectories(current_path);
+                if (dirs.Length > 0)
+                {
+                    foreach (var k in dirs)
+                    {
+                        GetAllFilesInDirectory(k, container);
+                    }
+                }
+            }
+
+            List<string> result = new List<string>();
+            GetAllFilesInDirectory(path, result);
+            return result;
+        }
+        #endregion
+
+        #region MenuItem工具
+        static void CleanMaterialProperty(Material material, ref int count)
+        {
+            List<string> collectedKeywords = new List<string>();
+
+            bool CleanTextureProperty(SerializedProperty property, Material mat)
+            {
+                bool res = false;
+                for (int j = property.arraySize - 1; j >= 0; j--)
+                {
+                    string propertyName = property.GetArrayElementAtIndex(j).FindPropertyRelative("first").stringValue;
+                    if (!mat.HasProperty(propertyName))
+                    {
+                        if (propertyName == "_MainTex")
+                        {
+                            if (property.GetArrayElementAtIndex(j).FindPropertyRelative("second").FindPropertyRelative("m_Texture").objectReferenceValue != null)
+                            {
+                                property.GetArrayElementAtIndex(j).FindPropertyRelative("second").FindPropertyRelative("m_Texture").objectReferenceValue = null;
+                                res = true;
+                            }
+                        }
+                        else
+                        {
+                            property.DeleteArrayElementAtIndex(j);
+                            Debug.Log("Delete 贴图属性 in serialized object:" + propertyName);
+                            res = true;
+                        }
+                    }
+                }
+                return res;
+            }
+
+            bool CleanFloatProperty(SerializedProperty property, Material mat)
+            {
+                bool res = false;
+                for (int j = property.arraySize - 1; j >= 0; j--)
+                {
+                    string propertyName = property.GetArrayElementAtIndex(j).FindPropertyRelative("first").stringValue;
+                    if (!mat.HasProperty(propertyName))
+                    {
+                        property.DeleteArrayElementAtIndex(j);
+                        Debug.Log("Delete 浮点数属性 in serialized object:" + propertyName);
+                        res = true;
+                    }
+                }
+                return res;
+            }
+
+            bool CleanColorProperty(SerializedProperty property, Material mat)
+            {
+                bool res = false;
+                for (int j = property.arraySize - 1; j >= 0; j--)
+                {
+                    string propertyName = property.GetArrayElementAtIndex(j).FindPropertyRelative("first").stringValue;
+                    if (!mat.HasProperty(propertyName))
+                    {
+                        property.DeleteArrayElementAtIndex(j);
+                        Debug.Log("Delete 颜色属性 in serialized object:" + propertyName);
+                        res = true;
+                    }
+                }
+                return res;
+            }
+
+            if (material == null)
+                return;
+            SerializedObject psSource = new SerializedObject(material);
+
+            SerializedProperty emissionProperty = psSource.FindProperty("m_SavedProperties");
+            SerializedProperty texEnvs = emissionProperty.FindPropertyRelative("m_TexEnvs");
+            SerializedProperty floats = emissionProperty.FindPropertyRelative("m_Floats");
+            SerializedProperty colors = emissionProperty.FindPropertyRelative("m_Colors");
+            SerializedProperty shaderKeywords = psSource.FindProperty("m_InvalidKeywords");
+            CleanTextureProperty(texEnvs, material);
+            CleanFloatProperty(floats, material);
+            CleanColorProperty(colors, material);
+
+            int invalidKeywordsCount = shaderKeywords.arraySize;
+            for (int i = invalidKeywordsCount - 1; i > -1; --i)
+                shaderKeywords.DeleteArrayElementAtIndex(i);
+
+            psSource.ApplyModifiedProperties();
+            EditorUtility.SetDirty(material);
+            count += 1;
+        }
+
+        [MenuItem("Assets/TA工具/1 删除材质球上的无用属性", false, 27)]
+        static void OneKeyClearMaterialProperty()
+        {
+            Debug.LogError("开始...");
+            List<string> allSelectedFiles = GetAllSelectedFilesWithNoMeta();
+            int count = 0;
+            foreach (var file in allSelectedFiles)
+            {
+                Material material = AssetDatabase.LoadAssetAtPath(file, typeof(Material)) as Material;
+                CleanMaterialProperty(material, ref count);
+            }
+            AssetDatabase.SaveAssets();
+            Debug.LogError("结束...  处理次数：" + count);
+        }
+        #endregion
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
         {

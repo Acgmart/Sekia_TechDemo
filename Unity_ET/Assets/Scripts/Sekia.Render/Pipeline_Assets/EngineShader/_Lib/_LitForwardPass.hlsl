@@ -60,8 +60,8 @@ fragOutput frag(v2f i)
     //MaskMap输入
     half4 maskMapValue = SAMPLE_TEXTURE2D(_MaskMap, sampler_MaskMap, i.uv0.xy);
     half metallic = maskMapValue.r * _MetallicCof;
-    half occlusion = lerp(1.0h, maskMapValue.g, _OcclusionCof);
-    half roughness = clamp(maskMapValue.b * _RoughnessCof, 0.12h, 1.0h);
+    half roughness = clamp(maskMapValue.g * _RoughnessCof, 0.12h, 1.0h);
+    half occlusion = lerp(1.0h, maskMapValue.b, _OcclusionCof);
     half3 emission = maskMapValue.a * _EmissionColor.rgb;
     
     //法线贴图输入

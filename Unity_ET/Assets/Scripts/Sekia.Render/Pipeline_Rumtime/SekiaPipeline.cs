@@ -47,6 +47,11 @@ namespace Sekia
             var ins = GlobalData.Instance;
             ins.OnDispose += DisposePipelineResource;
 
+            //检查项目设置
+            int masterTextureLimit = QualitySettings.masterTextureLimit;
+            if (masterTextureLimit != 0)
+                Debug.LogWarning("Texture Quality设置不是Full Res\n2D贴图的mip0分辨率降低");
+
             //收集硬件支持信息
             ins.graphicsDeviceType = SystemInfo.graphicsDeviceType;
             ins.graphicsShaderLevel = SystemInfo.graphicsShaderLevel;

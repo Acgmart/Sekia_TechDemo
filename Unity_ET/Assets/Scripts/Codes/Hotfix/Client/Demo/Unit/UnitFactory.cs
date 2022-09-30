@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
 
 namespace ET.Client
 {
@@ -10,31 +10,24 @@ namespace ET.Client
 	        Unit unit = unitComponent.AddChildWithId<Unit, int>(unitInfo.UnitId, unitInfo.ConfigId);
 	        unitComponent.Add(unit);
 	        
-	        unit.Position = new Vector3(unitInfo.X, unitInfo.Y, unitInfo.Z);
-	        unit.Forward = new Vector3(unitInfo.ForwardX, unitInfo.ForwardY, unitInfo.ForwardZ);
+	        unit.Position = unitInfo.Position;
+	        unit.Forward = unitInfo.Forward;
 	        
 	        NumericComponent numericComponent = unit.AddComponent<NumericComponent>();
-	        for (int i = 0; i < unitInfo.Ks.Count; ++i)
-	        {
-		        numericComponent.Set(unitInfo.Ks[i], unitInfo.Vs[i]);
-	        }
+
+			foreach (var kv in unitInfo.KV)
+			{
+				numericComponent.Set(kv.Key, kv.Value);
+			}
 	        
 	        unit.AddComponent<MoveComponent>();
 	        if (unitInfo.MoveInfo != null)
 	        {
-		        if (unitInfo.MoveInfo.X.Count > 0)
-		        {
-			        using (ListComponent<Vector3> list = ListComponent<Vector3>.Create())
-			        {
-				        list.Add(unit.Position);
-				        for (int i = 0; i < unitInfo.MoveInfo.X.Count; ++i)
-				        {
-					        list.Add(new Vector3(unitInfo.MoveInfo.X[i], unitInfo.MoveInfo.Y[i], unitInfo.MoveInfo.Z[i]));
-				        }
-
-				        unit.MoveToAsync(list).Coroutine();
-			        }
-		        }
+		        if (unitInfo.MoveInfo.Points.Count > 0)
+				{
+					unitInfo.MoveInfo.Points[0] = unit.Position;
+					unit.MoveToAsync(unitInfo.MoveInfo.Points).Coroutine();
+				}
 	        }
 
 	        unit.AddComponent<ObjectWait>();

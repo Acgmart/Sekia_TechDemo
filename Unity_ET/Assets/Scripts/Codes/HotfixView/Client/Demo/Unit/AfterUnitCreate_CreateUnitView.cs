@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-//Edit by Sekia
 
 namespace ET.Client
 {
     [Event(SceneType.Current)]
+    [FriendOfAttribute(typeof(ET.Client.GlobalComponent))]
     public class AfterUnitCreate_CreateUnitView : AEvent<EventType.AfterUnitCreate>
     {
         protected override async ETTask Run(Scene scene, EventType.AfterUnitCreate args)
@@ -14,7 +14,7 @@ namespace ET.Client
             GameObject bundleGameObject = (GameObject)ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
             GameObject prefab = bundleGameObject.Get<GameObject>("Skeleton");
 
-            GameObject go = UnityEngine.Object.Instantiate(prefab, GlobalComponent.Instance.unitRoot, true);
+            GameObject go = UnityEngine.Object.Instantiate(prefab, GlobalComponent.Instance.Root_Unit, true);
             go.transform.position = unit.Position;
             unit.AddComponent<GameObjectComponent>().GameObject = go;
             unit.AddComponent<AnimatorComponent>();

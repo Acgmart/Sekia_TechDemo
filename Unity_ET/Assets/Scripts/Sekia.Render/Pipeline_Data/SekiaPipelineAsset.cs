@@ -892,6 +892,11 @@ namespace Sekia
             }
         }
 
+        public override Shader terrainDetailGrassShader
+        {
+            get { return editorResources?.shaders.terrainDetailGrassPS; }
+        }
+
         /// <summary>
         /// Returns asset texture resources
         /// </summary>

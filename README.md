@@ -2,6 +2,7 @@
 介绍：这是我个人学习渲染技术的效果与技术展示demo  
 仓库地址：https://github.com/Acgmart/Sekia_URP_TechDemo  
 Unity官方仓库地址：https://github.com/Unity-Technologies/Graphics  
+ET官方仓库地址：https://github.com/egametang/ET  
 
 # 版本管理思路
 SekiaPipeline计划同时兼容多个Unity版本 基于Unity2019以后的LTS和最新开发版  

@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CartWheels
+  m_Shader: {fileID: 4800000, guid: 634ca5a5ffe8e164db60132fa10470f9, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _NORMALMAP
+  - _SPECGLOSSMAP
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 777a2048b55316141a8b74401aa336a1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: 3390734cd376f4c4ca316a00cc2dc8db, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 2800000, guid: d44c8d54af4c84b46b6fdc0f64642c9d, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0.81, y: 1.28}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 2800000, guid: 471a986e1b3bb3749a564ed718ff7ae0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 777a2048b55316141a8b74401aa336a1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskMap:
+        m_Texture: {fileID: 2800000, guid: 58d6d8baef2611742993237b224e96c0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskyMixAlbedo:
+        m_Texture: {fileID: 2800000, guid: 9c05ab852b0a1034ba7fa0ebc859271c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskyMixBumpMap:
+        m_Texture: {fileID: 2800000, guid: 3f071f1579ab97645946b775f61e77fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskyMixMask:
+        m_Texture: {fileID: 2800000, guid: 4d9ed45fbfebe3a4a98c686cf6cbf17e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 3390734cd376f4c4ca316a00cc2dc8db, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 2800000, guid: 3a61e130817275240852029dcefc4a40, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 2800000, guid: 8cb395047ed5eb94c8b393fafe7b5686, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaClip: 0
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 0.5
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _MaskyMixBumpScale: 1.5
+    - _MaskyMixMaskFalloff: 0.26
+    - _MaskyMixMaskThresholdHi: 0.827
+    - _MaskyMixMaskThresholdLow: 0.456
+    - _MaskyMixMaskTile: 1
+    - _MaskyMixUVTile: 2
+    - _Metallic: 0
+    - _MetallicCof: 0
+    - _Mode: 0
+    - _OcclusionCof: 1
+    - _OcclusionStrength: 1
+    - _Orthonormalize: 0
+    - _Parallax: 0.02
+    - _RoughnessCof: 0.8
+    - _SmoothnessInAlbedo: 0
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseColor: {r: 0.8039216, g: 0.8627451, b: 0.91764706, a: 1}
+    - _Color: {r: 0.80422795, g: 0.86206895, b: 0.9191176, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MaskyMixColor: {r: 0.31617647, g: 0.29449952, b: 0.25573096, a: 0.5}
+    - _MaskyMixSpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _MaskyMixWorldDirection: {r: 0, g: 1, b: 0, a: 0}
+    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_BuildTextureStacks: []

@@ -4,16 +4,18 @@
     "references": [
         "Sekia.Core",
         "Sekia.Render",
+        "Unity.ThirdParty",
+        "Unity.Core",
+        "Unity.Mono",
         "Unity.RenderPipelines.Core.Editor",
         "Unity.RenderPipelines.Core.Runtime",
-        "Unity.ThirdParty",
         "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

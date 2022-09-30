@@ -1,0 +1,172 @@
+fileFormatVersion: 2
+guid: c3296d0d1865964468574f415b0b983e
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: build_bighouse_01_balcony_01
+    100004: build_bighouse_01_door_01
+    100006: build_bighouse_01_dragonhead_01
+    100008: build_bighouse_01_gables_01
+    100010: build_bighouse_01_interior_01
+    100012: build_bighouse_01_logwall_back_01
+    100014: build_bighouse_01_logwall_front_01
+    100016: build_bighouse_01_logwall_left_01
+    100018: build_bighouse_01_logwall_right_01
+    100020: build_bighouse_01_pillars_01
+    100022: build_bighouse_01_railings_01
+    100024: build_bighouse_01_roof_01
+    100026: build_bighouse_01_walls_01
+    100028: build_bighouse_01_walls_02
+    100030: build_bighouse_01
+    100032: build_bighouse_01_MeshPart0
+    100034: build_bighouse_01_MeshPart1
+    100036: HouseBig01
+    100038: HouseBigDragonhead
+    100040: HouseBig01Dragonhead
+    400000: //RootNode
+    400002: build_bighouse_01_balcony_01
+    400004: build_bighouse_01_door_01
+    400006: build_bighouse_01_dragonhead_01
+    400008: build_bighouse_01_gables_01
+    400010: build_bighouse_01_interior_01
+    400012: build_bighouse_01_logwall_back_01
+    400014: build_bighouse_01_logwall_front_01
+    400016: build_bighouse_01_logwall_left_01
+    400018: build_bighouse_01_logwall_right_01
+    400020: build_bighouse_01_pillars_01
+    400022: build_bighouse_01_railings_01
+    400024: build_bighouse_01_roof_01
+    400026: build_bighouse_01_walls_01
+    400028: build_bighouse_01_walls_02
+    400030: build_bighouse_01
+    400032: build_bighouse_01_MeshPart0
+    400034: build_bighouse_01_MeshPart1
+    400036: HouseBig01
+    400038: HouseBigDragonhead
+    400040: HouseBig01Dragonhead
+    2300000: build_bighouse_01_balcony_01
+    2300002: build_bighouse_01_door_01
+    2300004: build_bighouse_01_dragonhead_01
+    2300006: build_bighouse_01_gables_01
+    2300008: build_bighouse_01_interior_01
+    2300010: build_bighouse_01_logwall_back_01
+    2300012: build_bighouse_01_logwall_front_01
+    2300014: build_bighouse_01_logwall_left_01
+    2300016: build_bighouse_01_logwall_right_01
+    2300018: build_bighouse_01_pillars_01
+    2300020: build_bighouse_01_railings_01
+    2300022: build_bighouse_01_roof_01
+    2300024: build_bighouse_01_walls_01
+    2300026: build_bighouse_01_walls_02
+    2300028: build_bighouse_01_MeshPart0
+    2300030: build_bighouse_01_MeshPart1
+    2300032: build_bighouse_01
+    2300034: HouseBig01
+    2300036: HouseBigDragonhead
+    2300038: HouseBig01Dragonhead
+    3300000: build_bighouse_01_balcony_01
+    3300002: build_bighouse_01_door_01
+    3300004: build_bighouse_01_dragonhead_01
+    3300006: build_bighouse_01_gables_01
+    3300008: build_bighouse_01_interior_01
+    3300010: build_bighouse_01_logwall_back_01
+    3300012: build_bighouse_01_logwall_front_01
+    3300014: build_bighouse_01_logwall_left_01
+    3300016: build_bighouse_01_logwall_right_01
+    3300018: build_bighouse_01_pillars_01
+    3300020: build_bighouse_01_railings_01
+    3300022: build_bighouse_01_roof_01
+    3300024: build_bighouse_01_walls_01
+    3300026: build_bighouse_01_walls_02
+    3300028: build_bighouse_01_MeshPart0
+    3300030: build_bighouse_01_MeshPart1
+    3300032: build_bighouse_01
+    3300034: HouseBig01
+    3300036: HouseBigDragonhead
+    3300038: HouseBig01Dragonhead
+    4300000: build_bighouse_01_railings_01
+    4300002: build_bighouse_01_pillars_01
+    4300004: build_bighouse_01_interior_01
+    4300006: build_bighouse_01_roof_01
+    4300008: build_bighouse_01_logwall_back_01
+    4300010: build_bighouse_01_door_01
+    4300012: build_bighouse_01_gables_01
+    4300014: build_bighouse_01_walls_02
+    4300016: build_bighouse_01_dragonhead_01
+    4300018: build_bighouse_01_walls_01
+    4300020: build_bighouse_01_balcony_01
+    4300022: build_bighouse_01_logwall_left_01
+    4300024: build_bighouse_01_logwall_right_01
+    4300026: build_bighouse_01_logwall_front_01
+    4300028: build_bighouse_01_MeshPart0
+    4300030: build_bighouse_01_MeshPart1
+    4300032: build_bighouse_01
+    4300034: HouseBigDragonhead
+    4300036: HouseBig01
+    4300038: HouseBig01Dragonhead
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 2
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -2,7 +2,7 @@ using System;
 
 namespace ET
 {
-    [Callback(TimerCallbackId.SessionIdleChecker)]
+    [Invoke(TimerInvokeType.SessionIdleChecker)]
     public class SessionIdleChecker: ATimer<SessionIdleCheckerComponent>
     {
         protected override void Run(SessionIdleCheckerComponent self)
@@ -19,11 +19,11 @@ namespace ET
     }
     
     [ObjectSystem]
-    public class SessionIdleCheckerComponentAwakeSystem: AwakeSystem<SessionIdleCheckerComponent, int>
+    public class SessionIdleCheckerComponentAwakeSystem: AwakeSystem<SessionIdleCheckerComponent>
     {
-        protected override void Awake(SessionIdleCheckerComponent self, int checkInteral)
+        protected override void Awake(SessionIdleCheckerComponent self)
         {
-            self.RepeatedTimer = TimerComponent.Instance.NewRepeatedTimer(checkInteral, TimerCallbackId.SessionIdleChecker, self);
+            self.RepeatedTimer = TimerComponent.Instance.NewRepeatedTimer(SessionIdleCheckerComponentSystem.CheckInteral, TimerInvokeType.SessionIdleChecker, self);
         }
     }
 
@@ -38,6 +38,8 @@ namespace ET
 
     public static class SessionIdleCheckerComponentSystem
     {
+        public const int CheckInteral = 2000;
+        
         public static void Check(this SessionIdleCheckerComponent self)
         {
             Session session = self.GetParent<Session>();
@@ -48,8 +50,7 @@ namespace ET
                 return;
             }
 
-            Log.Info(
-                $"session timeout: {session.Id} {timeNow} {session.LastRecvTime} {session.LastSendTime} {timeNow - session.LastRecvTime} {timeNow - session.LastSendTime}");
+            Log.Info($"session timeout: {session.Id} {timeNow} {session.LastRecvTime} {session.LastSendTime} {timeNow - session.LastRecvTime} {timeNow - session.LastSendTime}");
             session.Error = ErrorCore.ERR_SessionSendOrRecvTimeout;
 
             session.Dispose();

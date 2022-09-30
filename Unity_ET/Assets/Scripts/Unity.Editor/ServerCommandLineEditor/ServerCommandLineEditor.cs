@@ -28,7 +28,7 @@ namespace ET
 
         public void OnEnable()
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo("../Config/StartConfig");
+            DirectoryInfo directoryInfo = new DirectoryInfo("../Config/Excel/s/StartConfig");
             this.startConfigs = directoryInfo.GetDirectories().Select(x => x.Name).ToArray();
         }
 
@@ -45,7 +45,7 @@ namespace ET
             dotnet = "dotnet";
 #endif
             
-            if (GUILayout.Button("Start Server(Single Srocess)"))
+            if (GUILayout.Button("Start Server(Single Process)"))
             {
                 string arguments = $"App.dll --Process=1 --StartConfig=StartConfig/{this.startConfig} --Console=1";
                 ProcessHelper.Run(dotnet, arguments, "../Bin/");
