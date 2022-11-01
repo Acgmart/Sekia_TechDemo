@@ -7,6 +7,7 @@
     真机可能需要切换至开发者模式
         设置 -> 隐私与安全性 -> 开发者模式
 打包URP默认demo
+    构建设置中勾选 Run in Xcode as Debug
     生成XCode工程 可使用XCode打开或运行.xcodeproj文件
     设置证书：在All标签下使用自动化配置 Team中指定账号
         没有账号时添加账号并添加证书
@@ -15,8 +16,10 @@
         需要是一个
 
 # 处理开发者证书 uuid
-
+用于安装调试的手机需要先绑定uuid到开发者账号
+如果需要调试要使用Development证书
 
 # 使用模拟器构建
 在Unity的PlayerSettings中设置TargetSDK为SimulatorSDK
 切换SDK后可使用模拟器作为目标设备
+模拟器模式下不支持截帧

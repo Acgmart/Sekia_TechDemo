@@ -2,3 +2,12 @@
 .idea/
 **/obj/
 bin/
+.DS_Store
+Logs/
+Library/
+Temp/
+XCodeIPhone/
+*_DoNotShip/
+*.gputrace/
+MemoryCaptures/
+Layouts/

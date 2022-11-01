@@ -1,0 +1,5 @@
+# Indirect类型的DrawCall
+使用Indirect类型渲染命令：cmd.DrawMeshInstancedIndirect
+    参考：https://www.zhihu.com/question/427803115/answer/1548993170
+不同之处在于原来几个参数都直接放在了indirect指针指向的显存Buffer中，这样API执行时会直接在显存里面拿。因为参数直接从显存拿，非直接传输的关系，所以命名为indirect。好处是可以通过compute shader直接在GPU端直接修改Buffer内容
+需要硬件支持compute shader 可以用小型项目验证下

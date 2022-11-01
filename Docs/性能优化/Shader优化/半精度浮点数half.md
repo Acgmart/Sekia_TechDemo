@@ -33,3 +33,19 @@ half    的这三部分所占的位宽分别为：1 | 5 | 10
 对于已经归一化的向量来说基本够，用于计算NdotL/NdotH之类的不会有明显误差。
     不能用half精度的向量做rsqrt这种复杂度比较高的运算，会丢失过多精度。
 由于我们基本要保障小数点后三位的精度，half表示的数值不应超过1。
+
+# 在Unity shader中正确使用half
+参考：https://docs.unity3d.com/Manual/SL-DataTypesAndPrecision.html
+在错误的地方使用half会导致画面出现bug 在数值很大或者非常接近0时尤为注意
+    如：长度小于0.01的向量归一化时 dp3指令的结果太小近似于0 rsqrt返回异常
+
+自定义数字用half()标注 Unity的shader编译器会忽视自定义数字的h后缀
+但是half(x) 和 half y = ...等转换是有效的
+具体是否真的使用了half精度计算要看看性能分析结果
+    float似乎不能先转换为half以后再与half数值相乘 只能以half = float * half的形式转换
+    可以通过shader属性面板的编译工程生成对应平台的预览shader
+
+half类型采样语法：
+sampler2D_half _MainTex;
+samplerCUBE_half _Cubemap;
+可以在Player Setting中指定默认精度 默认half精度无需设置

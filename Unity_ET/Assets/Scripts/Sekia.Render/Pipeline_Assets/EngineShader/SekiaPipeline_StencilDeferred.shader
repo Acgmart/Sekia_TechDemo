@@ -69,6 +69,7 @@ Shader "Hidden/SekiaPipeline/StencilDeferred"
     half3 _LightColor;
     half4 _LightAttenuation; //xy距离衰减 zwSpot张开角度衰减
     half3 _LightDirection;
+    TEXTURE2D(_SsaoTexture);    SAMPLER(sampler_SsaoTexture);
 
     Light GetStencilLight(float3 positionWS, float2 screenUV)
     {
@@ -151,10 +152,12 @@ Shader "Hidden/SekiaPipeline/StencilDeferred"
         half _PerceptualRoughness = roughness;
         half3 _Diffuse = albedo * (1.0h - metallic);
         half3 _F0 = lerp(0.04h, albedo, metallic);
+        half _Roughness_a =  _PerceptualRoughness * _PerceptualRoughness;
+        half _Roughness_b = _PerceptualRoughness * half(0.25) + half(0.25);
 
         half3 envirSpecular2 = EnvBRDFApprox(_F0, _PerceptualRoughness, _NdotV);
         half3 color = OneDirectLighting(light.color, light.direction, _NdotV, _NormalWS, 
-            _ViewDirWS, _Diffuse, _F0, _PerceptualRoughness, envirSpecular2);
+            _ViewDirWS, _Diffuse, _F0, envirSpecular2, _Roughness_a, _Roughness_b);
         
         half alpha = 1.0h;
         #if defined(_DEFERRED_FIRST_LIGHT)

@@ -30,7 +30,8 @@ Shader "SekiaPipeline/Lit"
             HLSLPROGRAM
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma multi_compile_local_fragment _ _SCREEN_SPACE_OCCLUSION
-            #pragma multi_compile _ DYNAMICLIGHTMAP_ON
+            #pragma multi_compile _ LIGHTMAP_ON
+            //#define _ADDITIONAL_LIGHTS
             #pragma vertex vert
             #pragma fragment frag
             #include "_Lib/_LitInput.hlsl"
@@ -48,7 +49,7 @@ Shader "SekiaPipeline/Lit"
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma multi_compile_local_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT
-            #pragma multi_compile _ DYNAMICLIGHTMAP_ON
+            #pragma multi_compile _ LIGHTMAP_ON
             #define _GBUFFER_PASS
             #pragma vertex vert
             #pragma fragment frag

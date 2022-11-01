@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: XCode_Test_PBR3_NoNormalMap
+  m_Shader: {fileID: 4800000, guid: 42c62a730e382c1408d9f051531b6de1, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 66b112d2104a6a041bb8408b2da725c0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EnvirMap:
+        m_Texture: {fileID: 8900000, guid: b3caefda5fb346f4e90b9bcaadca94e8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LightMap:
+        m_Texture: {fileID: 2800000, guid: 60c1ab0fbc2a43b4ca0e2d6f550f891c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskMap:
+        m_Texture: {fileID: 2800000, guid: f864f8bbd6973c94984f99982227216e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 58d393b7a31eda64182eca6be6f65595, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _MetallicCof: 0.128
+    - _OcclusionCof: 0.818
+    - _RoughnessCof: 0.8
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _NormalWS_P: {r: 0, g: 1, b: 0, a: 0}
+    - _PositionWS_P: {r: 0, g: 0, b: 0, a: 0}
+    - _TangentWS_P: {r: 1, g: 0, b: 0, a: 0}
+    - _ViewDirWS_P: {r: 0, g: -1, b: 0, a: 0}
+  m_BuildTextureStacks: []

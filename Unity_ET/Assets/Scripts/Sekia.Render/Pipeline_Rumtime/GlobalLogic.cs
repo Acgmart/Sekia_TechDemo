@@ -210,16 +210,16 @@ namespace Sekia
             SupportedRenderingFeatures.active = new SupportedRenderingFeatures()
             {
                 reflectionProbeModes = SupportedRenderingFeatures.ReflectionProbeModes.None, //反射探针不支持旋转
-                defaultMixedLightingModes = SupportedRenderingFeatures.LightmapMixedBakeModes.Subtractive,
-                mixedLightingModes = SupportedRenderingFeatures.LightmapMixedBakeModes.Subtractive | SupportedRenderingFeatures.LightmapMixedBakeModes.IndirectOnly | SupportedRenderingFeatures.LightmapMixedBakeModes.Shadowmask,
-                lightmapBakeTypes = LightmapBakeType.Realtime, //关闭baked模式 mixed模式
+                defaultMixedLightingModes = SupportedRenderingFeatures.LightmapMixedBakeModes.IndirectOnly,
+                mixedLightingModes = SupportedRenderingFeatures.LightmapMixedBakeModes.IndirectOnly,
+                lightmapBakeTypes = LightmapBakeType.Baked, //关闭baked模式 mixed模式
                 lightmapsModes = LightmapsMode.NonDirectional, //关闭Directional贴图
                 lightProbeProxyVolumes = false,
                 motionVectors = false,
-                receiveShadows = false,
+                receiveShadows = true,
                 reflectionProbes = false,
                 reflectionProbesBlendDistance = true,
-                particleSystemInstancing = true
+                particleSystemInstancing = true,
             };
             UnityEditor.Rendering.Universal.SceneViewDrawMode.SetupDrawMode();
 #endif
