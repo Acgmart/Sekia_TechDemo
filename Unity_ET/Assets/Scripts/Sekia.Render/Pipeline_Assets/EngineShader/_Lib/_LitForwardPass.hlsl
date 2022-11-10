@@ -33,7 +33,7 @@ v2f vert(a2v i)
     #if defined(LIGHTMAP_ON)
         o.uv0.zw = i.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
     #endif
-	o.viewDirWS = normalize(_WorldSpaceCameraPos.xyz - o.positionWS);
+	o.viewDirWS = normalize(_WorldSpaceCameraPos.xyz - o.positionWS.xyz);
     return o;
 }
 
