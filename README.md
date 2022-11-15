@@ -5,12 +5,9 @@ Unity官方仓库地址：https://github.com/Unity-Technologies/Graphics
 ET官方仓库地址：https://github.com/egametang/ET  
 
 # 版本管理思路
-SekiaPipeline计划同时兼容多个Unity版本 基于Unity2019以后的LTS和最新开发版  
-　　如2019.4 | 2020.3 | 2021.3 | 2022.1...  
-其中主版本跟随ET框架(目前使用2021.3)  
-　　对应Unity工程名分别是Unity2019.4 | Unity2020.3 | Unity_ET | Unity2022.1  
-　　主版本中将测试场景渲染和美术工具链  
-　　非主版本中只进行代码兼容性测试  
+SekiaPipeline倾向于使用ET的Unity版本以及最新的Unity版本(目前使用2021.3)
+    避免因Unity版本牵扯过多精力 将稀缺的时间花在解决游戏开发实际问题上
+　  主版本中将测试场景渲染原型和美术工具链  单独开小工程测试个别问题
 为了使一套代码兼容多个Unity版本 SekiaPipeline对URP采取轻度介入方案  
 　　参考文档：[SekiaPipeline与URP之间的依赖关系](Docs/URP管线流程/SekiaPipeline注意点.md)
 

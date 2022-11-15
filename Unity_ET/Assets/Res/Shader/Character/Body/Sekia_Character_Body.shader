@@ -57,8 +57,8 @@
         _EmissionScaler ("自发光强度", Range(0, 100)) = 1
         _EmissionColor ("自发光颜色", Color) = (1, 1, 1, 1)
 
-        _OutlineWidthAdjustZs ("Outline Width Adjust Dist Start (near, middle, far)", Vector) = (0.01,2,6,0)
-        _OutlineWidthAdjustScales ("Outline Width Adjust Scale (near, middle, far)", Vector) = (0.105,0.245,0.6,0)
+        _OutlineWidthAdjustZs ("OutlineStart (near/middle/far)", Vector) = (0.01,2,6,0)
+        _OutlineWidthAdjustScales ("OutlineScale(near/middle/far)", Vector) = (0.105,0.245,0.6,0)
         _OutlineWidth ("Outline Width", Range(0, 0.5)) = 0.04
         _MaxOutlineZOffset ("Max Outline Z Offset", Range(0, 100)) = 1
     }

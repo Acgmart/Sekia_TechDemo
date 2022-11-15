@@ -64,7 +64,6 @@ float   _IsInCoverShader;
 float4  _OutlineWidthAdjustZs;
 float4  _OutlineWidthAdjustScales;
 float   _OutlineWidth;
-float   _MaxOutlineZOffset;
 CBUFFER_END
 
 TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);

@@ -35,8 +35,7 @@ v2f vert(a2v i)
 
     //观察空间顶点扩张 增加Z值 少量放大
     float3 viewSpacePositionDir = normalize(positionVS);
-    float3 positionExtend = viewSpacePositionDir * _MaxOutlineZOffset;
-    positionExtend *= i.vertexColor.z - 0.5;
+    float3 positionExtend = viewSpacePositionDir * (i.vertexColor.z - 0.5);
 
     positionVS.xy += normalExtend;
     positionVS += positionExtend;

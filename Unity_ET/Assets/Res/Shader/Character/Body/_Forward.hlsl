@@ -99,7 +99,7 @@ half4 frag(v2f i) : SV_TARGET
         diffuseTerm = lerp(_MTMapDarkColor.xyz, _MTMapLightColor.xyz, diffuseM);
         diffuseTerm = diffuseTerm * _Albedo;
 
-        //金属漫反射收到阴影影响
+        //金属漫反射受到阴影影响
         float3 diffuseTerm_Shadow = diffuseTerm * _MTShadowMultiColor.xyz;
         float3 diffuseTerm_Lit = diffuseTerm * _DirectLightingCof;
         diffuseTerm = isInAnyShadow ? diffuseTerm_Shadow : diffuseTerm_Lit;
