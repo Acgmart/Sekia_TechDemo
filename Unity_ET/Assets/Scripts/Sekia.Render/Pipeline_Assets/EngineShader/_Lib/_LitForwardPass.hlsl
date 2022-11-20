@@ -8,6 +8,9 @@ struct a2v
     #if defined(LIGHTMAP_ON)
         float2 uv1                  : TEXCOORD1;
     #endif
+    #if defined(_DEBUG_VERTEXCOLOR) 
+	    half4 vertexColor			: COLOR;
+    #endif
 };
 
 struct v2f
@@ -18,6 +21,9 @@ struct v2f
     half4 tangentWS                 : TEXCOORD2;
     float4 uv0                      : TEXCOORD3;
 	half3 viewDirWS					: TEXCOORD4;
+    #if defined(_DEBUG_VERTEXCOLOR) 
+	    half4 vertexColor			: COLOR;
+    #endif
 };
 
 v2f vert(a2v i)
@@ -34,6 +40,9 @@ v2f vert(a2v i)
         o.uv0.zw = i.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
     #endif
 	o.viewDirWS = normalize(_WorldSpaceCameraPos.xyz - o.positionWS.xyz);
+    #if defined(_DEBUG_VERTEXCOLOR) 
+        o.vertexColor = i.vertexColor;
+    #endif
     return o;
 }
 
@@ -127,7 +136,11 @@ fragOutput frag(v2f i)
         output.GBuffer2 = half4(roughness, SignedOctEncode(_NormalWS));
         output.GBuffer3 = i.positionCS.z;
     #else
-        output._Color = half4(_Color, 1.0);
+        #if defined(_DEBUG_VERTEXCOLOR) 
+            output._Color = i.vertexColor;
+        #else
+            output._Color = half4(_Color, 1.0);
+        #endif
     #endif
     return output;
 }

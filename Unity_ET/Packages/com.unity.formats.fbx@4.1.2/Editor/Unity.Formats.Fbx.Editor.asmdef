@@ -1,0 +1,28 @@
+﻿{
+    "name": "Unity.Formats.Fbx.Editor",
+    "references": [
+        "Unity.Timeline",
+        "Unity.Timeline.Editor",
+        "Unity.Formats.Fbx.Runtime",
+        "Autodesk.Fbx",
+        "Unity.Recorder.Editor",
+        "Unity.Recorder"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.recorder",
+            "expression": "2.5.5",
+            "define": "ENABLE_FBX_RECORDER"
+        }
+    ],
+    "noEngineReferences": false
+}

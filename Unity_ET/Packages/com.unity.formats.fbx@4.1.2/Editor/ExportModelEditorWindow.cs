@@ -1,0 +1,1155 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+#if UNITY_2018_1_OR_NEWER
+using UnityEditor.Presets;
+#endif
+using System.Linq;
+using System.Security.Permissions;
+
+namespace UnityEditor.Formats.Fbx.Exporter
+{
+    internal abstract class ExportOptionsEditorWindow : EditorWindow
+    {
+        internal const string DefaultWindowTitle = "Export Options";
+        protected const float SelectableLabelMinWidth = 120;
+        protected const float BrowseButtonWidth = 25;
+        protected const float LabelWidth = 175;
+        protected const float FieldOffset = 18;
+        protected const float TextFieldAlignOffset = 3;
+        protected const float ExportButtonWidth = 100;
+        protected const float FbxExtOffset = -7;
+        protected virtual float MinWindowHeight { get { return 300; } }
+
+        protected virtual string ExportButtonName { get { return "Export"; } }
+
+        protected virtual GUIContent WindowTitle { get { return new GUIContent(DefaultWindowTitle); } }
+
+        private string m_exportFileName = "";
+        protected string ExportFileName
+        {
+            get { return m_exportFileName; }
+            set { m_exportFileName = value; }
+        }
+
+        private UnityEditor.Editor m_innerEditor;
+        protected UnityEditor.Editor InnerEditor
+        {
+            get { return m_innerEditor; }
+            set { m_innerEditor = value; }
+        }
+#if UNITY_2018_1_OR_NEWER
+        private FbxExportPresetSelectorReceiver m_receiver;
+        protected FbxExportPresetSelectorReceiver Receiver
+        {
+            get { return m_receiver; }
+            set { m_receiver = value; }
+        }
+#endif
+        private static GUIContent presetIcon { get { return EditorGUIUtility.IconContent("Preset.Context"); } }
+        private static GUIStyle presetIconButton { get { return new GUIStyle("IconButton"); } }
+
+        private bool m_showOptions;
+
+        private GUIStyle m_nameTextFieldStyle;
+        protected GUIStyle NameTextFieldStyle
+        {
+            get
+            {
+                if (m_nameTextFieldStyle == null)
+                {
+                    m_nameTextFieldStyle = new GUIStyle(GUIStyle.none);
+                    m_nameTextFieldStyle.alignment = TextAnchor.MiddleCenter;
+                    m_nameTextFieldStyle.clipping = TextClipping.Clip;
+                    m_nameTextFieldStyle.normal.textColor = EditorStyles.textField.normal.textColor;
+                }
+                return m_nameTextFieldStyle;
+            }
+            set { m_nameTextFieldStyle = value; }
+        }
+
+        private GUIStyle m_fbxExtLabelStyle;
+        protected GUIStyle FbxExtLabelStyle
+        {
+            get
+            {
+                if (m_fbxExtLabelStyle == null)
+                {
+                    m_fbxExtLabelStyle = new GUIStyle(GUIStyle.none);
+                    m_fbxExtLabelStyle.alignment = TextAnchor.MiddleLeft;
+                    m_fbxExtLabelStyle.richText = true;
+                    m_fbxExtLabelStyle.contentOffset = new Vector2(FbxExtOffset, 0);
+                }
+                return m_fbxExtLabelStyle;
+            }
+            set { m_fbxExtLabelStyle = value; }
+        }
+
+        private float m_fbxExtLabelWidth = -1;
+        protected float FbxExtLabelWidth
+        {
+            get
+            {
+                if (m_fbxExtLabelWidth < 0)
+                {
+                    m_fbxExtLabelWidth = FbxExtLabelStyle.CalcSize(new GUIContent(".fbx")).x;
+                }
+                return m_fbxExtLabelWidth;
+            }
+            set { m_fbxExtLabelWidth = value; }
+        }
+
+        protected abstract bool DisableTransferAnim { get; }
+        protected abstract bool DisableNameSelection { get; }
+
+        protected abstract ExportOptionsSettingsSerializeBase SettingsObject { get; }
+
+        // Helper functions for persisting the Export Settings for the session
+        protected abstract string SessionStoragePrefix { get; }
+
+        protected const string k_SessionSettingsName = "Settings";
+        protected const string k_SessionFbxPathsName = "FbxSavePath";
+        protected const string k_SessionSelectedFbxPathName = "SelectedFbxPath";
+        protected const string k_SessionPrefabPathsName = "PrefabSavePath";
+        protected const string k_SessionSelectedPrefabPathName = "SelectedPrefabPath";
+
+        protected void StorePathsInSession(string varName, List<string> paths)
+        {
+            if (paths == null)
+            {
+                return;
+            }
+
+            var n = paths.Count;
+            SessionState.SetInt(string.Format(SessionStoragePrefix, varName), n);
+            for (int i = 0; i < n; i++)
+            {
+                SessionState.SetString(string.Format(SessionStoragePrefix + "_{1}", varName, i), paths[i]);
+            }
+        }
+
+        protected void RestorePathsFromSession(string varName, List<string> defaultsPaths, out List<string> paths)
+        {
+            var n = SessionState.GetInt(string.Format(SessionStoragePrefix, varName), 0);
+            if (n <= 0)
+            {
+                paths = defaultsPaths;
+                return;
+            }
+
+            paths = new List<string>();
+            for (int i = 0; i < n; i++)
+            {
+                var path = SessionState.GetString(string.Format(SessionStoragePrefix + "_{1}", varName, i), null);
+                if (!string.IsNullOrEmpty(path))
+                {
+                    paths.Add(path);
+                }
+            }
+        }
+
+        protected static void ClearPathsFromSession(string varName, string prefix)
+        {
+            var n = SessionState.GetInt(string.Format(prefix, varName), 0);
+            SessionState.EraseInt(string.Format(prefix, varName));
+            for (int i = 0; i < n; i++)
+            {
+                SessionState.EraseString(string.Format(prefix + "_{1}", varName, i));
+            }
+        }
+
+        protected virtual void StoreSettingsInSession()
+        {
+            var settings = SettingsObject;
+            var json = EditorJsonUtility.ToJson(settings);
+            SessionState.SetString(string.Format(SessionStoragePrefix, k_SessionSettingsName), json);
+
+            StorePathsInSession(k_SessionFbxPathsName, m_fbxSavePaths);
+            SessionState.SetInt(string.Format(SessionStoragePrefix, k_SessionSelectedFbxPathName), SelectedFbxPath);
+        }
+
+        protected virtual void RestoreSettingsFromSession(ExportOptionsSettingsSerializeBase defaults)
+        {
+            var settings = SettingsObject;
+            var json = SessionState.GetString(string.Format(SessionStoragePrefix, k_SessionSettingsName), EditorJsonUtility.ToJson(defaults));
+            if (!string.IsNullOrEmpty(json))
+            {
+                EditorJsonUtility.FromJsonOverwrite(json, settings);
+            }
+        }
+
+        public static void ResetAllSessionSettings(string prefix, string settingsDefaults = null)
+        {
+            SessionState.EraseString(string.Format(prefix, k_SessionSettingsName));
+            // Set the defaults of the settings.
+            // If there exists a Default Preset for the Convert/Export settings, then if the project settings are modified,
+            // the Default Preset will be reloaded instead of the project settings. Therefore, set them explicitely if projects settings desired.
+            if (!string.IsNullOrEmpty(settingsDefaults))
+            {
+                SessionState.SetString(string.Format(prefix, k_SessionSettingsName), settingsDefaults);
+            }
+
+            ClearPathsFromSession(k_SessionFbxPathsName, prefix);
+            SessionState.EraseInt(string.Format(prefix, k_SessionSelectedFbxPathName));
+
+            ClearPathsFromSession(k_SessionPrefabPathsName, prefix);
+            SessionState.EraseInt(string.Format(prefix, k_SessionSelectedPrefabPathName));
+        }
+
+        public virtual void ResetSessionSettings(string settingsDefaults = null)
+        {
+            ResetAllSessionSettings(SessionStoragePrefix, settingsDefaults);
+            m_fbxSavePaths = null;
+            SelectedFbxPath = 0;
+        }
+
+        private List<string> m_fbxSavePaths;
+        internal List<string> FbxSavePaths
+        {
+            get
+            {
+                if (m_fbxSavePaths == null)
+                {
+                    // Try to restore from session, fall back to Fbx Export Settings
+                    RestorePathsFromSession(k_SessionFbxPathsName, ExportSettings.instance.GetCopyOfFbxSavePaths(), out m_fbxSavePaths);
+                    SelectedFbxPath = SessionState.GetInt(string.Format(SessionStoragePrefix, k_SessionSelectedFbxPathName), ExportSettings.instance.SelectedFbxPath);
+                }
+                return m_fbxSavePaths;
+            }
+        }
+
+        [SerializeField]
+        private int m_selectedFbxPath = 0;
+        internal int SelectedFbxPath
+        {
+            get { return m_selectedFbxPath; }
+            set { m_selectedFbxPath = value; }
+        }
+
+        private UnityEngine.Object[] m_toExport;
+        protected Object[] GetToExport() { return m_toExport; }
+        protected void SetToExport(Object[] value) { m_toExport = value; }
+
+        protected virtual void OnEnable()
+        {
+#if UNITY_2018_1_OR_NEWER
+            InitializeReceiver();
+#endif
+            m_showOptions = true;
+            this.minSize = new Vector2(SelectableLabelMinWidth + LabelWidth + BrowseButtonWidth + ExportButtonWidth, MinWindowHeight);
+        }
+
+        protected static T CreateWindow<T>() where T : EditorWindow
+        {
+            return (T)EditorWindow.GetWindow<T>(DefaultWindowTitle, focus: true);
+        }
+
+        protected virtual void InitializeWindow(string filename = "")
+        {
+            this.titleContent = WindowTitle;
+            this.SetFilename(filename);
+        }
+
+#if UNITY_2018_1_OR_NEWER
+        protected void InitializeReceiver()
+        {
+            if (!Receiver)
+            {
+                Receiver = ScriptableObject.CreateInstance<FbxExportPresetSelectorReceiver>() as FbxExportPresetSelectorReceiver;
+                Receiver.SelectionChanged -= OnPresetSelectionChanged;
+                Receiver.SelectionChanged += OnPresetSelectionChanged;
+                Receiver.DialogClosed -= SaveExportSettings;
+                Receiver.DialogClosed += SaveExportSettings;
+            }
+        }
+#endif
+
+        internal void SetFilename(string filename)
+        {
+            // remove .fbx from end of filename
+            int extIndex = filename.LastIndexOf(".fbx");
+            if (extIndex < 0)
+            {
+                ExportFileName = filename;
+                return;
+            }
+            ExportFileName = filename.Remove(extIndex);
+        }
+
+        public abstract void SaveExportSettings();
+
+        public void OnPresetSelectionChanged()
+        {
+            this.Repaint();
+        }
+
+        protected bool SelectionContainsPrefabInstanceWithAddedObjects()
+        {
+            var exportSet = GetToExport();
+            // FBX-60 (fogbug 1307749):
+            // On Linux OnGUI() sometimes gets called a few times before
+            // the export set is set and window.show() is called.
+            // This leads to this function being called from OnGUI() with a
+            // null or empty export set, and an ArgumentNullException when
+            // creating the stack.
+            // Check that the set exists and has values before creating the stack.
+            if (exportSet == null || exportSet.Length <= 0)
+            {
+                return false;
+            }
+
+            Stack<Object> stack = new Stack<Object>(exportSet);
+            while (stack.Count > 0)
+            {
+                var go = ModelExporter.GetGameObject(stack.Pop());
+                if (!go)
+                {
+                    continue;
+                }
+
+                if (PrefabUtility.IsAnyPrefabInstanceRoot(go) && PrefabUtility.GetAddedGameObjects(go).Count > 0)
+                {
+                    return true;
+                }
+
+                foreach (Transform child in go.transform)
+                {
+                    stack.Push(child.gameObject);
+                }
+            }
+            return false;
+        }
+
+        protected abstract bool Export();
+
+        /// <summary>
+        /// Function to be used by derived classes to add custom UI between the file path selector and export options.
+        /// </summary>
+        protected virtual void CreateCustomUI() { }
+
+#if UNITY_2018_1_OR_NEWER
+        protected abstract void ShowPresetReceiver();
+
+        protected void ShowPresetReceiver(UnityEngine.Object target)
+        {
+            InitializeReceiver();
+            Receiver.SetTarget(target);
+            Receiver.SetInitialValue(new Preset(target));
+            UnityEditor.Presets.PresetSelector.ShowSelector(target, null, true, Receiver);
+        }
+#endif
+
+        protected Transform TransferAnimationSource
+        {
+            get
+            {
+                return SettingsObject.AnimationSource;
+            }
+            set
+            {
+                if (!TransferAnimationSourceIsValid(value))
+                {
+                    return;
+                }
+                SettingsObject.SetAnimationSource(value);
+            }
+        }
+
+        protected Transform TransferAnimationDest
+        {
+            get
+            {
+                return SettingsObject.AnimationDest;
+            }
+            set
+            {
+                if (!TransferAnimationDestIsValid(value))
+                {
+                    return;
+                }
+                SettingsObject.SetAnimationDest(value);
+            }
+        }
+
+        //-------Helper functions for determining if Animation source and dest are valid---------
+
+        /// <summary>
+        /// Determines whether p is an ancestor to t.
+        /// </summary>
+        /// <returns><c>true</c> if p is ancestor to t; otherwise, <c>false</c>.</returns>
+        /// <param name="p">P.</param>
+        /// <param name="t">T.</param>
+        protected bool IsAncestor(Transform p, Transform t)
+        {
+            var curr = t;
+            while (curr != null)
+            {
+                if (curr == p)
+                {
+                    return true;
+                }
+                curr = curr.parent;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether t1 and t2 are in the same hierarchy.
+        /// </summary>
+        /// <returns><c>true</c> if t1 is in same hierarchy as t2; otherwise, <c>false</c>.</returns>
+        /// <param name="t1">T1.</param>
+        /// <param name="t2">T2.</param>
+        protected bool IsInSameHierarchy(Transform t1, Transform t2)
+        {
+            return (IsAncestor(t1, t2) || IsAncestor(t2, t1));
+        }
+
+
+        protected virtual GameObject FirstGameObjectToExport
+        {
+            get
+            {
+                return ModelExporter.GetGameObject(GetToExport()[0]);
+            }
+        }
+
+        protected bool TransferAnimationSourceIsValid(Transform newValue)
+        {
+            if (!newValue)
+            {
+                return true;
+            }
+
+            if (GetToExport() == null || GetToExport().Length <= 0)
+            {
+                Debug.LogWarning("FbxExportSettings: no Objects selected for export, can't transfer animation");
+                return false;
+            }
+
+            var selectedGO = FirstGameObjectToExport;
+
+            // source must be ancestor to dest
+            if (TransferAnimationDest && !IsAncestor(newValue, TransferAnimationDest))
+            {
+                Debug.LogWarningFormat("FbxExportSettings: Source {0} must be an ancestor of {1}", newValue.name, TransferAnimationDest.name);
+                return false;
+            }
+            // must be in same hierarchy as selected GO
+            if (!selectedGO || !IsInSameHierarchy(newValue, selectedGO.transform))
+            {
+                Debug.LogWarningFormat("FbxExportSettings: Source {0} must be in the same hierarchy as {1}", newValue.name, selectedGO ? selectedGO.name : "the selected object");
+                return false;
+            }
+            return true;
+        }
+
+        protected bool TransferAnimationDestIsValid(Transform newValue)
+        {
+            if (!newValue)
+            {
+                return true;
+            }
+
+            if (GetToExport() == null || GetToExport().Length <= 0)
+            {
+                Debug.LogWarning("FbxExportSettings: no Objects selected for export, can't transfer animation");
+                return false;
+            }
+
+            var selectedGO = FirstGameObjectToExport;
+
+            // source must be ancestor to dest
+            if (TransferAnimationSource && !IsAncestor(TransferAnimationSource, newValue))
+            {
+                Debug.LogWarningFormat("FbxExportSettings: Destination {0} must be a descendant of {1}", newValue.name, TransferAnimationSource.name);
+                return false;
+            }
+            // must be in same hierarchy as selected GO
+            if (!selectedGO || !IsInSameHierarchy(newValue, selectedGO.transform))
+            {
+                Debug.LogWarningFormat("FbxExportSettings: Destination {0} must be in the same hierarchy as {1}", newValue.name, selectedGO ? selectedGO.name : "the selected object");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Add UI to turn the dialog off next time the user exports
+        /// </summary>
+        protected virtual void DoNotShowDialogUI()
+        {
+            EditorGUI.indentLevel--;
+            ExportSettings.instance.DisplayOptionsWindow = !EditorGUILayout.Toggle(
+                new GUIContent("Don't ask me again", "Don't ask me again, use the last used paths and options instead"),
+                !ExportSettings.instance.DisplayOptionsWindow
+            );
+        }
+
+        // -------------------------------------------------------------------------------------
+
+        protected void OnGUI()
+        {
+            // Increasing the label width so that none of the text gets cut off
+            EditorGUIUtility.labelWidth = LabelWidth;
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+#if UNITY_2018_1_OR_NEWER
+            if (EditorGUILayout.DropdownButton(presetIcon, FocusType.Keyboard, presetIconButton))
+            {
+                ShowPresetReceiver();
+            }
+#endif
+
+            GUILayout.EndHorizontal();
+
+            EditorGUILayout.LabelField("Naming");
+            EditorGUI.indentLevel++;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(new GUIContent(
+                "Export Name",
+                "Filename to save model to."), GUILayout.Width(LabelWidth - TextFieldAlignOffset));
+
+            EditorGUI.BeginDisabledGroup(DisableNameSelection);
+            // Show the export name with an uneditable ".fbx" at the end
+            //-------------------------------------
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginHorizontal(EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+            EditorGUI.indentLevel--;
+            // continually resize to contents
+            var textFieldSize = NameTextFieldStyle.CalcSize(new GUIContent(ExportFileName));
+            ExportFileName = EditorGUILayout.TextField(ExportFileName, NameTextFieldStyle, GUILayout.Width(textFieldSize.x + 5), GUILayout.MinWidth(5));
+            ExportFileName = ModelExporter.ConvertToValidFilename(ExportFileName);
+
+            EditorGUILayout.LabelField("<color=#808080ff>.fbx</color>", FbxExtLabelStyle, GUILayout.Width(FbxExtLabelWidth));
+            EditorGUI.indentLevel++;
+
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+            //-----------------------------------
+            EditorGUI.EndDisabledGroup();
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(new GUIContent(
+                "Export Path",
+                "Location where the FBX will be saved."), GUILayout.Width(LabelWidth - FieldOffset));
+
+            var pathLabels = ExportSettings.GetMixedSavePaths(FbxSavePaths);
+
+            if (this is ConvertToPrefabEditorWindow)
+            {
+                pathLabels = ExportSettings.GetRelativeFbxSavePaths(FbxSavePaths, ref m_selectedFbxPath);
+            }
+
+            SelectedFbxPath = EditorGUILayout.Popup(SelectedFbxPath, pathLabels, GUILayout.MinWidth(SelectableLabelMinWidth));
+
+            if (!(this is ConvertToPrefabEditorWindow))
+            {
+                var exportSettingsEditor = InnerEditor as ExportModelSettingsEditor;
+                // Set export setting for exporting outside the project on choosing a path
+                var exportOutsideProject = !pathLabels[SelectedFbxPath].Substring(0, 6).Equals("Assets");
+                exportSettingsEditor.SetExportingOutsideProject(exportOutsideProject);
+            }
+
+            if (GUILayout.Button(new GUIContent("...", "Browse to a new location to export to"), EditorStyles.miniButton, GUILayout.Width(BrowseButtonWidth)))
+            {
+                string initialPath = Application.dataPath;
+
+                string fullPath = EditorUtility.SaveFolderPanel(
+                    "Select Export Model Path", initialPath, null
+                );
+
+                // Unless the user canceled, save path.
+                if (!string.IsNullOrEmpty(fullPath))
+                {
+                    var relativePath = ExportSettings.ConvertToAssetRelativePath(fullPath);
+
+                    // If exporting an fbx for a prefab, not allowed to export outside the Assets folder
+                    if (this is ConvertToPrefabEditorWindow && string.IsNullOrEmpty(relativePath))
+                    {
+                        Debug.LogWarning("Please select a location in the Assets folder");
+                    }
+                    // We're exporting outside Assets folder, so store the absolute path
+                    else if (string.IsNullOrEmpty(relativePath))
+                    {
+                        ExportSettings.AddSavePath(fullPath, FbxSavePaths, exportOutsideProject: true);
+                        SelectedFbxPath = 0;
+                    }
+                    // Store the relative path to the Assets folder
+                    else
+                    {
+                        ExportSettings.AddSavePath(relativePath, FbxSavePaths, exportOutsideProject: false);
+                        SelectedFbxPath = 0;
+                    }
+                    // Make sure focus is removed from the selectable label
+                    // otherwise it won't update
+                    GUIUtility.hotControl = 0;
+                    GUIUtility.keyboardControl = 0;
+                }
+            }
+            GUILayout.EndHorizontal();
+
+            CreateCustomUI();
+
+            EditorGUILayout.Space();
+
+            EditorGUI.BeginDisabledGroup(DisableTransferAnim);
+            EditorGUI.indentLevel--;
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(new GUIContent(
+                "Transfer Animation",
+                "Transfer transform animation from source to destination. Animation on objects between source and destination will also be transferred to destination."
+            ), GUILayout.Width(LabelWidth - FieldOffset));
+            GUILayout.EndHorizontal();
+            EditorGUI.indentLevel++;
+            TransferAnimationSource = EditorGUILayout.ObjectField("Source", TransferAnimationSource, typeof(Transform), allowSceneObjects: true) as Transform;
+            TransferAnimationDest = EditorGUILayout.ObjectField("Destination", TransferAnimationDest, typeof(Transform), allowSceneObjects: true) as Transform;
+            EditorGUILayout.Space();
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.indentLevel--;
+            m_showOptions = EditorGUILayout.Foldout(m_showOptions, "Options");
+            EditorGUI.indentLevel++;
+            if (m_showOptions)
+            {
+                InnerEditor.OnInspectorGUI();
+            }
+
+            // if we are exporting or converting a prefab with overrides, then show a warning
+            if (SelectionContainsPrefabInstanceWithAddedObjects())
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.HelpBox("Prefab instance overrides will be exported", MessageType.Warning, true);
+            }
+
+            GUILayout.FlexibleSpace();
+
+            GUILayout.BeginHorizontal();
+            DoNotShowDialogUI();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Cancel", GUILayout.Width(ExportButtonWidth)))
+            {
+                this.Close();
+            }
+
+            if (GUILayout.Button(ExportButtonName, GUILayout.Width(ExportButtonWidth)))
+            {
+                if (Export())
+                {
+                    this.Close();
+                }
+            }
+            GUILayout.EndHorizontal();
+            EditorGUILayout.Space(); // adding a space at bottom of dialog so buttons aren't right at the edge
+
+            if (GUI.changed)
+            {
+                SaveExportSettings();
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the file exists and if it does then asks if it should be overwritten.
+        /// </summary>
+        /// <returns><c>true</c>, if file should be overwritten, <c>false</c> otherwise.</returns>
+        /// <param name="filePath">File path.</param>
+        protected bool OverwriteExistingFile(string filePath)
+        {
+            // check if file already exists, give a warning if it does
+            if (System.IO.File.Exists(filePath))
+            {
+                bool overwrite = UnityEditor.EditorUtility.DisplayDialog(
+                    string.Format("{0} Warning", ModelExporter.PACKAGE_UI_NAME),
+                    string.Format("File {0} already exists.\nOverwrite cannot be undone.", filePath),
+                    "Overwrite", "Cancel");
+                if (!overwrite)
+                {
+                    if (GUI.changed)
+                    {
+                        SaveExportSettings();
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    internal class ExportModelEditorWindow : ExportOptionsEditorWindow
+    {
+        public const string k_SessionStoragePrefix = "FbxExporterOptions_{0}";
+        protected override string SessionStoragePrefix { get { return k_SessionStoragePrefix; } }
+
+        protected override float MinWindowHeight { get { return 310; } } // determined by trial and error
+        protected override bool DisableNameSelection
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        protected override GameObject FirstGameObjectToExport
+        {
+            get
+            {
+                return (IsTimelineAnim)
+                    ? AnimationOnlyExportData.GetGameObjectAndAnimationClip(GetToExport()[0]).Key
+                    : ModelExporter.GetGameObject(GetToExport()[0]);
+            }
+        }
+
+        protected override bool DisableTransferAnim
+        {
+            get
+            {
+                // don't transfer animation if we are exporting more than one hierarchy, the timeline clips from
+                // a playable director, or if only the model is being exported
+                // if we are on the timeline then export length can be more than 1
+                return GetToExport() == null || GetToExport().Length == 0 || (!IsTimelineAnim && GetToExport().Length > 1) || SettingsObject.ModelAnimIncludeOption == ExportSettings.Include.Model;
+            }
+        }
+
+        private bool m_isTimelineAnim = false;
+        protected bool IsTimelineAnim
+        {
+            get { return m_isTimelineAnim; }
+            set
+            {
+                m_isTimelineAnim = value;
+                if (m_isTimelineAnim)
+                {
+                    m_previousInclude = ExportModelSettingsInstance.info.ModelAnimIncludeOption;
+                    ExportModelSettingsInstance.info.SetModelAnimIncludeOption(ExportSettings.Include.Anim);
+                }
+                if (InnerEditor)
+                {
+                    var exportModelSettingsEditor = InnerEditor as ExportModelSettingsEditor;
+                    if (exportModelSettingsEditor)
+                    {
+                        exportModelSettingsEditor.DisableIncludeDropdown(m_isTimelineAnim);
+                    }
+                }
+            }
+        }
+
+        private bool m_singleHierarchyExport = true;
+        protected bool SingleHierarchyExport
+        {
+            get { return m_singleHierarchyExport; }
+            set
+            {
+                m_singleHierarchyExport = value;
+
+                if (InnerEditor)
+                {
+                    var exportModelSettingsEditor = InnerEditor as ExportModelSettingsEditor;
+                    if (exportModelSettingsEditor)
+                    {
+                        exportModelSettingsEditor.SetIsSingleHierarchy(m_singleHierarchyExport);
+                    }
+                }
+            }
+        }
+
+        public override void ResetSessionSettings(string defaultSettings = null)
+        {
+            base.ResetSessionSettings(defaultSettings);
+
+            // save the source and dest as these are not serialized
+            var source = m_exportModelSettingsInstance.info.AnimationSource;
+            var dest = m_exportModelSettingsInstance.info.AnimationDest;
+
+            m_exportModelSettingsInstance = null;
+            ExportModelSettingsInstance.info.SetAnimationSource(source);
+            ExportModelSettingsInstance.info.SetAnimationDest(dest);
+            InnerEditor = Editor.CreateEditor(ExportModelSettingsInstance);
+        }
+
+        private ExportModelSettings m_exportModelSettingsInstance;
+        public ExportModelSettings ExportModelSettingsInstance
+        {
+            get
+            {
+                if (m_exportModelSettingsInstance == null)
+                {
+                    // make a copy of the settings
+                    m_exportModelSettingsInstance = ScriptableObject.CreateInstance(typeof(ExportModelSettings)) as ExportModelSettings;
+                    // load settings stored in Unity session, default to DefaultPreset, if none then Export Settings
+                    var defaultPresets = Preset.GetDefaultPresetsForObject(m_exportModelSettingsInstance);
+                    if (defaultPresets.Length <= 0)
+                    {
+                        RestoreSettingsFromSession(ExportSettings.instance.ExportModelSettings.info);
+                    }
+                    else
+                    {
+                        // apply the first default preset
+                        // TODO: figure out what it means to have multiple default presets, when would they be applied?
+                        defaultPresets[0].ApplyTo(m_exportModelSettingsInstance);
+                        RestoreSettingsFromSession(m_exportModelSettingsInstance.info);
+                    }
+                }
+                return m_exportModelSettingsInstance;
+            }
+        }
+
+        public override void SaveExportSettings()
+        {
+            // check if the settings are different from what is in the Project Settings and only store
+            // if they are. Otherwise we want to keep them updated with changes to the Project Settings.
+            bool settingsChanged = !(ExportModelSettingsInstance.Equals(ExportSettings.instance.ExportModelSettings));
+            var projectSettingsPaths = ExportSettings.instance.GetCopyOfFbxSavePaths();
+            settingsChanged |= !projectSettingsPaths.SequenceEqual(FbxSavePaths);
+            settingsChanged |= SelectedFbxPath != ExportSettings.instance.SelectedFbxPath;
+
+            if (settingsChanged)
+            {
+                StoreSettingsInSession();
+            }
+        }
+
+        protected override ExportOptionsSettingsSerializeBase SettingsObject
+        {
+            get { return ExportModelSettingsInstance.info; }
+        }
+
+        private ExportSettings.Include m_previousInclude = ExportSettings.Include.ModelAndAnim;
+
+        public struct meshChannelSetting
+        {
+            public bool deleteColor;
+            public bool deleteNormal;
+            public bool deleteTangent;
+            public bool deleteUV0;
+            public bool deleteUV2;
+            public bool deleteUV3;
+            public bool deleteUV4;
+            public bool deleteUV5;
+            public bool deleteUV6;
+            public bool deleteUV7;
+            public bool deleteUV8;
+        }
+
+        public Dictionary<Mesh, meshChannelSetting> meshSettings = new Dictionary<Mesh, meshChannelSetting>();
+        public Dictionary<GameObject, bool> gameObjectShows = new Dictionary<GameObject, bool>();
+        public Dictionary<Mesh, bool> meshShows = new Dictionary<Mesh, bool>();
+
+        public bool checkCalculateNormal = false;
+        public bool checkCalculateTangent = false;
+        private bool checkCalculateUV2 = false;
+
+        protected override void CreateCustomUI()
+        {
+            EditorGUILayout.Space(5);
+            EditorGUI.indentLevel--;
+            EditorGUILayout.LabelField("模型数据保留项");
+            EditorGUI.indentLevel++;
+            checkCalculateNormal = EditorGUILayout.Toggle("计算法线", checkCalculateNormal);
+            checkCalculateTangent = EditorGUILayout.Toggle("计算切线", checkCalculateTangent);
+            checkCalculateUV2 = EditorGUILayout.Toggle("计算UV2", checkCalculateUV2);
+
+            var objects = GetToExport();
+            int objectCount = objects.Length;
+            for (int i = 0; i < objectCount; i++)
+            {
+                var _object = objects[i] as GameObject;
+                if (!gameObjectShows.ContainsKey(_object))
+                    gameObjectShows[_object] = true;
+                GUILayout.BeginHorizontal();
+                GUI.enabled = false;
+                EditorGUILayout.ObjectField(new GUIContent($"{_object.name}"), _object, typeof(GameObject), true, GUILayout.Width(350));
+                GUI.enabled = true;
+                gameObjectShows[_object] = EditorGUILayout.Toggle(gameObjectShows[_object]);
+                GUILayout.EndHorizontal();
+                if (!gameObjectShows[_object])
+                    continue;
+                var _meshFilters = _object.GetComponentsInChildren<MeshFilter>();
+                var _skindMeshRenderer = _object.GetComponentsInChildren<SkinnedMeshRenderer>();
+                int _meshFiltersCount = _meshFilters.Length;
+                int _skindMeshRendererCount = _skindMeshRenderer.Length;
+
+                void ShowMeshChannels(Mesh meshInput)
+                {
+                    if (!meshSettings.ContainsKey(meshInput))
+                        meshSettings[meshInput] = new meshChannelSetting();
+                    var settings = meshSettings[meshInput];
+                    int vertexCount = meshInput.vertices.Length;
+                    bool hasVertexColor = meshInput.colors != null && meshInput.colors.Length == vertexCount;
+                    bool hasNormal = meshInput.normals != null && meshInput.normals.Length == vertexCount;
+                    bool hasTangent = meshInput.tangents != null && meshInput.tangents.Length == vertexCount;
+                    bool hasUV0 = meshInput.uv != null && meshInput.uv.Length == vertexCount;
+                    bool hasUV2 = meshInput.uv2 != null && meshInput.uv2.Length == vertexCount;
+                    bool hasUV3 = meshInput.uv3 != null && meshInput.uv3.Length == vertexCount;
+                    bool hasUV4 = meshInput.uv4 != null && meshInput.uv4.Length == vertexCount;
+                    bool hasUV5 = meshInput.uv5 != null && meshInput.uv5.Length == vertexCount;
+                    bool hasUV6 = meshInput.uv6 != null && meshInput.uv6.Length == vertexCount;
+                    bool hasUV7 = meshInput.uv7 != null && meshInput.uv7.Length == vertexCount;
+                    bool hasUV8 = meshInput.uv8 != null && meshInput.uv8.Length == vertexCount;
+                    GUI.enabled = true;
+
+                    EditorGUI.BeginChangeCheck();
+                    if (hasVertexColor)
+                        settings.deleteColor = !EditorGUILayout.Toggle("顶点色", !settings.deleteColor);
+                    if (hasNormal)
+                        settings.deleteNormal = !EditorGUILayout.Toggle("法线", !settings.deleteNormal);
+                    if (hasTangent)
+                        settings.deleteTangent = !EditorGUILayout.Toggle("切线", !settings.deleteTangent);
+                    if (hasUV0)
+                        settings.deleteUV0 = !EditorGUILayout.Toggle("UV0", !settings.deleteUV0);
+                    if (hasUV2)
+                        settings.deleteUV2 = !EditorGUILayout.Toggle("UV2", !settings.deleteUV2);
+                    if (hasUV3)
+                        settings.deleteUV3 = !EditorGUILayout.Toggle("UV3", !settings.deleteUV3);
+                    if (hasUV4)
+                        settings.deleteUV4 = !EditorGUILayout.Toggle("UV4", !settings.deleteUV4);
+                    if (hasUV5)
+                        settings.deleteUV5 = !EditorGUILayout.Toggle("UV5", !settings.deleteUV5);
+                    if (hasUV6)
+                        settings.deleteUV6 = !EditorGUILayout.Toggle("UV6", !settings.deleteUV6);
+                    if (hasUV7)
+                        settings.deleteUV7 = !EditorGUILayout.Toggle("UV7", !settings.deleteUV7);
+                    if (hasUV8)
+                        settings.deleteUV8 = !EditorGUILayout.Toggle("UV8", !settings.deleteUV8);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        meshSettings[meshInput] = settings;
+                    }
+                    GUI.enabled = false;
+                }
+
+                EditorGUI.indentLevel++;
+                GUI.enabled = false;
+                for (int k = 0; k < _meshFiltersCount; k++)
+                {
+                    if (_meshFilters[k] == null || _meshFilters[k].sharedMesh == null)
+                        continue;
+                    Mesh _mesh = _meshFilters[k].sharedMesh;
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.ObjectField(new GUIContent($"mesh_{k}"), _mesh, typeof(Mesh), true, GUILayout.Width(350));
+                    if (!meshShows.ContainsKey(_mesh))
+                        meshShows[_mesh] = true;
+                    GUI.enabled = true;
+                    EditorGUI.indentLevel--;
+                    meshShows[_mesh] = EditorGUILayout.Toggle(meshShows[_mesh]);
+                    EditorGUI.indentLevel++;
+                    GUI.enabled = false;
+                    GUILayout.EndHorizontal();
+                    if (!meshShows[_mesh])
+                        continue;
+                    EditorGUI.indentLevel++;
+                    ShowMeshChannels(_mesh);
+                    EditorGUI.indentLevel--;
+                }
+
+                for (int k = 0; k < _skindMeshRendererCount; k++)
+                {
+                    if (_skindMeshRenderer[k] == null || _skindMeshRenderer[k].sharedMesh == null)
+                        continue;
+                    Mesh _mesh = _skindMeshRenderer[k].sharedMesh;
+                    EditorGUILayout.ObjectField(new GUIContent($"mesh_{k + _meshFiltersCount}"), _mesh, typeof(Mesh), allowSceneObjects: false);
+                    EditorGUI.indentLevel++;
+                    ShowMeshChannels(_mesh);
+                    EditorGUI.indentLevel--;
+                }
+                GUI.enabled = true;
+
+                EditorGUI.indentLevel--;
+            }
+        }
+
+        public static ExportModelEditorWindow Init(IEnumerable<UnityEngine.Object> toExport, string filename = "", bool isTimelineAnim = false)
+        {
+            ExportModelEditorWindow window = CreateWindow<ExportModelEditorWindow>();
+            window.IsTimelineAnim = isTimelineAnim;
+
+            int numObjects = window.SetGameObjectsToExport(toExport);
+            if (string.IsNullOrEmpty(filename))
+            {
+                filename = window.DefaultFilename;
+            }
+            window.InitializeWindow(filename);
+            window.SingleHierarchyExport = (numObjects == 1);
+            window.Show();
+            return window;
+        }
+
+        protected int SetGameObjectsToExport(IEnumerable<UnityEngine.Object> toExport)
+        {
+            SetToExport(toExport.ToArray());
+            if (GetToExport().Length == 0) return 0;
+
+            TransferAnimationSource = null;
+            TransferAnimationDest = null;
+
+            // if only one object selected, set transfer source/dest to this object
+            if (GetToExport().Length == 1 || (IsTimelineAnim && GetToExport().Length > 0))
+            {
+                GameObject go = FirstGameObjectToExport;
+                if (go)
+                {
+                    TransferAnimationSource = go.transform;
+                    TransferAnimationDest = go.transform;
+                }
+            }
+
+            return GetToExport().Length;
+        }
+
+        /// <summary>
+        /// Gets the filename from objects to export.
+        /// </summary>
+        /// <returns>The object's name if one object selected, "Untitled" if multiple
+        /// objects selected for export.</returns>
+        protected string DefaultFilename
+        {
+            get
+            {
+                var filename = "";
+                if (GetToExport().Length == 1)
+                {
+                    filename = GetToExport()[0].name;
+                }
+                else
+                {
+                    filename = "Untitled";
+                }
+                return filename;
+            }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if (!InnerEditor)
+            {
+                InnerEditor = UnityEditor.Editor.CreateEditor(ExportModelSettingsInstance);
+                this.SingleHierarchyExport = m_singleHierarchyExport;
+                this.IsTimelineAnim = m_isTimelineAnim;
+            }
+        }
+
+        protected void OnDisable()
+        {
+            RestoreSettings();
+        }
+
+        /// <summary>
+        /// Restore changed export settings after export
+        /// </summary>
+        protected virtual void RestoreSettings()
+        {
+            if (IsTimelineAnim)
+            {
+                ExportModelSettingsInstance.info.SetModelAnimIncludeOption(m_previousInclude);
+            }
+        }
+
+
+        [SecurityPermission(SecurityAction.LinkDemand)]
+        protected override bool Export()
+        {
+            if (string.IsNullOrEmpty(ExportFileName))
+            {
+                Debug.LogError("FbxExporter: Please specify an fbx filename");
+                return false;
+            }
+            var folderPath = ExportSettings.GetAbsoluteSavePath(FbxSavePaths[SelectedFbxPath]);
+            var filePath = System.IO.Path.Combine(folderPath, ExportFileName + ".fbx");
+
+            if (!OverwriteExistingFile(filePath))
+            {
+                return false; //Overrite提示时选择取消导出
+            }
+
+            //数据处理
+            var objects = GetToExport();
+            int objectCount = objects.Length;
+            for (int i = 0; i < objectCount; i++)
+            {
+                var _object = objects[i] as GameObject;
+                var _meshFilters = _object.GetComponentsInChildren<MeshFilter>();
+                var _skindMeshRenderer = _object.GetComponentsInChildren<SkinnedMeshRenderer>();
+                int _meshFiltersCount = _meshFilters.Length;
+                int _skindMeshRendererCount = _skindMeshRenderer.Length;
+
+                void SetupData(Mesh mesh)
+                {
+                    meshChannelSetting channelSetting = meshSettings[mesh];
+                    if (channelSetting.deleteColor)
+                        mesh.colors = new Color[0];
+                    if (channelSetting.deleteNormal)
+                        mesh.normals = new Vector3[0];
+                    if (channelSetting.deleteTangent)
+                        mesh.tangents = new Vector4[0];
+                    if (channelSetting.deleteUV0)
+                        mesh.uv = new Vector2[0];
+                    if (channelSetting.deleteUV2)
+                        mesh.uv2 = new Vector2[0];
+                    if (channelSetting.deleteUV3)
+                        mesh.uv3 = new Vector2[0];
+                    if (channelSetting.deleteUV4)
+                        mesh.uv4 = new Vector2[0];
+                    if (channelSetting.deleteUV5)
+                        mesh.uv5 = new Vector2[0];
+                    if (channelSetting.deleteUV6)
+                        mesh.uv6 = new Vector2[0];
+                    if (channelSetting.deleteUV7)
+                        mesh.uv7 = new Vector2[0];
+                    if (channelSetting.deleteUV8)
+                        mesh.uv8 = new Vector2[0];
+                }
+
+                for (int k = 0; k < _meshFiltersCount; k++)
+                {
+                    if (_meshFilters[k] == null || _meshFilters[k].sharedMesh == null)
+                        continue;
+                    SetupData(_meshFilters[k].sharedMesh);
+                }
+
+                for (int k = 0; k < _skindMeshRendererCount; k++)
+                {
+                    if (_skindMeshRenderer[k] == null || _skindMeshRenderer[k].sharedMesh == null)
+                        continue;
+                    SetupData(_skindMeshRenderer[k].sharedMesh);
+                }
+            }
+
+            if (ModelExporter.ExportObjects(filePath, GetToExport(), SettingsObject) != null)
+            {
+                // refresh the asset database so that the file appears in the
+                // asset folder view.
+                AssetDatabase.Refresh();
+
+                //模型导入设置
+                string _path = filePath.Replace("\\", "/");
+                _path = _path.Substring(filePath.IndexOf("Assets"));
+                ModelImporter modelImporter = AssetImporter.GetAtPath(_path) as ModelImporter;
+                if (modelImporter != null)
+                {
+                    modelImporter.importNormals = ModelImporterNormals.Import;
+                    modelImporter.importTangents = ModelImporterTangents.Import;
+                    if (checkCalculateNormal)
+                        modelImporter.importNormals = ModelImporterNormals.Calculate;
+                    if (checkCalculateTangent)
+                        modelImporter.importTangents = ModelImporterTangents.CalculateMikk;
+                    modelImporter.generateSecondaryUV = false;
+                    if (checkCalculateUV2)
+                        modelImporter.generateSecondaryUV = true;
+                    modelImporter.SaveAndReimport();
+                    AssetDatabase.Refresh();
+                }
+            }
+
+            return true;
+        }
+
+#if UNITY_2018_1_OR_NEWER
+        protected override void ShowPresetReceiver()
+        {
+            ShowPresetReceiver(ExportModelSettingsInstance);
+        }
+#endif
+    }
+}

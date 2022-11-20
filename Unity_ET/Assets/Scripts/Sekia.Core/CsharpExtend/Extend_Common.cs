@@ -11,6 +11,13 @@ public static partial class SekiaExtend
     #region String
     static StringBuilder sb = new StringBuilder(20); //用前Clear
 
+    public static string ToUnityPath(this string path)
+    {
+        string unityPath = path.Replace("\\", "/");
+        unityPath = unityPath.Substring(unityPath.IndexOf("Assets/"));
+        return unityPath;
+    }
+
     public static int StringToInt(this string word)
     {
         //检查被转换的数值是否能够用 int 表示

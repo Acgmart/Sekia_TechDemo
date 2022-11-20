@@ -40,11 +40,11 @@ namespace UnityEditor
                 {
                     if (GUILayout.Button("Off"))
                     {
-                        material.EnableKeyword(keywordName); 
+                        material.EnableKeyword(keywordName);
                         material.SetInt("_AlphaClip", 1);
                     }
                 }
-                
+
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();

@@ -32,6 +32,8 @@ Shader "SekiaPipeline/Lit"
             #pragma multi_compile_local_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile _ LIGHTMAP_ON
             //#define _ADDITIONAL_LIGHTS
+
+            #pragma shader_feature _ _DEBUG_VERTEXCOLOR
             #pragma vertex vert
             #pragma fragment frag
             #include "_Lib/_LitInput.hlsl"
