@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Ground_4
+  m_Shader: {fileID: 4800000, guid: 129ded3ea3ab2c740a0bf0b2173713e2, type: 3}
+  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: f67c9facef146804bb873252d98e2c91, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseAlphaChannel:
+        m_Texture: {fileID: 2800000, guid: bf778cd4515a0c643af5e0c1034f7be6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseBlackChannel:
+        m_Texture: {fileID: 2800000, guid: 6221f1ee6d3623f49af21b64e1d4ad6f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseGreenChannel:
+        m_Texture: {fileID: 2800000, guid: 42d34f9c01f55704380b1ac836ad3e4b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseRedChannel:
+        m_Texture: {fileID: 2800000, guid: 4bdf0c3e1fad3704aba15e61649d1eb8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 5, y: 5}
+        m_Offset: {x: 0, y: 0}
+    - _HeightAlphachannel:
+        m_Texture: {fileID: 2800000, guid: e82896696bf2f984c8d3126227ecf21a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightBlackChannel:
+        m_Texture: {fileID: 2800000, guid: 42b6f6108d0301d4e8a17331b769435a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightGreenchannel:
+        m_Texture: {fileID: 2800000, guid: 4650dc4d6149146478c0b54a9f651001, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightRedChannel:
+        m_Texture: {fileID: 2800000, guid: 99efcde877ad5b64fa0fb5170976d947, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 4bdf0c3e1fad3704aba15e61649d1eb8, type: 3}
+        m_Scale: {x: 5, y: 5}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 2800000, guid: 42d34f9c01f55704380b1ac836ad3e4b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalAlphaChannel:
+        m_Texture: {fileID: 2800000, guid: 5a67e4d4b8a8a2947b87168d56b0ef3c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalBlackChannel:
+        m_Texture: {fileID: 2800000, guid: 297549b99e02f6b48a4f58a6566468f1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalGreenChannel:
+        m_Texture: {fileID: 2800000, guid: e14f5e27d5b8db44dac17dac3aff7526, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalRedChannel:
+        m_Texture: {fileID: 2800000, guid: f67c9facef146804bb873252d98e2c91, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BlendingStrengthAlpha: 1.23
+    - _BlendingStrengthGreen: 2.85
+    - _BlendingstrengthRed: 0.7
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _EdgeLength: 15
+    - _Float1: 3.4
+    - _GlossMapScale: 0.682
+    - _Glossiness: 0.183
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _NormalmapstrengthAlpha: 2.32
+    - _NormalmapstrengthBlack: 1
+    - _NormalmapstrengthGreen: 1.5
+    - _NormalmapstrengthRed: 2.41
+    - _OcclusionStrength: 1
+    - _Parallax: 0.005
+    - _ParallaxStrength: 0
+    - _SmoothnessTextureChannel: 0
+    - _SmoothnessshiftAlphaChannel: 1.47
+    - _SmoothnessshiftBlackchannel: 0.2
+    - _SmoothnessshiftGreenChannel: 0.85
+    - _SmoothnessshiftRedChannel: 0.7
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _Tiling: 20
+    - _TilingAlpha: 56.3
+    - _TilingBlack: 47.4
+    - _TilingGreen: 32.6
+    - _TilingRed: 10
+    - _UVSec: 0
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorshiftAlphaChannel: {r: 0.6617647, g: 0.6617647, b: 0.6617647, a: 0}
+    - _ColorshiftBlackChannel: {r: 0.5441177, g: 0.5441177, b: 0.5441177, a: 0}
+    - _ColorshiftGreenChannel0: {r: 0.5147059, g: 0.48098382, b: 0.45036766, a: 0}
+    - _ColorshiftRedChannel: {r: 0.87564135, g: 0.88235295, b: 0.39576122, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Wetness_color: {r: 1, g: 1, b: 1, a: 0}

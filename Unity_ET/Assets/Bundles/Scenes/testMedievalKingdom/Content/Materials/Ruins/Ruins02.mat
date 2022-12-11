@@ -1,0 +1,279 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Ruins02
+  m_Shader: {fileID: 4800000, guid: b1a8003b3a91375448f9f79b0f6e32f6, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Detail_mask_1_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_smoothness_map_input:
+        m_Texture: {fileID: 2800000, guid: dba25366d3f56db49ae2bb679e287fae, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambient_Occlusion_map_input:
+        m_Texture: {fileID: 2800000, guid: 23eedb14c17714343b429fef57dbf2f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Clouds:
+        m_Texture: {fileID: 2800000, guid: 7d095a4e5bb60a543bd5b4555ff6b7c6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Clouds2:
+        m_Texture: {fileID: 2800000, guid: 0ead5c456c2686a4a9b6019204dcded3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormal_map_inputMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail_mask_1_map_input:
+        m_Texture: {fileID: 2800000, guid: 1a668aaa03ed037428b32cfcae6a07b9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Dirt:
+        m_Texture: {fileID: 2800000, guid: d201c5dd37125904c8febf7390242bc8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Edge_mask_map_input:
+        m_Texture: {fileID: 2800000, guid: 0cc1be9555c6d1f49b3b9250750f2715, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_map_input:
+        m_Texture: {fileID: 2800000, guid: 36c61abddb694a945ad36399d38d5f27, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_AO:
+        m_Texture: {fileID: 2800000, guid: 799fc662f4f04ff4c9a63550f43a40df, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_Ambient_Occlusion_map_input:
+        m_Texture: {fileID: 2800000, guid: 23eedb14c17714343b429fef57dbf2f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_Curvature:
+        m_Texture: {fileID: 2800000, guid: 0cc1be9555c6d1f49b3b9250750f2715, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_Normal_map_input:
+        m_Texture: {fileID: 2800000, guid: 36c61abddb694a945ad36399d38d5f27, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_Thickness:
+        m_Texture: {fileID: 2800000, guid: 0d3442e9792fb5e4682df1d0aa8a1a77, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_WorlSpaceNormal_map_inputs:
+        m_Texture: {fileID: 2800000, guid: 67ca8de33db0a304cb0d7fb022adcfe1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_inner_mask:
+        m_Texture: {fileID: 2800000, guid: 1a668aaa03ed037428b32cfcae6a07b9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_inner_mask2:
+        m_Texture: {fileID: 2800000, guid: 76d0f93fd367d74469e7deaff55da655, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_low_1001_AO:
+        m_Texture: {fileID: 2800000, guid: 799fc662f4f04ff4c9a63550f43a40df, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_low_1001_Curvature:
+        m_Texture: {fileID: 2800000, guid: 13712f1aaff78594dacbab436f4ad289, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_low_1001_ID:
+        m_Texture: {fileID: 2800000, guid: eebbc96932449ea47860d667e5067ec3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_low_1001_Normal_map_input:
+        m_Texture: {fileID: 2800000, guid: 7896a8f736ad56749aa7a4f8eb2c3b4e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ruins1_low_1001_WorlSpaceNormal_map_inputs:
+        m_Texture: {fileID: 2800000, guid: 08f624ad66dcd8c4db618937afbd81b1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 67ca8de33db0a304cb0d7fb022adcfe1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: 475548bddc2ab9b4b9fa823b486d7066, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 2800000, guid: 23eedb14c17714343b429fef57dbf2f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample3:
+        m_Texture: {fileID: 2800000, guid: 0ead5c456c2686a4a9b6019204dcded3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample4:
+        m_Texture: {fileID: 2800000, guid: 1a668aaa03ed037428b32cfcae6a07b9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample5:
+        m_Texture: {fileID: 2800000, guid: 6799dc0960212a34683f28f20b1ea31d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample6:
+        m_Texture: {fileID: 2800000, guid: 186b67f3ca68ea849b97f56091052191, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample7:
+        m_Texture: {fileID: 2800000, guid: 36c61abddb694a945ad36399d38d5f27, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample8:
+        m_Texture: {fileID: 2800000, guid: 23eedb14c17714343b429fef57dbf2f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Top_mask_mettalic_smoothness:
+        m_Texture: {fileID: 2800000, guid: a32a858a403b44847864758ec5578e2b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Top_mask_normal:
+        m_Texture: {fileID: 2800000, guid: 158cb12c39f8d93469bc5ef379fec320, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Top_mask_texture:
+        m_Texture: {fileID: 2800000, guid: ddf6344e26e0f7e44a9a606e40d2f832, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _base_Metallic_Smoothness:
+        m_Texture: {fileID: 2800000, guid: 186b67f3ca68ea849b97f56091052191, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _inner_mask2:
+        m_Texture: {fileID: 2800000, guid: 76d0f93fd367d74469e7deaff55da655, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ruins1_roughness:
+        m_Texture: {fileID: 2800000, guid: 2003f25624b5d2a428325a8105fafff4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ruins1_roughness1:
+        m_Texture: {fileID: 2800000, guid: 2003f25624b5d2a428325a8105fafff4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AO_shift: 0.401
+    - _Base_Normal_Intensity: 1
+    - _Bricks_color_differrence: 0
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormal_map_inputMapScale: 1
+    - _Detail_1_level: 2
+    - _Dirt_level: -1
+    - _DstBlend: 0
+    - _Edge_wear: 0.743
+    - _Edges_intensity: 0.5
+    - _Float0: 2
+    - _Float1: 1
+    - _Float2: 2
+    - _Float3: 0.5
+    - _Float4: 1
+    - _Float6: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Material_Smoothness_shift: 1.029728
+    - _Metallic: 0
+    - _Mode: 0
+    - _Moss_intensity: 1
+    - _Normal_map_input_Detail_level: 1
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _Ruins_moss_intensity: 1
+    - _Smoothnes_Shift: 1
+    - _SmoothnessTextureChannel: 0
+    - _Smoothness_shift: 1
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _Top_mask_level: 1
+    - _Top_mask_normal_intensity: 2
+    - _Top_mask_smoothness_shift: 1
+    - _Top_mask_tiling: 4
+    - _UVSec: 0
+    - _ZWrite: 1
+    - __dirty: 0
+    - _moss_intensity: 2
+    m_Colors:
+    - _Base_color: {r: 0.29411763, g: 0.2673546, b: 0.24653977, a: 0}
+    - _Between_color: {r: 0.77205884, g: 0.5147039, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color0: {r: 0.44705886, g: 0.4117634, b: 0.38431242, a: 0}
+    - _Color1: {r: 0.4470589, g: 0.4117636, b: 0.3843127, a: 0}
+    - _Color2: {r: 0.654902, g: 0.7058823, b: 0.1490184, a: 0}
+    - _Color3: {r: 0.14509684, g: 0.14117524, b: 0.13333213, a: 0}
+    - _Color4: {r: 0.654902, g: 0.7058823, b: 0.1490186, a: 0}
+    - _Color6: {r: 1, g: 1, b: 1, a: 1}
+    - _Color7: {r: 0.654902, g: 0.7058824, b: 0.1490196, a: 0}
+    - _Detail_color: {r: 0.17647058, g: 0.14922145, b: 0.14922145, a: 0}
+    - _Dirt_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Edge_color: {r: 1, g: 1, b: 1, a: 0}
+    - _Edges_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Moss_color: {r: 0.654902, g: 0.7058823, b: 0.14901838, a: 0}
+    - _Ruins_base_color: {r: 0.44705886, g: 0.41176382, b: 0.38431287, a: 0}
+    - _Ruins_between_bricks_color: {r: 0.1450972, g: 0.14117563, b: 0.13333249, a: 0}
+    - _Ruins_between_color: {r: 0.14509764, g: 0.14117607, b: 0.13333294, a: 0}
+    - _Ruins_moss_color: {r: 0.654902, g: 0.7058823, b: 0.14901873, a: 0}
+    - _Top_Color: {r: 0.123269886, g: 0.29411763, b: 0.1527264, a: 0}
+    - _Top_mask_tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _base_color: {r: 0.43529415, g: 0.38823533, b: 0.35686275, a: 0}
+    - _between_bricks_color: {r: 0.14509675, g: 0.14117515, b: 0.13333204, a: 0}

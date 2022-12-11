@@ -1,0 +1,216 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Fire
+  m_Shader: {fileID: 4800000, guid: 4419966325d11e341b83aca1e12c8ea3, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _2nd_color_mask:
+        m_Texture: {fileID: 2800000, guid: 46c2a8d2c332a2342acae55bf1450fd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambien_Occllusion:
+        m_Texture: {fileID: 2800000, guid: 894f0ca1a1a69b04997cc519b84e323a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Base_Texture:
+        m_Texture: {fileID: 2800000, guid: e22a11ad522d7d2488a749b3df99fd58, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Base_shape:
+        m_Texture: {fileID: 2800000, guid: e22a11ad522d7d2488a749b3df99fd58, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cracks_map:
+        m_Texture: {fileID: 2800000, guid: c7d2837421252d6409ca92e28f209238, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fire_Normal:
+        m_Texture: {fileID: 2800000, guid: a969b12d54379d140a028c3cd3161844, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fire_glow_map:
+        m_Texture: {fileID: 2800000, guid: c9975cd677f4eb0458b87fe80af7373e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fire_maps_1:
+        m_Texture: {fileID: 2800000, guid: c7d2837421252d6409ca92e28f209238, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fire_move:
+        m_Texture: {fileID: 2800000, guid: c9975cd677f4eb0458b87fe80af7373e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fire_move_map:
+        m_Texture: {fileID: 2800000, guid: c9975cd677f4eb0458b87fe80af7373e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Height_map:
+        m_Texture: {fileID: 2800000, guid: 715371a2cc4fb014bb12647c5f6fd98f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Shape_Alpha_cutout:
+        m_Texture: {fileID: 2800000, guid: b65cde33915642a4a9395eee7a294641, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Small_noise_map:
+        m_Texture: {fileID: 2800000, guid: ef11cdaa9fb31f2489c4359977149e7b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: c9975cd677f4eb0458b87fe80af7373e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wind_noise:
+        m_Texture: {fileID: 2800000, guid: c9975cd677f4eb0458b87fe80af7373e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fire_height:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AO_shift: 0.99
+    - _BumpScale: 1
+    - _Color_intensity: 10
+    - _Cracks_map_intensity: 40
+    - _Cracksmapintensity: 15
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _Distortion: 0.2
+    - _DstBlend: 0
+    - _EdgeLength: 15
+    - _Emmisive_Color_intensity: 4.1
+    - _Emmisive_Frequency: 0.58
+    - _Emmisive_intensity: 0
+    - _Emmisive_multiply: 21.9
+    - _Emmisivemultiply: 40
+    - _Fire_Glow_intensity: 25
+    - _Fire_intensity: 25
+    - _Fire_map_1_shift: 2
+    - _Fire_tiling: 1
+    - _Float0: 0.77
+    - _Float1: 10
+    - _Float2: 4.84261
+    - _Float3: 0.92
+    - _Float4: 14.3
+    - _Frequency: 0.26
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Height: 5.08
+    - _Metallic: 0
+    - _Mode: 0
+    - _Normal_intensity: 1
+    - _OcclusionStrength: 1
+    - _Offset_intensity: 0.69
+    - _Overall_ermmisive_intensity: 5.31
+    - _Overallermmisiveintensity: 15
+    - _PAralax_shift: 0.05
+    - _Paralaax_shift: 8.32
+    - _Paralax_shift: 0.05
+    - _Parallax: 0.02
+    - _Small_noise_shift: 15
+    - _Smallnoiseshift: 3.07
+    - _SmoothnessTextureChannel: 0
+    - _Smoothness_Shift: 0.5
+    - _SpecularHighlights: 1
+    - _Speed: 0.01
+    - _SrcBlend: 1
+    - _TessPhongStrength: 0.5
+    - _TransAmbient: 0.2
+    - _TransDirect: 1
+    - _TransNormalDistortion: 0.1
+    - _TransScattering: 2
+    - _TransShadow: 0.9
+    - _Translucency: 1
+    - _UVSec: 0
+    - _Vertex_offset_intensity: 0.49
+    - _Vertex_offset_speed: 0.55
+    - _Wind_power_multiply: 0.0351
+    - _Wind_speed: 0.064
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _2nd_color: {r: 0.9632353, g: 0.3786511, b: 0, a: 0}
+    - _BaseColor: {r: 0.31617647, g: 0.15654904, b: 0.011624128, a: 0}
+    - _Base_Color: {r: 0.6691177, g: 0.3622391, b: 0.08363971, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color0: {r: 1, g: 0.35294116, b: 0, a: 0}
+    - _Color3: {r: 1, g: 0.35172406, b: 0, a: 0}
+    - _Color5: {r: 1, g: 0.35172406, b: 0, a: 0}
+    - _Cracks_map_color: {r: 1, g: 0.062068842, b: 0, a: 0}
+    - _Cracksmapcolor: {r: 1, g: 0.47586206, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Emmisive_Color: {r: 1, g: 0.35294116, b: 0, a: 0}
+    - _Emmisive_color: {r: 1, g: 0.062068976, b: 0, a: 0}
+    - _Fire_1_color: {r: 1, g: 0.35172406, b: 0, a: 0}
+    - _Fire_glow_color: {r: 1, g: 0.35172406, b: 0, a: 0}
+    - _Fire_move_color: {r: 1, g: 0.35172406, b: 0, a: 0}
+    - _Small_noise_color: {r: 1, g: 0, b: 0, a: 0}
+    - _Smallnoisecolor: {r: 0.97794116, g: 0.4465203, b: 0.15819634, a: 0}

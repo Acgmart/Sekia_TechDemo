@@ -1,0 +1,279 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Single_leaf_01
+  m_Shader: {fileID: 4800000, guid: 0f7c21dda7fbbfc49b71ea6f47716bfc, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _2nd_color_mask_input:
+        m_Texture: {fileID: 2800000, guid: e6047c557a6eeb141951c122b7cc9560, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 8aa4f557e2502f74395c53ceedc98a60, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambient_Occlusion_map_input:
+        m_Texture: {fileID: 2800000, guid: 220e4475de97c134f85edd959891bca3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambien_Occulsion:
+        m_Texture: {fileID: 2800000, guid: c35a69962ffffc74c96aa97cce397cfe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_AO:
+        m_Texture: {fileID: 2800000, guid: 2c0f572590cac9a49b79d51fc7dda51c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_Depth:
+        m_Texture: {fileID: 2800000, guid: 9be2d9f921183574495d531ca42ed4f7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_Mask:
+        m_Texture: {fileID: 2800000, guid: f912406eba412bd46b70dc0c75488eb1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_Render:
+        m_Texture: {fileID: 2800000, guid: 4cfc960ea75dd33498a7b9f646fd5120, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_normal:
+        m_Texture: {fileID: 2800000, guid: 963e9ef7dcf002b46b559c158ab999c7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_map_input:
+        m_Texture: {fileID: 2800000, guid: ef3bcb9d53e2cb643993174bf0f8eac5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Hill_roughness:
+        m_Texture: {fileID: 2800000, guid: ef59a990d4bdf6d42822acff8be787eb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Hill_roughness2:
+        m_Texture: {fileID: 2800000, guid: 2d274a673699b8c4fa88ab96d237f251, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_01_Render:
+        m_Texture: {fileID: 2800000, guid: 4cfc960ea75dd33498a7b9f646fd5120, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_01_normal:
+        m_Texture: {fileID: 2800000, guid: 963e9ef7dcf002b46b559c158ab999c7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_2nd_color_mask_input:
+        m_Texture: {fileID: 2800000, guid: 9be2d9f921183574495d531ca42ed4f7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_AO:
+        m_Texture: {fileID: 2800000, guid: 2c0f572590cac9a49b79d51fc7dda51c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_Alpha:
+        m_Texture: {fileID: 2800000, guid: f912406eba412bd46b70dc0c75488eb1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_group_1_roughness:
+        m_Texture: {fileID: 2800000, guid: d7c9a77ded94f3a47aff732ca6da8a7f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_shape:
+        m_Texture: {fileID: 2800000, guid: d7c9a77ded94f3a47aff732ca6da8a7f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Moss_mask:
+        m_Texture: {fileID: 2800000, guid: aec460f127bb3ae4e8fcfd91d1b5a98f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: e68328761e1f397499e121d48d56e88c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Roughness:
+        m_Texture: {fileID: 2800000, guid: 2d274a673699b8c4fa88ab96d237f251, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Shape_Alpha:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha_cutout_mask_map_input:
+        m_Texture: {fileID: 2800000, guid: ef08961267c35274cbc6bf0494661e6f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 412bf6608c1ff84499c3051b059b6181, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: d2341f6e260645f4cb070dab4d4eafc1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample11:
+        m_Texture: {fileID: 2800000, guid: fa271a88ce9b3ba4bba7f7113cc2e82c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 2800000, guid: 5ed84a2de7407254d873f93c24aa9f95, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample6:
+        m_Texture: {fileID: 2800000, guid: e68328761e1f397499e121d48d56e88c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample7:
+        m_Texture: {fileID: 2800000, guid: c35a69962ffffc74c96aa97cce397cfe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample9:
+        m_Texture: {fileID: 2800000, guid: aec460f127bb3ae4e8fcfd91d1b5a98f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tree01_Curvature:
+        m_Texture: {fileID: 2800000, guid: 5ed84a2de7407254d873f93c24aa9f95, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tree1_AO:
+        m_Texture: {fileID: 2800000, guid: fd361e511dbcc4246a2cf7c7b8a0e082, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tree1_WorlSpaceNormals:
+        m_Texture: {fileID: 2800000, guid: d2341f6e260645f4cb070dab4d4eafc1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tree1_basecolor:
+        m_Texture: {fileID: 2800000, guid: 0d338b605b10cd044859035f39ddd4fe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tree1_normal:
+        m_Texture: {fileID: 2800000, guid: 190e9dc6595f34648a8a4157d361d085, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tree1_roughness:
+        m_Texture: {fileID: 2800000, guid: a65be90488835904d9cc2378f007a97b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wind_noise:
+        m_Texture: {fileID: 2800000, guid: 412bf6608c1ff84499c3051b059b6181, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _creased_noise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _plane_Default_BaseColor:
+        m_Texture: {fileID: 2800000, guid: ceb848ff79e29094fa213b7a9e09f625, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _2nd_color_intensity: 0.258
+    - _AODiff: 2
+    - _AO_Intensity: 1
+    - _Ambien_Occlusion_albedo_multiply: 0.02
+    - _Ambient_occlusion_shift: 2
+    - _BumpScale: 1
+    - _ChromaticAberration: 0.1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _Float0: 0.15
+    - _Float1: 3
+    - _Float2: 0.5856935
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Leaf_mask_intensity: 1.5
+    - _Leaf_normal_intensity: 1
+    - _Leaf_smoothness: 0
+    - _Leaves_2nd_color_intensity: 0.445
+    - _MOC: 0.057911556
+    - _Metallic: 0
+    - _Mode: 0
+    - _Moss_level: 0.5
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _Smoothness_Shift: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _TransAmbient: 0.5
+    - _TransDirect: 0.35
+    - _TransNormalDistortion: 0.5
+    - _TransScattering: 1
+    - _TransShadow: 1
+    - _Translucency: 5
+    - _Tree_edges_light: 1.5
+    - _UVSec: 0
+    - _Wind_power: 5
+    - _Wind_power_multiply: 0.15
+    - _Wind_speed: 2
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _2nd_color: {r: 0.3035467, g: 0.42647058, b: 0.24459343, a: 0}
+    - _Base_Color: {r: 0.44857717, g: 0.46323532, b: 0.3814879, a: 0}
+    - _Base_Leaf_color: {r: 0.850876, g: 1, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color0: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Hill_Color_change: {r: 1, g: 1, b: 1, a: 0}
+    - _Leaf_mask_color: {r: 0.50735295, g: 0.50735295, b: 0.50735295, a: 1}
+    - _Leaves_2nd_color: {r: 1, g: 1, b: 1, a: 0}
+    - _Leaves_base_color: {r: 0.35428354, g: 0.5441177, b: 0.22404845, a: 0}
+    - _Moss: {r: 0.69411767, g: 0.7372549, b: 0.2627451, a: 0}
+    - _Moss_color: {r: 0.6553948, g: 0.7058823, b: 0.15051886, a: 0}
+    - _Tree_01_color: {r: 0.7176471, g: 0.76470596, b: 0.26274508, a: 0}
+    - _Tree_edges_light_color: {r: 1, g: 1, b: 1, a: 1}

@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Hill 2
+  m_Shader: {fileID: 4800000, guid: ca8c7b0a6e455b34a956d170adcc5914, type: 3}
+  m_ShaderKeywords: _NORMALMAP
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 3f2a03fdf5c393840b0245053bd7c5d2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_smoothness_map_input:
+        m_Texture: {fileID: 2800000, guid: 9d6267be8413a2e4d8c8a5440ffd2934, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha_cutout_mask_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambien_Occulsion:
+        m_Texture: {fileID: 2800000, guid: 42d821d6761c37f4f94200e650569a66, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambient_Occlusion_map_input:
+        m_Texture: {fileID: 2800000, guid: 42d821d6761c37f4f94200e650569a66, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail_mask_1_map_input:
+        m_Texture: {fileID: 2800000, guid: 0461dd6110ae6504e870740f7507c76b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail_mask_2_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Edge_mask_map_input:
+        m_Texture: {fileID: 2800000, guid: 6d72a6827ee467245a78110d13b340c6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emmisive_mask_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Hill_roughness:
+        m_Texture: {fileID: 2800000, guid: ac935e945b9c04646bfba989d5558a23, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Hill_roughness2:
+        m_Texture: {fileID: 2800000, guid: d7adf7780ed12934a90f65f987b56823, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Metallic_Smoothness_map_input:
+        m_Texture: {fileID: 2800000, guid: ac935e945b9c04646bfba989d5558a23, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Moss_mask:
+        m_Texture: {fileID: 2800000, guid: 0461dd6110ae6504e870740f7507c76b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_map_input:
+        m_Texture: {fileID: 2800000, guid: a14a165655d31ba4393594188f902def, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Roughness:
+        m_Texture: {fileID: 2800000, guid: d7adf7780ed12934a90f65f987b56823, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 3f2a03fdf5c393840b0245053bd7c5d2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample11:
+        m_Texture: {fileID: 2800000, guid: d2e166ee667f8a249869e4be2b797b31, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample6:
+        m_Texture: {fileID: 2800000, guid: a14a165655d31ba4393594188f902def, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample7:
+        m_Texture: {fileID: 2800000, guid: 42d821d6761c37f4f94200e650569a66, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample9:
+        m_Texture: {fileID: 2800000, guid: 0461dd6110ae6504e870740f7507c76b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_normal:
+        m_Texture: {fileID: 2800000, guid: a14a165655d31ba4393594188f902def, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AO_shift: 0
+    - _Alpha_cutout_level: 1
+    - _Alpha_cutout_mask_map_input_level: 1
+    - _Cutoff: 0
+    - _Detail_2_level: 0
+    - _Detail_Smoothness_shift: 0.054
+    - _Detail_level: 0.891
+    - _Edge_wear: 0.064
+    - _Emmisive_intensity: 0
+    - _Material_Smoothness_shift: 0.14
+    - _Metal_object: 0
+    - _Metalobjectusesmettalicsmoothnesmap: 0
+    - _Mettallic_shift: 0
+    - _Moss_level: 2
+    - _Normal_intensity: 1.06
+    - _Normal_map_input_intensity: 1
+    - __dirty: 0
+    m_Colors:
+    - _Base_color: {r: 0.035034604, g: 0.052001566, b: 0.066176474, a: 0}
+    - _Detail_2_color: {r: 0.9779412, g: 0.6676978, b: 0, a: 0}
+    - _Detail_color: {r: 1, g: 0.92486453, b: 0.7205882, a: 0}
+    - _Emmsivie_color: {r: 0.9779412, g: 0.9210103, b: 0.68312067, a: 0}
+    - _Hill_Color_change: {r: 1, g: 1, b: 1, a: 0}
+    - _Material_Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Moss: {r: 0.69411767, g: 0.7372549, b: 0.2627451, a: 0}
+    - _Moss_color: {r: 0.69411767, g: 0.737255, b: 0.26274505, a: 0}

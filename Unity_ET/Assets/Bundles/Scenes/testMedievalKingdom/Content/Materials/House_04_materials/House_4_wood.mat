@@ -1,0 +1,304 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: House_4_wood
+  m_Shader: {fileID: 4800000, guid: ca8c7b0a6e455b34a956d170adcc5914, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AO_Input:
+        m_Texture: {fileID: 2800000, guid: f77bc66b9c4f5434ea97a481b8e34fc4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 3f2a03fdf5c393840b0245053bd7c5d2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha_cutout_mask_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambien_Occulsion:
+        m_Texture: {fileID: 2800000, guid: 42d821d6761c37f4f94200e650569a66, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambient_Occlusion_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Copper_grayscale2:
+        m_Texture: {fileID: 2800000, guid: f446683c340367d41bef5856cda67b6c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormal_map_inputMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail_mask_2_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail_mask_1_map_input:
+        m_Texture: {fileID: 2800000, guid: 0f8dc076c749f13478e921de7fac9e25, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Edge_mask_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emmisive_mask_map_input:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Lantern_AO:
+        m_Texture: {fileID: 2800000, guid: 57a3d57538255cb42bdaa72724516847, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Lantern_ID_mask2:
+        m_Texture: {fileID: 2800000, guid: a82fdbbcd59bbfc439beb3afcc9b9e0a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Lantern_Moss_mask:
+        m_Texture: {fileID: 2800000, guid: 061321c797c7403459d4a75222cb19b9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Lantern_curvature:
+        m_Texture: {fileID: 2800000, guid: 85619241ac6426f4d9a1023f807a738f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_smoothness_map_input:
+        m_Texture: {fileID: 2800000, guid: 3320889b6ffef344396a6dc6a830a0d5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Material_pattern:
+        m_Texture: {fileID: 2800000, guid: d4313493d229c504b928b76fa6688c3a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Metallic_Smoothness_map_input:
+        m_Texture: {fileID: 2800000, guid: f71c00f56888e8443b9c0030b681dc4c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Moss_mask:
+        m_Texture: {fileID: 2800000, guid: 0461dd6110ae6504e870740f7507c76b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_map_input:
+        m_Texture: {fileID: 2800000, guid: 7c3ebf16a179a1a41a1b32fe95c22d82, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Paint_mask:
+        m_Texture: {fileID: 2800000, guid: 0f8dc076c749f13478e921de7fac9e25, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Roof_curvature_mask:
+        m_Texture: {fileID: 2800000, guid: 99a483729aa975c40a85c342095e9a16, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Roughness:
+        m_Texture: {fileID: 2800000, guid: d7adf7780ed12934a90f65f987b56823, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 0f8dc076c749f13478e921de7fac9e25, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: d4313493d229c504b928b76fa6688c3a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 2800000, guid: 99a483729aa975c40a85c342095e9a16, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample3:
+        m_Texture: {fileID: 2800000, guid: b838fa83c90eed34f9c29a27bdf9c290, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample4:
+        m_Texture: {fileID: 2800000, guid: f71c00f56888e8443b9c0030b681dc4c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample5:
+        m_Texture: {fileID: 2800000, guid: a529f5337afb9694486a26ce3d415e1b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample6:
+        m_Texture: {fileID: 2800000, guid: 7c3ebf16a179a1a41a1b32fe95c22d82, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample7:
+        m_Texture: {fileID: 2800000, guid: 7c3ebf16a179a1a41a1b32fe95c22d82, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_AO:
+        m_Texture: {fileID: 2800000, guid: d6b4682369105aa42bd1e55c54d9ea36, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_AO_inverted:
+        m_Texture: {fileID: 2800000, guid: d55c568630db1144f9e8a6d54caff702, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_Barrel_AO:
+        m_Texture: {fileID: 2800000, guid: d751258cf9404c949afe780a050af5af, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_curvature_mask:
+        m_Texture: {fileID: 2800000, guid: 21de25c467203004d93ac3534e98042f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_grayscale:
+        m_Texture: {fileID: 2800000, guid: 7131ee9329355134395b1e266c47f9d1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_normal:
+        m_Texture: {fileID: 2800000, guid: 7c3ebf16a179a1a41a1b32fe95c22d82, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wood_roughness:
+        m_Texture: {fileID: 2800000, guid: f71c00f56888e8443b9c0030b681dc4c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _box_ambient_occlusion:
+        m_Texture: {fileID: 2800000, guid: f77bc66b9c4f5434ea97a481b8e34fc4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _box_curvature_blur:
+        m_Texture: {fileID: 2800000, guid: 675d9ecbe9cbb72459297a466ffd486c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _concrete_grayscale:
+        m_Texture: {fileID: 2800000, guid: eb85a9f6ec8895a488b0a9fae9639feb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _concrete_metall_smooth:
+        m_Texture: {fileID: 2800000, guid: 1d84136a27cc27f40839216676529abb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _concrete_normal:
+        m_Texture: {fileID: 2800000, guid: 3f35cf0e6c3ca86478862319d4e54981, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _curvature_blur:
+        m_Texture: {fileID: 2800000, guid: 675d9ecbe9cbb72459297a466ffd486c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AO_Intensity: 0.6
+    - _AO_shift: 0.509
+    - _Alpha_cutout_mask_map_input_level: 1
+    - _BumpScale: 1
+    - _Concrete_smoothness: 1
+    - _Cutoff: 0
+    - _DetailNormal_map_inputMapScale: 1
+    - _Detail_2_level: 0
+    - _Detail_Smoothness_shift: 0.143
+    - _Detail_level: 0
+    - _Detail_smoothness: 0
+    - _DstBlend: 0
+    - _Edge_: 1
+    - _Edge_wear: 0
+    - _Emmisive_intensity: 0
+    - _Float0: 0
+    - _Float1: 1
+    - _Float2: 0
+    - _Float3: 0.577
+    - _Float4: 0.587
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Int0: 2
+    - _Material_Smoothness: 1
+    - _Material_Smoothness_shift: 0.84
+    - _Metal_object: 0
+    - _Metallic: 0
+    - _Mettalic_shift: 0
+    - _Mettallic_shift: 0
+    - _Mode: 0
+    - _Moss_2nd_color: 0.4537141
+    - _Moss_Smouuthness: 1
+    - _Moss_intensity: 0
+    - _Moss_level: 2
+    - _Normal_map_input_intensity: 1
+    - _OcclusionStrength: 1
+    - _Paint_Smoothness: 0.283
+    - _Paint_level: 0
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _Tiling: 2
+    - _UVSec: 0
+    - _Wood_Smoothness: 0.568
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _1st_color: {r: 0.42745098, g: 0.22745097, b: 0.13725486, a: 0}
+    - _2nd_Color: {r: 0.42745098, g: 0.22745097, b: 0.13725486, a: 0}
+    - _Base_Color: {r: 0.42745093, g: 0.2274509, b: 0.1372548, a: 0}
+    - _Base_color: {r: 0.42745098, g: 0.22745097, b: 0.13725486, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color0: {r: 0.40000004, g: 0.2509804, b: 0.20392159, a: 0}
+    - _Color1: {r: 0.18431333, g: 0.46274477, b: 0.40784273, a: 0}
+    - _Color3: {r: 0.18431333, g: 0.46274477, b: 0.40784273, a: 0}
+    - _Color4: {r: 0.7279412, g: 0.31109595, b: 0.12310714, a: 0}
+    - _Coopper_color: {r: 0.42745098, g: 0.22745097, b: 0.13725486, a: 0}
+    - _Detail_2_color: {r: 0, g: 0.9779412, b: 0.7756083, a: 0}
+    - _Detail_color: {r: 0, g: 0.9779412, b: 0.7756083, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Emmsivie_color: {r: 0.9779412, g: 0.9210103, b: 0.68312067, a: 0}
+    - _Hill_Color_change: {r: 1, g: 1, b: 1, a: 0}
+    - _Material_Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Moss_color: {r: 0, g: 0.5588235, b: 0.0038539239, a: 0}
+    - _Paint_color: {r: 0.13725471, g: 0.34339407, b: 0.42745084, a: 0}
+    - _Vector0: {r: 4, g: 3, b: 0, a: 0}
+    - _Wood_Color: {r: 0.42745087, g: 0.22745088, b: 0.13725477, a: 0}
+    - _Wood_base_color: {r: 0.36764702, g: 0.15973613, b: 0, a: 0}
+    - _Wood_tiling: {r: 1, g: 1, b: 0, a: 0}

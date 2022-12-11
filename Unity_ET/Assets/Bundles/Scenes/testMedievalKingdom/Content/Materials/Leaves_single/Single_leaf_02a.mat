@@ -1,0 +1,184 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Single_leaf_02a
+  m_Shader: {fileID: 4800000, guid: 0f7c21dda7fbbfc49b71ea6f47716bfc, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _2nd_color_mask_input:
+        m_Texture: {fileID: 2800000, guid: 435dfbc0c2031ff4a8d17e7092ba855c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ambient_Occlusion_map_input:
+        m_Texture: {fileID: 2800000, guid: abd94495c9f92644592122e7b1dc4bd4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_AO:
+        m_Texture: {fileID: 2800000, guid: 2c0f572590cac9a49b79d51fc7dda51c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_Depth:
+        m_Texture: {fileID: 2800000, guid: 9be2d9f921183574495d531ca42ed4f7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BPR_Mask:
+        m_Texture: {fileID: 2800000, guid: f912406eba412bd46b70dc0c75488eb1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_map_input:
+        m_Texture: {fileID: 2800000, guid: 894b02b2444e44741b5c098a8446906e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_01_Render:
+        m_Texture: {fileID: 2800000, guid: 4cfc960ea75dd33498a7b9f646fd5120, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_02_Depth:
+        m_Texture: {fileID: 2800000, guid: c3f48bfe4ef24a744b2d925c31fd910b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_02_Render:
+        m_Texture: {fileID: 2800000, guid: 535f282b6e8813042a7e0bff08731827, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_2nd_color_mask_input:
+        m_Texture: {fileID: 2800000, guid: c3f48bfe4ef24a744b2d925c31fd910b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_AO:
+        m_Texture: {fileID: 2800000, guid: 0821264ec7a4aae4dab5720e3174eaf4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_Alpha:
+        m_Texture: {fileID: 2800000, guid: b7d35d1477d8c9e418edf696d4e655f8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Leaves_shape:
+        m_Texture: {fileID: 2800000, guid: 535f282b6e8813042a7e0bff08731827, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Shape_Alpha:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha_cutout_mask_map_input:
+        m_Texture: {fileID: 2800000, guid: eba4bbd1961afa846b001d183488dcb4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 412bf6608c1ff84499c3051b059b6181, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 2800000, guid: 0821264ec7a4aae4dab5720e3174eaf4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample4:
+        m_Texture: {fileID: 2800000, guid: b7d35d1477d8c9e418edf696d4e655f8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wind_noise:
+        m_Texture: {fileID: 2800000, guid: 412bf6608c1ff84499c3051b059b6181, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _2nd_color_intensity: 1.5
+    - _AODiff: 2
+    - _AO_Intensity: 0.873
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _Float0: 0.971
+    - _Float1: 2
+    - _Float2: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Leaf_mask_intensity: 0
+    - _Leaf_smoothness: 0
+    - _Leaves_2nd_color_intensity: 0.507144
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _Smoothness_Shift: 0.766
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _TransAmbient: 0.5
+    - _TransDirect: 0.35
+    - _TransNormalDistortion: 0.5
+    - _TransScattering: 1
+    - _TransShadow: 0.9
+    - _Translucency: 5
+    - _UVSec: 0
+    - _Wind_power: 0.7
+    - _Wind_power_multiply: 0.192
+    - _Wind_speed: 2.9
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _2nd_color: {r: 0.6838235, g: 0.573205, b: 0.40727726, a: 0}
+    - _Base_Color: {r: 0.545098, g: 0.34993908, b: 0.22352935, a: 0}
+    - _Base_Leaf_color: {r: 0.5930606, g: 0.697, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 0.5930606, g: 0.697, b: 0, a: 0}
+    - _Color2: {r: 1, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Leaf_mask_color: {r: 1, g: 0, b: 0, a: 1}
+    - _Leaves_2nd_color: {r: 1, g: 1, b: 1, a: 0}
+    - _Leaves_base_color: {r: 0.51141715, g: 0.71323526, b: 0.24124135, a: 0}

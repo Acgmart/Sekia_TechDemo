@@ -1,0 +1,184 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Stall_C_Fabric
+  m_Shader: {fileID: 4800000, guid: 8cceb64ff36f85441b0e1496273e8dd8, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fabric_holes:
+        m_Texture: {fileID: 2800000, guid: 112b1e340e676d54d8c9208f479c73e9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fabric_normal:
+        m_Texture: {fileID: 2800000, guid: dd061f1ecaac78f4c82aed36c0301178, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normalmapinput:
+        m_Texture: {fileID: 2800000, guid: 0c970a02b891dcf40a071de5e09c7d04, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stripe1:
+        m_Texture: {fileID: 2800000, guid: ba038bdc7af40784b9d3b72db5047da6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stripe2:
+        m_Texture: {fileID: 2800000, guid: c13d7b96682ef604abbad01f9e2ccf96, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stripe3:
+        m_Texture: {fileID: 2800000, guid: 713fc5b10b1f0c147b72abfc955472e4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 4ee6590d155bdcb4db3ce5ff5f0f13ec, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wind_noise:
+        m_Texture: {fileID: 2800000, guid: 4ee6590d155bdcb4db3ce5ff5f0f13ec, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fabric_AO:
+        m_Texture: {fileID: 2800000, guid: 0517d24bcd88a854b9b14928c2d4bbba, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fabric_folds_AO:
+        m_Texture: {fileID: 2800000, guid: 82925ead7a9fde34293981b4bfef68f7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fabric_metal_smooth:
+        m_Texture: {fileID: 2800000, guid: 6c50d0a1f90164b44b9439b98031e6e5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fabric_metal_smooth2:
+        m_Texture: {fileID: 2800000, guid: 2bc1700c606db604caa57108d2724c0d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _stripes_mask1:
+        m_Texture: {fileID: 2800000, guid: 0cece6389a4d6944e88450decb8c02da, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _stripes_mask1a:
+        m_Texture: {fileID: 2800000, guid: 26b0296167293c3458b8e57b29a178d0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _stripes_mask2:
+        m_Texture: {fileID: 2800000, guid: 070b1c7d8c163a04eba60cf93163f84d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _stripes_mask2a:
+        m_Texture: {fileID: 2800000, guid: 8ff39eb16fa3e2f4db517f63f197dc2f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _stripes_mask3:
+        m_Texture: {fileID: 2800000, guid: e11b34353553a9641b896628a90f4f00, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _stripes_mask3a:
+        m_Texture: {fileID: 2800000, guid: 41790ca1e1e73254c8a2b4b63fffe3f7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _Float0: 2.4
+    - _Float2: 0.7334574
+    - _Float3: 1
+    - _Folds_AO_multiply: 1
+    - _Folds_tiling_shift: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Holes_amount: 0
+    - _Holes_tiling: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _Normal_level: 1
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _Smoothness_shift: 0.7
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _Stripes_tiling: 11.3
+    - _TransAmbient: 0.2
+    - _TransDirect: 1
+    - _TransNormalDistortion: 0.1
+    - _TransScattering: 2
+    - _TransShadow: 0.9
+    - _Translucency: 1
+    - _Translucency_level: 0.1609634
+    - _UVSec: 0
+    - _Wind_Speed: 2.71
+    - _Wind_level: 0.0401
+    - _Wind_top_masking: 1
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 1, g: 0.7098039, b: 0.26666668, a: 0}
+    - _Color2: {r: 0.75, g: 0.5624998, b: 0, a: 0}
+    - _Color3: {r: 0.15294117, g: 0.34117648, b: 0.5137254, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Folds_Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Stripe_1_color: {r: 1, g: 1, b: 1, a: 0}
+    - _Stripe_2_color: {r: 0.8901961, g: 0.5607843, b: 0.37254897, a: 0}
+    - _Stripe_3_color: {r: 0.8352942, g: 0.32156855, b: 0.28235298, a: 0}
