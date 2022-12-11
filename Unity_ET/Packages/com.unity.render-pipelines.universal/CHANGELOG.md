@@ -1,5 +1,15 @@
+---
+uid: changelog
+---
+
 # Changelog
-All notable changes to this package will be documented in this file.
+
+
+## [12.1.8] - 2022-11-04
+
+Version Updated
+The version number for this package has increased due to a version update of a related graphics package.
+
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
@@ -814,7 +824,7 @@ The version number for this package has increased due to a version update of a r
 
 ### Changed
 - The 2D renderer and Light2D component received a number of improvements and are now ready to try as experimental features.
-- Updated the [Feature Comparison Table](lwrp-builtin-feature-comparison.md) to reflect the current state of LWRP features.
+- Updated the Feature Comparison Table page to reflect the current state of LWRP features.
 
 ### Fixed
 - When in playmode, the error 'Non matching Profiler.EndSample' no longer appears. [case 1140750](https://fogbugz.unity3d.com/f/cases/1140750/)
@@ -922,7 +932,7 @@ The version number for this package has increased due to a version update of a r
 - The __Double sided__ property is now __Render Face__. This means you can also do front face culling.
 - Changed the docs for Lit Shader, Simple Lit Shader and Unlit Shader according to Shader GUI changes.
 - When you create a new LWRP Asset, it will now be initialized with settings that favor performance on mobile platforms.
-- Updated the [FAQ](faq.md) and the [Built-in/LWRP feature comparison table](lwrp-builtin-feature-comparison.md).
+- Updated the FAQ section and the Built-in/LWRP feature comparison table.
 
 ### Fixed
 - Several tweaks to reduce bandwidth consumption on mobile devices.
@@ -959,7 +969,7 @@ The version number for this package has increased due to a version update of a r
 
 ## [5.1.0] - 2018-11-19
 ### Added
-- The user documentation for LWRP is now in this GitHub repo, instead of in the separate GitHub wiki. You can find the most up-to-date pages in the [TableOfContents.md](TableOfCotents.md) file. Pages not listed in that file are still in progress.
+- The user documentation for LWRP is now in this GitHub repo, instead of in the separate GitHub wiki. You can find the most up-to-date pages in the TableOfContents.md file. Pages not listed in that file are still in progress.
 
 ### Changed
 - The LWRP package is no longer in preview.

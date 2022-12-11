@@ -269,9 +269,7 @@ namespace UnityEditor.Rendering.Universal
         static void DrawRenderingContent(UniversalRenderPipelineSerializedLight serializedLight, Editor owner)
         {
             serializedLight.settings.DrawRenderMode();
-
-            using (new EditorGUI.DisabledScope(UniversalRenderPipeline.asset.supportsLightLayers))
-                serializedLight.settings.DrawCullingMask();
+            EditorGUILayout.PropertyField(serializedLight.settings.cullingMask, Styles.CullingMask);
         }
 
         static void DrawShadowsContent(UniversalRenderPipelineSerializedLight serializedLight, Editor owner)
@@ -439,6 +437,8 @@ namespace UnityEditor.Rendering.Universal
                     }
                 }
             }
+
+            EditorGUILayout.HelpBox(Styles.ShadowInfo.text, MessageType.Info);
         }
 
         static void DrawLightCookieContent(UniversalRenderPipelineSerializedLight serializedLight, Editor owner)

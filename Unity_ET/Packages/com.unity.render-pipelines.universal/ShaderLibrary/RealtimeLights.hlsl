@@ -1,4 +1,4 @@
-﻿
+
 #ifndef UNIVERSAL_REALTIME_LIGHTS_INCLUDED
 #define UNIVERSAL_REALTIME_LIGHTS_INCLUDED
 
@@ -27,7 +27,7 @@ struct Light
 {
     half3   direction;
     half3   color;
-    half   distanceAttenuation; // full-float precision required on some platforms
+    float   distanceAttenuation; // full-float precision required on some platforms
     half    shadowAttenuation;
     uint    layerMask;
 };

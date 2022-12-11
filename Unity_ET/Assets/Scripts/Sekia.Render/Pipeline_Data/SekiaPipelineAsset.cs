@@ -161,7 +161,7 @@ namespace Sekia
                 if (m_EditorResourcesAsset != null && !m_EditorResourcesAsset.Equals(null))
                     return m_EditorResourcesAsset;
 
-                string resourcePath = UnityEditor.AssetDatabase.GUIDToAssetPath(UniversalRenderPipelineAsset.editorResourcesGUID);
+                string resourcePath = UnityEditor.AssetDatabase.GUIDToAssetPath("3c72bda23337b6b42813c7eeffe9aef9");
                 var objs = UnityEditorInternal.InternalEditorUtility.LoadSerializedFileAndForget(resourcePath);
                 m_EditorResourcesAsset = objs != null && objs.Length > 0 ? objs.First() as UniversalRenderPipelineEditorResources : null;
                 return m_EditorResourcesAsset;

@@ -1,4 +1,4 @@
-﻿#ifndef UNIVERSAL_INPUT_INCLUDED
+#ifndef UNIVERSAL_INPUT_INCLUDED
 #define UNIVERSAL_INPUT_INCLUDED
 
 #define MAX_VISIBLE_LIGHTS_UBO  32
@@ -36,7 +36,7 @@ struct InputData
 {
     float3  positionWS;
     float4  positionCS;
-    half3   normalWS;
+    float3   normalWS;
     half3   viewDirectionWS;
     float4  shadowCoord;
     half    fogCoord;
@@ -86,7 +86,7 @@ SAMPLER(sampler_GlossyEnvironmentCubeMap);
 #define _InvCameraViewProj unity_MatrixInvVP
 float4 _ScaledScreenParams;
 
-half4 _MainLightPosition;
+float4 _MainLightPosition;
 half4 _MainLightColor;
 half4 _MainLightOcclusionProbes;
 uint _MainLightLayerMask;
