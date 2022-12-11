@@ -1,0 +1,20 @@
+!!!!!!!!!
+BEFORE YOU WILL START TO USE PROJECT YOU HAVE TO CHANGE ONE CRUCIAL SETTING
+
+RENDERING PATH FROM - GAMMA TO - LINEAR
+GO TO EDIT->PROJECT->PLAYER->OTHER SETTINGS -> RENDERING PATH TO LINEAR
+
+MORE HERE:
+https://docs.unity3d.com/540/Documentation/Manual/LinearLighting.html
+
+& IN OUR DOCUMENTATION 
+
+Thank you for purchasing this pack.
+
+You can find full Documentation on https://www.beffio.com/medieval-kindgom-documentation
+
+If you have any problems contact as at https://www.beffio.com/contact or hello@beffio.com
+
+We would be greatful if you could consider to rate & review our asset! Thank you.
+
+beffio team.
