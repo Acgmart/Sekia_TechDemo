@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 8cceb64ff36f85441b0e1496273e8dd8
+timeCreated: 1519818108
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Normalmapinput: {fileID: 2800000, guid: 0c970a02b891dcf40a071de5e09c7d04, type: 3}
+  - _fabric_folds_AO: {fileID: 2800000, guid: 82925ead7a9fde34293981b4bfef68f7, type: 3}
+  - _fabric_metal_smooth: {fileID: 2800000, guid: 6c50d0a1f90164b44b9439b98031e6e5,
+      type: 3}
+  - _Fabric_holes: {fileID: 2800000, guid: 112b1e340e676d54d8c9208f479c73e9, type: 3}
+  - _Wind_noise: {fileID: 2800000, guid: 4ee6590d155bdcb4db3ce5ff5f0f13ec, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4419966325d11e341b83aca1e12c8ea3
+timeCreated: 1519378658
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Base_Texture: {fileID: 2800000, guid: e22a11ad522d7d2488a749b3df99fd58, type: 3}
+  - _Cracks_map: {fileID: 2800000, guid: c7d2837421252d6409ca92e28f209238, type: 3}
+  - _Small_noise_map: {fileID: 2800000, guid: ef11cdaa9fb31f2489c4359977149e7b, type: 3}
+  - _Fire_glow_map: {fileID: 2800000, guid: e22a11ad522d7d2488a749b3df99fd58, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

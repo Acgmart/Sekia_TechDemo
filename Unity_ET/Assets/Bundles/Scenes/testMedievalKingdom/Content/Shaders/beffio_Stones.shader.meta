@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b1a8003b3a91375448f9f79b0f6e32f6
+timeCreated: 1519735503
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Top_mask_normal: {fileID: 2800000, guid: a10e98907b5cb784aa93e62c73c60b1a, type: 3}
+  - _Top_mask_texture: {fileID: 2800000, guid: ddf6344e26e0f7e44a9a606e40d2f832, type: 3}
+  - _Albedo_smoothness_map_input: {fileID: 2800000, guid: eb85a9f6ec8895a488b0a9fae9639feb,
+      type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
