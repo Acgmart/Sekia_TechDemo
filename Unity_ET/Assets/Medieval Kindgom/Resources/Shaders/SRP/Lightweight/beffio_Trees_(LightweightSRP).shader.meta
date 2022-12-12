@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 8abd9be2268f9ec448e824fa9821784f
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Albedo_smoothness_map_input: {fileID: 2800000, guid: 39c3a989f5e653145a8682c1c3898b03,
+      type: 3}
+  - _Moss_texture_grayscale: {fileID: 2800000, guid: ddf6344e26e0f7e44a9a606e40d2f832,
+      type: 3}
+  - _Edge_mask_map_input: {fileID: 2800000, guid: ceb848ff79e29094fa213b7a9e09f625,
+      type: 3}
+  - _Moss_Normal: {fileID: 2800000, guid: a10e98907b5cb784aa93e62c73c60b1a, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

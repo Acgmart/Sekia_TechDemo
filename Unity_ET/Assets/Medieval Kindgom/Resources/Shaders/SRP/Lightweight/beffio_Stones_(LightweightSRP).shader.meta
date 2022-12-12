@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: ae9cc2d8794e1384e8718f2e60ba001a
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Albedo_smoothness_map_input: {fileID: 2800000, guid: eb85a9f6ec8895a488b0a9fae9639feb,
+      type: 3}
+  - _Top_mask_texture: {fileID: 2800000, guid: ddf6344e26e0f7e44a9a606e40d2f832, type: 3}
+  - _Top_mask_normal: {fileID: 2800000, guid: a10e98907b5cb784aa93e62c73c60b1a, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
