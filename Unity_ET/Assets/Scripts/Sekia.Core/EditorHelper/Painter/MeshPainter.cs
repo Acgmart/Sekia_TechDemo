@@ -209,7 +209,11 @@ namespace Sekia
             //添加碰撞体
             collider = _target.GetComponent<MeshCollider>();
             if (collider == null)
+            {
                 collider = _target.gameObject.AddComponent<MeshCollider>();
+                collider.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild | HideFlags.NotEditable;
+            }
+            _target.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
 
             //读取个人设置
             if (userSetting == null)
