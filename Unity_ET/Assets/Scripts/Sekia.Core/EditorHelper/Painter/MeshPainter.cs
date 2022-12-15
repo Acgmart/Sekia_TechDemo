@@ -9,8 +9,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Sekia
 {
+    [ExecuteInEditMode]
     public class MeshPainter : MonoBehaviour
     {
+        private void Awake()
+        {
+#if UNITY_EDITOR
+            this.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+#endif
+        }
     }
 
     [CustomEditor(typeof(MeshPainter))]
@@ -213,7 +220,6 @@ namespace Sekia
                 collider = _target.gameObject.AddComponent<MeshCollider>();
                 collider.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild | HideFlags.NotEditable;
             }
-            _target.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
 
             //读取个人设置
             if (userSetting == null)
