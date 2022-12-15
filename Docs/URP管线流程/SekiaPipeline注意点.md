@@ -5,6 +5,8 @@
 1.Runtime/AssemblyInfo.cs   利用友元程序集访问URP的公开和内部方法
 2.Runtime/UniversalAdditionalCamera.cs 使部分字段公开
 3.Editor/UniversalAdditionalCameraDataEditor.cs 禁用CustomEditor
+4.RealtimeLights.hlsl 修改distanceAttenuation为half
+5.Input.hlsl 修改_MainLightPosition为half
 这样做的好处是URP版本更新时不需要做太大的改动 专注于移植新的渲染特性
 不改动UniversalAdditionalCamera 兼容URP管线 可一键切换管线
 所以切换Unity版本后 只需要重新切出URP包 修改这少量文件就可以了

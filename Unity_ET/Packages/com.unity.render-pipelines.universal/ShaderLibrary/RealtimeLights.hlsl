@@ -27,7 +27,7 @@ struct Light
 {
     half3   direction;
     half3   color;
-    float   distanceAttenuation; // full-float precision required on some platforms
+    half   distanceAttenuation; // full-float precision required on some platforms
     half    shadowAttenuation;
     uint    layerMask;
 };
