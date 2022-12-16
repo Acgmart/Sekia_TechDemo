@@ -218,7 +218,7 @@ namespace Sekia
             if (collider == null)
             {
                 collider = _target.gameObject.AddComponent<MeshCollider>();
-                collider.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild | HideFlags.NotEditable;
+                collider.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
             }
 
             //读取个人设置
