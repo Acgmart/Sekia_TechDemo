@@ -266,7 +266,14 @@ namespace Sekia
 
             //检查Layer层数
             int layerCount = 2;
-            if (targetMat.HasProperty(_Splat3))
+            if (targetMat.HasProperty("_LAYER3")) //通过关键字判断Layer数量
+            {
+                if (targetMat.IsKeywordEnabled("_LAYER3"))
+                    layerCount = 3;
+                else if (targetMat.IsKeywordEnabled("_LAYER4"))
+                    layerCount = 4;
+            }
+            else if (targetMat.HasProperty(_Splat3)) //通过属性名判断Layer数量
             {
                 layerCount += 1;
                 if (targetMat.HasProperty(_Splat4))
