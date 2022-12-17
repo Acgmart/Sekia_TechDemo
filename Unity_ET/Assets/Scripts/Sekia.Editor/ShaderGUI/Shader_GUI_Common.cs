@@ -172,11 +172,8 @@ namespace UnityEditor
                     {
                         if (propertyName == "_MainTex")
                         {
-                            if (property.GetArrayElementAtIndex(j).FindPropertyRelative("second").FindPropertyRelative("m_Texture").objectReferenceValue != null)
-                            {
-                                property.GetArrayElementAtIndex(j).FindPropertyRelative("second").FindPropertyRelative("m_Texture").objectReferenceValue = null;
-                                res = true;
-                            }
+                            property.GetArrayElementAtIndex(j).FindPropertyRelative("second").FindPropertyRelative("m_Texture").objectReferenceValue = null;
+                            res = true;
                         }
                         else
                         {
