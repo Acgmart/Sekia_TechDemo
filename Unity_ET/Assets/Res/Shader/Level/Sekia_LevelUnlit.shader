@@ -1,4 +1,4 @@
-Shader "Sekia/Level"
+Shader "Sekia/LevelUnlit"
 {
     Properties
     {

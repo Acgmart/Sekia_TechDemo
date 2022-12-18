@@ -1,4 +1,4 @@
-Shader "Sekia/Terrain"
+Shader "Sekia/TerrainPbr"
 {
     Properties
     {
