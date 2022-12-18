@@ -36,9 +36,8 @@ Shader "Sekia/Level"
             #pragma shader_feature _ _DEBUG_VERTEXCOLOR
             #pragma vertex vert
             #pragma fragment frag
-            #include "_Lib/_LitInput.hlsl"
-            #include "_Lib/_SharedBrdfFunctions.hlsl"
-            #include "_Lib/_LitForwardPass.hlsl"
+            #include "_Lib/_InputLevel.hlsl"
+            #include "_Lib/_ForwardLevel.hlsl"
             ENDHLSL
         }
 
@@ -55,9 +54,8 @@ Shader "Sekia/Level"
             #define _GBUFFER_PASS
             #pragma vertex vert
             #pragma fragment frag
-            #include "_Lib/_LitInput.hlsl"
-            #include "_Lib/_SharedBrdfFunctions.hlsl"
-            #include "_Lib/_LitForwardPass.hlsl"
+            #include "_Lib/_InputLevel.hlsl"
+            #include "_Lib/_ForwardLevel.hlsl"
             ENDHLSL
         }
 
@@ -70,8 +68,8 @@ Shader "Sekia/Level"
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma vertex vert
             #pragma fragment frag
-            #include "_Lib/_LitInput.hlsl"
-            #include "_Lib/_ShadowCasterPass.hlsl"
+            #include "_Lib/_InputLevel.hlsl"
+            #include "_Lib/_ShadowCasterLevel.hlsl"
             ENDHLSL
         }
     }
