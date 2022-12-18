@@ -8,18 +8,40 @@
 #endif
 
 CBUFFER_START(UnityPerMaterial)
-half4   _BaseColor;
-half    _Cutoff;
-half    _MetallicCof;
-half    _OcclusionCof;
-half    _RoughnessCof;
-half4   _EmissionColor;
+
+#if defined(_LEVEL)
+    half4       _BaseColor;
+    half        _MetallicCof;
+    half        _OcclusionCof;
+    half        _RoughnessCof;
+    half4       _EmissionColor;
+#elif defined(_TERRAIN)
+    float4      _Tiling;
+    half4       _RoughnessCof;
+#endif
+
+#if defined(_BASE_SHADER) || defined(_ALPHATEST_ON)
+    #if defined(_LEVEL)
+        half        _Cutoff;
+    #endif
+#endif
+
 CBUFFER_END
 
 TEXTURE2D(_BaseMap);        SAMPLER(sampler_BaseMap);
 TEXTURE2D(_MaskMap);        SAMPLER(sampler_MaskMap);
 TEXTURE2D(_NormalMap);      SAMPLER(sampler_NormalMap);
 TEXTURE2D(_SsaoTexture);    SAMPLER(sampler_SsaoTexture);
+
+TEXTURE2D(_Control); SAMPLER(sampler_Control);
+TEXTURE2D(_Splat1);  SAMPLER(sampler_Splat1);  
+TEXTURE2D(_Splat2);  
+TEXTURE2D(_NormalMap1);	SAMPLER(sampler_NormalMap1);
+TEXTURE2D(_NormalMap2);
+TEXTURE2D(_Splat3);
+TEXTURE2D(_NormalMap3);
+TEXTURE2D(_Splat4);
+TEXTURE2D(_NormalMap4);
 
 half3 UnpackNormalNoScale(half4 packedNormal)
 {
@@ -272,17 +294,3 @@ half3 SignedOctDecode(half3 n)
     #endif
 }
 
-CBUFFER_START(UnityPerMaterial)
-float4 _Tiling;
-half4 _SmoothnessCof;
-CBUFFER_END
-
-TEXTURE2D(_Control); SAMPLER(sampler_Control);
-TEXTURE2D(_Splat1);  SAMPLER(sampler_Splat1);  
-TEXTURE2D(_Splat2);  
-TEXTURE2D(_NormalMap1);	SAMPLER(sampler_NormalMap1);
-TEXTURE2D(_NormalMap2);
-TEXTURE2D(_Splat3);
-TEXTURE2D(_NormalMap3);
-TEXTURE2D(_Splat4);
-TEXTURE2D(_NormalMap4);

@@ -29,6 +29,7 @@ Shader "Sekia/LevelUnlit"
 			Cull [_CullMode]
 
             HLSLPROGRAM
+            #define _BASE_SHADER
             #define _LEVEL
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma multi_compile_local_fragment _ _SCREEN_SPACE_OCCLUSION
@@ -49,6 +50,7 @@ Shader "Sekia/LevelUnlit"
             Tags{ "LightMode" = "UniversalGBuffer"}
 
             HLSLPROGRAM
+            #define _BASE_SHADER
             #define _LEVEL
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma multi_compile_local_fragment _ _SCREEN_SPACE_OCCLUSION
@@ -68,6 +70,7 @@ Shader "Sekia/LevelUnlit"
             Tags{ "LightMode" = "ShadowCaster"}
             ColorMask 0
             HLSLPROGRAM
+            #define _BASE_SHADER
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma vertex vert
             #pragma fragment frag
@@ -82,6 +85,7 @@ Shader "Sekia/LevelUnlit"
             Tags{"LightMode" = "Meta"}
             Cull Off
             HLSLPROGRAM
+            #define _BASE_SHADER
             #pragma vertex UniversalVertexMeta
             #pragma fragment UniversalFragmentMetaLit
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"

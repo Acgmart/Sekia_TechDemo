@@ -25,6 +25,8 @@ Shader "Sekia/TerrainPbr"
             ColorMask RGB
 
             HLSLPROGRAM
+            #define _BASE_SHADER
+            #define _TERRAIN
             #define _MAIN_LIGHT_SHADOWS
             #define _ADDITIONAL_LIGHTS
             #pragma multi_compile _ FOG_LINEAR
@@ -45,6 +47,8 @@ Shader "Sekia/TerrainPbr"
             Tags{"LightMode" = "Meta"}
             Cull Off
             HLSLPROGRAM
+            #define _BASE_SHADER
+            #define _TERRAIN
             #pragma vertex vert
             #pragma fragment frag
             #include "_Lib/_Input.hlsl"
