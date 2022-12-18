@@ -27,7 +27,9 @@ Shader "Sekia/Level"
             Name "ForwardLit"
             Tags{ "LightMode" = "UniversalForward"}
 			Cull [_CullMode]
+
             HLSLPROGRAM
+            #define _LEVEL
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma multi_compile_local_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile _ LIGHTMAP_ON
@@ -45,8 +47,9 @@ Shader "Sekia/Level"
         {
             Name "GBuffer"
             Tags{ "LightMode" = "UniversalGBuffer"}
+
             HLSLPROGRAM
-            #pragma target 4.5
+            #define _LEVEL
             #pragma multi_compile_local_fragment _ _ALPHATEST_ON
             #pragma multi_compile_local_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT
@@ -70,6 +73,20 @@ Shader "Sekia/Level"
             #pragma fragment frag
             #include "_Lib/_Input.hlsl"
             #include "_Lib/_ShadowCaster.hlsl"
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "Meta"
+            Tags{"LightMode" = "Meta"}
+            Cull Off
+            HLSLPROGRAM
+            #pragma vertex UniversalVertexMeta
+            #pragma fragment UniversalFragmentMetaLit
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitMetaPass.hlsl"
+
             ENDHLSL
         }
     }

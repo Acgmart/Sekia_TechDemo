@@ -12,7 +12,7 @@ Shader "Sekia/Terrain"
 		[NoScaleOffset]_Splat4("Layer4", 2D) = "white" {}	
 		[NoScaleOffset]_NormalMap4("", 2D) = "bump"{}
 		_Tiling("Tiling", Vector) = (1, 1, 1, 1)
-		_SmoothnessCof("SmoothnessCof", Vector) = (1, 1, 1, 1)
+		_RoughnessCof("RoughnessCof", Vector) = (1, 1, 1, 1)
     }
 
     SubShader
@@ -22,7 +22,8 @@ Shader "Sekia/Terrain"
         {
             Name "Forward"
             Tags{"LightMode" = "UniversalForward"}
-            Blend One Zero, Zero Zero
+            ColorMask RGB
+
             HLSLPROGRAM
             #define _MAIN_LIGHT_SHADOWS
             #define _ADDITIONAL_LIGHTS
@@ -33,8 +34,8 @@ Shader "Sekia/Terrain"
 			#define _LAYER3
 			#define _LAYER4
 
-            #include "_Lib/_Layer_Input.hlsl"
-            #include "_Lib/_Layer_Forward.hlsl"
+            #include "_Lib/_Input.hlsl"
+            #include "_Lib/_Forward.hlsl"
             ENDHLSL
         }
 
@@ -46,8 +47,8 @@ Shader "Sekia/Terrain"
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "_Lib/_Layer_Input.hlsl"
-            #include "_Lib/_Layer_Meta.hlsl"
+            #include "_Lib/_Input.hlsl"
+            #include "_Lib/_Meta.hlsl"
             ENDHLSL
         }
     }
