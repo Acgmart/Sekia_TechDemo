@@ -22,7 +22,7 @@ CBUFFER_START(UnityPerMaterial)
 
 #if defined(_BASE_SHADER) || defined(_ALPHATEST_ON)
     #if defined(_LEVEL)
-        half        _Cutoff;
+        half    _Cutoff;
     #endif
 #endif
 
@@ -73,7 +73,7 @@ bool IsGammaSpace()
 half3 Fast_SRGBToLinear(half3 c)
 {
     //http://chilliant.blogspot.com/2012/08/srgb-approximations-for-hlsl.html
-    return c * (c * (c * half(0.3053) + half(0.6822)) + half(0.01252));
+    return c * (c * (c * half(0.3053) + half(0.6822)) + half(0.0125));
 }
 
 half3 ACESToneMapping(half3 x)
@@ -119,35 +119,30 @@ half3 EnvBRDFApprox(half3 _F0, half _PerceptualRoughness, half _NdotV)
 }
 
 //https://forum.unity.com/threads/hdr-cubemaps-questions.1170773/
-//考虑下dLDR在Linear空间和Gamma空间的区别
+//考虑下dLDR在Linear空间和Gamma空间得到线性光照值的区别
 //dLDR encode：HDR Image => to sRGB => clamp01 => * 0.5 => Store in 8bit sRGB
-//dLDR decode in Linear: Sample(硬件To Linear) => * 2.0 ^ 2.2(即4.59)
-//dLDR decode in Gamma : Sample => * 2.0 => 软件To Linear
+//dLDR decode in Linear: Sample(硬件To Linear) => * (2.0 ^ 2.2)(即4.59 一次乘法)
+//dLDR decode in Gamma : Sample => * 2.0(一次乘法) => 软解To Linear()
 //在两个颜色空间下进行线性光照计算时 他们是等价的：(2x)^2.2 = 4.59*(x^2.2)
-half3 SampleLightmap_Encode(float2 lightmapUV)
+half3 SampleLightmap_Encode_dLDR(float2 lightmapUV)
 {
-	half4 encodedIlluminance = SAMPLE_TEXTURE2D(unity_Lightmap, samplerunity_Lightmap, lightmapUV);
-    half3 irradiance = encodedIlluminance.rgb * LIGHTMAP_HDR_MULTIPLIER;
-    irradiance = IsGammaSpace() ? Fast_SRGBToLinear(irradiance) : irradiance;
+	half4 encodedIrradiance = SAMPLE_TEXTURE2D(unity_Lightmap, samplerunity_Lightmap, lightmapUV);
+    half3 irradiance = encodedIrradiance.rgb * LIGHTMAP_HDR_MULTIPLIER;
+    #if defined(_USE_PBR)
+        irradiance = IsGammaSpace() ? Fast_SRGBToLinear(irradiance) : irradiance;
+    #endif
     return irradiance;
 }
 
 half3 EnvironmentReflection(half3 _ReflectVector, half _PerceptualRoughness)
 {
-    #if !defined(_ENVIRONMENTREFLECTIONS_OFF)
-        half mip = _PerceptualRoughness * (half(10.2) - half(4.2) *_PerceptualRoughness);
-        half4 encodedIrradiance = SAMPLE_TEXTURECUBE_LOD(unity_SpecCube0, samplerunity_SpecCube0, _ReflectVector, mip);
-        #if defined(UNITY_USE_NATIVE_HDR) || defined(UNITY_DOTS_INSTANCING_ENABLED)
-            half3 irradiance = encodedIrradiance.rgb;
-        #else
-            //https://forum.unity.com/threads/hdr-cubemaps-questions.1170773/
-            //使用LDR编码时需要解码 线性空间下不能完整还原
-            half3 irradiance = DecodeHDREnvironment(encodedIrradiance, unity_SpecCube0_HDR);
-        #endif
+    half mip = _PerceptualRoughness * (half(10.2) - half(4.2) * _PerceptualRoughness);
+    half4 encodedIrradiance = SAMPLE_TEXTURECUBE_LOD(unity_SpecCube0, samplerunity_SpecCube0, _ReflectVector, mip);
+    half3 irradiance = encodedIrradiance.rgb * unity_SpecCube0_HDR.x;
+    #if defined(_USE_PBR)
         irradiance = IsGammaSpace() ? Fast_SRGBToLinear(irradiance) : irradiance;
-    return irradiance;
     #endif
-    return _GlossyEnvironmentColor.rgb;
+    return irradiance;
 }
 
 half D_GGX_NoPi(half3 _NormalWS, half3 _HalfDir, half a)
@@ -160,79 +155,25 @@ half D_GGX_NoPi(half3 _NormalWS, half3 _HalfDir, half a)
     return p * p;
 }
 
-half SchlickFresnel(half u)
+half3 DirectSpecularTerm(half3 _NormalWS, half3 _ViewDirWS, half3 _LightDirWS,
+    half _Roughness_a, half _Roughness_b, half3 envirSpecular2)
 {
-    half m = saturate(half(1.0) - u);
-    half m2 = m * m;
-    return m2 * m2 * m;
-}
-
-half G_GeometrySmith(half _NdotL, half _NdotV,half _PerceptualRoughness)
-{
-    half r = _PerceptualRoughness + half(1.0);
-    half k = r * r * half(0.125);
-    half ggx1 = k + (half(1.0) - k) * _NdotL;
-    half ggx2 = k + (half(1.0) - k) * _NdotV;
-    return half(0.25) / (ggx1 * ggx2);
-}
-
-half G_SmithJointGGXVisibilityTerm(half _NdotL, half _NdotV, half a)
-{
-    //UnityStandardBRDF.cginc
-    half lambdaV = _NdotL * (_NdotV * (half(1.0) - a) + a);
-    half lambdaL = _NdotV * (_NdotL * (half(1.0) - a) + a);
-    return half(0.5) / (lambdaV + lambdaL + half(0.001));
-}
-
-half3 DirectSpecularTerms(half _PerceptualRoughness, half3 _F0, half _NdotL, half _NdotV, 
-    half3 _NormalWS, half3 _ViewDirWS, half3 _LightDirWS, half3 envirSpecular2)
-{
-    half a = _PerceptualRoughness * _PerceptualRoughness;
     half3 _HalfDir = normalize(_LightDirWS + _ViewDirWS);
-    half _HdotV = saturate(dot(_HalfDir, _ViewDirWS));
-    #if defined(_TEST) //DisneyBrdf
-        half3 F = lerp(_F0, half3(1, 1, 1), SchlickFresnel(_HdotV));
-        half D = D_GGX_NoPi(_NormalWS, _HalfDir, a);
-        half G = G_GeometrySmith(_NdotL, _NdotV, _PerceptualRoughness);
-        return F * G * D;
-    #elif defined(_TEST1) //Unity builtin版近似G项
-        half3 F = lerp(_F0, half3(1, 1, 1), SchlickFresnel(_HdotV));
-        half D = D_GGX_NoPi(_NormalWS, _HalfDir, a);
-        half G = G_SmithJointGGXVisibilityTerm(_NdotL, _NdotV, a);
-        return F * G * D;
-    #elif defined(_TEST2) //Unity URP Lit
-        half _LdotH2 = max(half(0.1), _HdotV * _HdotV);
-        half3 FV = _F0 / (_LdotH2 * (a * 4.0 + 2.0));
-        half D = D_GGX_NoPi(_NormalWS, _HalfDir, a);
-        return D * FV;
-    #else  //UE4
-        half D = D_GGX_NoPi(_NormalWS, _HalfDir, a);
-        half b = _PerceptualRoughness * half(0.25) + half(0.25);
-        return D * b * envirSpecular2;
-    #endif
-}
-
-half3 DirectSpecularTerm(half3 _F0, half _NdotL, half _NdotV, half3 _NormalWS, 
-    half3 _ViewDirWS, half3 _LightDirWS, half3 envirSpecular2, half _Roughness_a, half _Roughness_b)
-{
-    
-    half3 _HalfDir = normalize(_LightDirWS + _ViewDirWS);
-    half _HdotV = saturate(dot(_HalfDir, _ViewDirWS));
     half D = D_GGX_NoPi(_NormalWS, _HalfDir, _Roughness_a);
     return D * _Roughness_b * envirSpecular2;
 }
 
-half3 OneDirectLighting(half3 _LightColor, half3 _LightDirWS, half _NdotV, half3 _NormalWS, 
-    half3 _ViewDirWS, half3 _Diffuse, half3 _F0, half3 envirSpecular2, half _Roughness_a, half _Roughness_b)
+half3 OneDirectLighting(half3 _LightColor, half3 _LightDirWS, half3 _NormalWS, half3 _ViewDirWS, 
+    half3 _Diffuse, half _Roughness_a, half _Roughness_b, half3 envirSpecular2)
 {
     half _NdotL = saturate(dot(_NormalWS, _LightDirWS));
     half3 diffuseTerm = _Diffuse;
-    half3 specularTerm = DirectSpecularTerm(_F0, _NdotL, _NdotV, _NormalWS, 
-        _ViewDirWS, _LightDirWS, envirSpecular2, _Roughness_a, _Roughness_b);
+    half3 specularTerm = DirectSpecularTerm(_NormalWS, _ViewDirWS, _LightDirWS,            
+        _Roughness_a, _Roughness_b, envirSpecular2);
     return (diffuseTerm + specularTerm) * _LightColor * _NdotL;
 }
 
-half3 AllDirectLighting(float3 _PositionWS, half _NdotV, half3 _NormalWS, half3 _ViewDirWS,
+half3 AllDirectLighting(float3 _PositionWS, half3 _NormalWS, half3 _ViewDirWS,
     half3 _Diffuse, half3 _F0, half _PerceptualRoughness, half3 envirSpecular2)           
 {
     float4 _ShadowCoord = TransformWorldToShadowCoord(_PositionWS);
@@ -242,17 +183,17 @@ half3 AllDirectLighting(float3 _PositionWS, half _NdotV, half3 _NormalWS, half3 
     half _Roughness_b = _PerceptualRoughness * half(0.25) + half(0.25);
 
     half3 _MainLighting = OneDirectLighting(mainLight.color, mainLight.direction,
-        _NdotV, _NormalWS, _ViewDirWS, _Diffuse, _F0, envirSpecular2, _Roughness_a, _Roughness_b);
+        _NormalWS, _ViewDirWS, _Diffuse, _Roughness_a, _Roughness_b, envirSpecular2);
 
     half3 _AdditionalLighting = 0.0h;
     #if defined(_ADDITIONAL_LIGHTS)
         uint pixelLightCount = GetAdditionalLightsCount();
         for (uint lightIndex = 0u; lightIndex < pixelLightCount; ++lightIndex)
         {
-            Light light = GetAdditionalLight(lightIndex, _PositionWS);
-            light.color *= light.distanceAttenuation * light.shadowAttenuation;
-            _AdditionalLighting += OneDirectLighting(light.color, light.direction,
-            _NdotV, _NormalWS, _ViewDirWS, _Diffuse, _F0, envirSpecular2, _Roughness_a, _Roughness_b);
+            Light pointLight = GetAdditionalLight(lightIndex, _PositionWS);
+            pointLight.color *= pointLight.distanceAttenuation * pointLight.shadowAttenuation;
+            _AdditionalLighting += OneDirectLighting(pointLight.color, pointLight.direction,
+                _NormalWS, _ViewDirWS, _Diffuse, _Roughness_a, _Roughness_b, envirSpecular2);
         }
     #endif
 
