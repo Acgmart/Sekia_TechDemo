@@ -28,7 +28,7 @@ public partial class ResourceExporter
         return path;
     }
 
-    static void BuildAssetBundles(BuildTarget target, BuildAssetBundleOptions options = BuildAssetBundleOptions.DeterministicAssetBundle | BuildAssetBundleOptions.ChunkBasedCompression)
+    static void BuildAssetBundles(BuildTarget target, BuildAssetBundleOptions options = BuildAssetBundleOptions.ChunkBasedCompression)
     {
         string dir = GetBundleSaveDir(target);
         Directory.CreateDirectory(Path.GetDirectoryName(dir));
