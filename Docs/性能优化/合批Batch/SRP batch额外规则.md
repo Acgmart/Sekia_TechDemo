@@ -4,3 +4,6 @@ CBuffer内声明的字段必须存在于Property声明中 不应存在CBuffer内
 
 SRP和Static合批根据Unity文档可以同时存在 单身根据实际经验可能SRP优先级更高
 可以在将Property字段声明在CBuffer外强行打断SRP合批
+
+在实际使用中会针对预计要静态合批和instancing的物体使用单变体版本的专用shader
+并在FrameDebug和真机性能测试中确保合批正常执行
