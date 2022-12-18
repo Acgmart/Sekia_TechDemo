@@ -11,8 +11,16 @@ using UnityEditor;
 
 namespace Sekia
 {
+    [ExecuteInEditMode]
     public class GrassPainter : MonoBehaviour
     {
+        private void Awake()
+        {
+#if UNITY_EDITOR
+            this.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+#endif
+        }
+
         //单帧的数据
         public struct CachedGrassDataConfig
         {
