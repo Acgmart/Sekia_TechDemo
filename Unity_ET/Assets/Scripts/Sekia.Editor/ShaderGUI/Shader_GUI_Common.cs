@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using UnityEditor.Formats.Fbx.Exporter;
 using UnityEngine;
 using System.Linq;
 
@@ -253,14 +252,6 @@ namespace UnityEditor
             }
             AssetDatabase.SaveAssets();
             Debug.LogError("结束...  处理次数：" + count);
-        }
-
-        [MenuItem("Assets/TA工具/2 导出GameObject为FBX", false, 27)]
-        static void ExportGameObjectToFBX()
-        {
-            GameObject[] selectedGOs = Selection.GetFiltered<GameObject>(SelectionMode.TopLevel);
-            var toExport = ModelExporter.RemoveRedundantObjects(selectedGOs);
-            ExportModelEditorWindow.Init(System.Linq.Enumerable.Cast<UnityEngine.Object>(toExport), isTimelineAnim: false);
         }
         #endregion
 

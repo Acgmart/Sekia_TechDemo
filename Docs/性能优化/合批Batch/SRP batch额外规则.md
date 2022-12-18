@@ -1,0 +1,6 @@
+# SRP合批注意点
+一个shader所有的变体的CBuffer长度一致 所以在CBuffer内不应使用效果逻辑分支
+CBuffer内声明的字段必须存在于Property声明中 不应存在CBuffer内有而Property没有的字段
+
+SRP和Static合批根据Unity文档可以同时存在 单身根据实际经验可能SRP优先级更高
+可以在将Property字段声明在CBuffer外强行打断SRP合批

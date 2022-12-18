@@ -21,7 +21,7 @@ Shader "Sekia/Level/Terrain/WavingGrass"
             HLSLPROGRAM
             #define _MAIN_LIGHT_SHADOWS
             #define _ADDITIONAL_LIGHTS
-            #define _SHADOWS_SOFT
+            //#define _SHADOWS_SOFT
             #pragma multi_compile_fog
             #pragma vertex WavingGrassVert
             #pragma fragment LitPassFragmentGrass
