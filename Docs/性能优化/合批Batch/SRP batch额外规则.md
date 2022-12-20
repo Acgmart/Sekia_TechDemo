@@ -7,3 +7,5 @@ SRP和Static合批根据Unity文档可以同时存在 单身根据实际经验�
 
 在实际使用中会针对预计要静态合批和instancing的物体使用单变体版本的专用shader
 并在FrameDebug和真机性能测试中确保合批正常执行
+
+垃圾关键字也会影响合批 比如残留的_ALPHATEST_ON
