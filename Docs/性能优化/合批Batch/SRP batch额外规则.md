@@ -9,3 +9,6 @@ SRP和Static合批根据Unity文档可以同时存在 单身根据实际经验�
 并在FrameDebug和真机性能测试中确保合批正常执行
 
 垃圾关键字也会影响合批 比如残留的_ALPHATEST_ON
+
+如果shader变体在bundle里 就会出现同名的多个shader 不能SRP合批
+
