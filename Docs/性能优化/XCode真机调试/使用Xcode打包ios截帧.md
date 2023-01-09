@@ -7,6 +7,7 @@
     真机可能需要切换至开发者模式
         设置 -> 隐私与安全性 -> 开发者模式
 打包URP默认demo
+    设置公司名为独一无二的 比如sekia
     构建设置中勾选 Run in Xcode as Debug
     生成XCode工程 可使用XCode打开或运行.xcodeproj文件
     设置证书：在All标签下使用自动化配置 Team中指定账号
