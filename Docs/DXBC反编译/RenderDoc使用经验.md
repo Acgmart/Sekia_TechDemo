@@ -1,0 +1,6 @@
+# instancing类型的连续DrawCall如何查看数据
+顶点的输出阶段通常会输出instanceID 可以看到多个instance之间ID是累加的
+instancing Buffer的长度固定为128
+当前合批数量为2时 覆盖instancing Buffer的前2个index的数据
+如果没有重置instancing Buffer则instanceID跨DrawCall累加
+通过查看instancing Buffer中数据的变化找到实例对应的数据
