@@ -1,11 +1,18 @@
 {
   "dependencies": {
     "com.autodesk.fbx": {
-      "version": "4.2.0",
+      "version": "4.2.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
+    },
+    "com.focus-creative-games.hybridclr_unity": {
+      "version": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f2b5f233df9710fe4edfc33526ce500f1933e747"
     },
     "com.unity.ai.navigation": {
       "version": "1.1.1",
@@ -17,7 +24,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.7.4",
+      "version": "1.8.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -27,18 +34,27 @@
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.formats.fbx": {
-      "version": "4.2.0",
+      "version": "4.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.timeline": "1.7.1",
-        "com.autodesk.fbx": "4.2.0"
+        "com.autodesk.fbx": "4.2.1"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.ide.rider": {
+      "version": "3.0.18",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ext.nunit": "1.0.6"
       },
       "url": "https://packages.unity.com"
     },
@@ -59,7 +75,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "14.0.4",
+      "version": "14.0.6",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
@@ -70,14 +86,14 @@
       }
     },
     "com.unity.render-pipelines.universal": {
-      "version": "14.0.4",
+      "version": "14.0.6",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
-        "com.unity.burst": "1.7.3",
-        "com.unity.render-pipelines.core": "14.0.4",
-        "com.unity.shadergraph": "14.0.4"
+        "com.unity.burst": "1.8.2",
+        "com.unity.render-pipelines.core": "14.0.6",
+        "com.unity.shadergraph": "14.0.6"
       }
     },
     "com.unity.searcher": {
@@ -88,11 +104,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "14.0.4",
+      "version": "14.0.6",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "14.0.4",
+        "com.unity.render-pipelines.core": "14.0.6",
         "com.unity.searcher": "4.9.2"
       }
     },
