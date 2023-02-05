@@ -13,10 +13,3 @@ MonoBehaviour:
   m_Name: GlobalConfig
   m_EditorClassIdentifier: 
   CodeMode: 3
-  uIPackages:
-  - packageName: Demo
-    uiTypes:
-    - UILogin
-    - UILobby
-    - UIHelp
-  uiDesignResolution: {x: 960, y: 540}

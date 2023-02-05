@@ -8,6 +8,9 @@ namespace ET.Client
     {
         [StaticField]
         public static GlobalComponent Instance;
+
+        public FairyGUI_GlobalConfig globalConfig;
+        
         public Transform Global;
         
         //Root

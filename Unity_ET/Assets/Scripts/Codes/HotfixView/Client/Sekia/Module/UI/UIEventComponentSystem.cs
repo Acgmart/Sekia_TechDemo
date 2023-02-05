@@ -35,7 +35,7 @@ namespace ET.Client
                 UIEventComponent.Instance = self;
 
                 //添加UI的Root 指定UI的设计分辨率
-                var uiDesignResolution = Init.Instance.GlobalConfig.uiDesignResolution;
+                var uiDesignResolution = GlobalComponent.Instance.globalConfig.uiDesignResolution;
                 GRoot.inst.SetContentScaleFactor(uiDesignResolution.x, uiDesignResolution.y, UIContentScaler.ScreenMatchMode.MatchWidthOrHeight);
 
                 //添加4个子根节点
@@ -66,7 +66,7 @@ namespace ET.Client
                 }
 
                 //初始化UI包名
-                var configs = Init.Instance.GlobalConfig.uIPackages;
+                var configs = GlobalComponent.Instance.globalConfig.uIPackages;
                 foreach (var package in configs)
                     foreach (var type in package.uiTypes)
                         self.UITypeToPackageName[type] = package.packageName;

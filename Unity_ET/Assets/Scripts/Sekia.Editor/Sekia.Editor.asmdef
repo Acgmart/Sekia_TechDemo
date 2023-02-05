@@ -6,11 +6,11 @@
         "Sekia.Render",
         "Unity.ThirdParty",
         "Unity.Core",
-        "Unity.Mono",
         "Unity.RenderPipelines.Core.Editor",
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.RenderPipelines.Universal.Runtime",
-        "Unity.Formats.Fbx.Editor"
+        "Unity.Formats.Fbx.Editor",
+        "Unity.Loader"
     ],
     "includePlatforms": [
         "Editor"
