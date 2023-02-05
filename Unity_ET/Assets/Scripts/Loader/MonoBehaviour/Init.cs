@@ -7,14 +7,8 @@ namespace ET
 {
 	public class Init: MonoBehaviour
 	{
-		public static Init Instance;
-		
-		public GlobalConfig GlobalConfig;
-		
-		private void Awake()
+		private void Start()
 		{
-			Instance = this;
-			
 			DontDestroyOnLoad(gameObject);
 			
 			AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
