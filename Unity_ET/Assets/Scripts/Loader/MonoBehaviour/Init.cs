@@ -33,6 +33,12 @@ namespace ET
 			Game.AddSingleton<CoroutineLockComponent>();
 			
 			ETTask.ExceptionHandler += Log.Error;
+			
+#if UNITY_EDITOR
+			Options.Instance.Develop = 1;
+#endif
+			Screen.sleepTimeout = SleepTimeout.NeverSleep; //屏幕常亮
+			Log.Info($"process start time: {TimeHelper.ServerNow()}");
 
 			Game.AddSingleton<CodeLoader>().Start();
 		}
