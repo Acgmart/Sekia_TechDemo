@@ -246,6 +246,7 @@ namespace Sekia
                 }
                 Mesh mesh = new Mesh();
                 mesh.CombineMeshes(TheCombineInstances.ToArray(), true, true); //检查模型文件是否开启了可读写
+                mesh.RecalculateNormals();
                 string path = dirPath + "/" + prefabName + materialIndex.ToString() + ".asset";
                 AssetDatabase.CreateAsset(mesh, path);
                 Mesh createdMesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);

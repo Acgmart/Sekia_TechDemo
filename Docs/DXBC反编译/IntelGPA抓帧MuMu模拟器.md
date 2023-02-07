@@ -1,4 +1,4 @@
-下载安装IntelGPA 下载安装MuMu模拟器6并切换到DX模式
+下载安装IntelGPA 下载安装MuMu模拟器6并切换到DX模式(Intel不支持非DX的API)
 运行GraphicsMonitor 指定路径
 D:/Program Files/MuMu/emulator/nemu/EmulatorShell/NemuPlayer.exe
 在设置中开启“Auto-detect Launched Applications"
