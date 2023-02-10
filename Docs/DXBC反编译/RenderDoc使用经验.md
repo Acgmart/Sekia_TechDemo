@@ -4,3 +4,7 @@ instancing Buffer的长度固定为128
 当前合批数量为2时 覆盖instancing Buffer的前2个index的数据
 如果没有重置instancing Buffer则instanceID跨DrawCall累加
 通过查看instancing Buffer中数据的变化找到实例对应的数据
+
+# 矩阵排列问题
+Buffer和shader里的矩阵经常是置转的
+hlslcc_mtx4x4unity_MatrixV[0].z 表示的是第三排的第一个元素
