@@ -11,14 +11,17 @@ https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIxMzc3NTQ5OA==&action=getalbum&a
 粗糙度与金属度的作用
 
 参考：PBR_Guide_Vol1.pdf 和 PBR_Guide_Vol2.pdf
+参考：天涯明月刀渲染
 
 3.HDR、Bloom、AO、阴影、反射、实时GI等
 问题：如何提升画面的真实性
 HDR：根据环境的最大亮度自动调整亮度范围以表现更多的细节
     为什么白天的阳光照不到的地方特别黑：动态范围太大导致暗部范围被压缩
 Bloom：亮度扩散 与环境进行融合
+    高质量泛光：https://zhuanlan.zhihu.com/p/525500877
+    通透感：https://zhuanlan.zhihu.com/p/111633226
 AO/阴影：强调空间关系 与环境进行融合
     如果角色与环境不融合就显得角色漂浮在场景上 没有立体感
-    缝隙里光不容易照进去
+    原神中的多种AO技术：http://www.76k.com/post/56503.html
 反射/折射：物理正确 强调材质特征
-GI：描述了光线在环境中充分弹射后造成的环境平均亮度
+实时GI：描述了光线在环境中充分弹射后造成的环境平均亮度
