@@ -10,11 +10,12 @@ https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIxMzc3NTQ5OA==&action=getalbum&a
 金属光照与非金属光照的差异
 粗糙度与金属度的作用
 
-参考：PBR_Guide_Vol1.pdf 和 PBR_Guide_Vol2.pdf
+参考：PBR_Guide_Vol1_中文版.pdf 和 PBR_Guide_Vol2_中文版.pdf
 参考：天涯明月刀渲染
 
 3.HDR、Bloom、AO、阴影、反射、实时GI等
 问题：如何提升画面的真实性
+
 HDR：根据环境的最大亮度自动调整亮度范围以表现更多的细节
     为什么白天的阳光照不到的地方特别黑：动态范围太大导致暗部范围被压缩
 Bloom：亮度扩散 与环境进行融合
@@ -25,3 +26,4 @@ AO/阴影：强调空间关系 与环境进行融合
     原神中的多种AO技术：http://www.76k.com/post/56503.html
 反射/折射：物理正确 强调材质特征
 实时GI：描述了光线在环境中充分弹射后造成的环境平均亮度
+    传统烘培GI在内容制作上渐渐体现出局限性
