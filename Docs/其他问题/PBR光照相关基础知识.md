@@ -1,5 +1,6 @@
 1.什么是颜色空间Color Space
 问题：人眼感知与物理参数的差异 为什么在要在线性空间进行光照计算
+常见液晶面板参数差异：峰值亮度、色域、调光模式
 
 参考文章：十分钟色彩科学系列
 https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIxMzc3NTQ5OA==&action=getalbum&album_id=1988071137502691328&scene=173&from_msgid=2247483701&from_itemidx=1&count=3&nolastread=1#wechat_redirect
@@ -15,6 +16,8 @@ https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIxMzc3NTQ5OA==&action=getalbum&a
 
 3.HDR、Bloom、AO、阴影、反射、实时GI等
 问题：如何提升画面的真实性
+了解URP后处理中出现的一些调色技巧：HSV颜色空间、对比度、冷暖色
+    可以尝试搜索关键词查找科普
 
 HDR：根据环境的最大亮度自动调整亮度范围以表现更多的细节
     为什么白天的阳光照不到的地方特别黑：动态范围太大导致暗部范围被压缩
