@@ -21,6 +21,13 @@ namespace Sekia
         public float brushSize = 0.1f;
         public float brushFalloff = 0.1f; //数值越大 笔刷边缘衰减越少
         public float brushOpacity = 1f;
+
+        private void Awake()
+        {
+#if UNITY_EDITOR
+            this.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+#endif
+        }
     }
 
     [CustomEditor(typeof(VertexColorPainter))]
