@@ -1,7 +1,12 @@
 1.什么是颜色空间Color Space
 问题：人眼感知与物理参数的差异 为什么在要在线性空间进行光照计算
 常见液晶面板参数差异：峰值亮度、色域、调光模式
-
+    gamma2.2和2.4的区别：https://zhuanlan.zhihu.com/p/66558476
+        比如贴图中的0.5 在gamma2.2下转换到线性空间为0.217
+            相当于将一半的存储范围用于0~0.217之间的暗部区域
+        当gamma值提高到2.2 0.5转换到线性空间为0.189
+            相当于暗部细节变多了 亮部细节减少了
+        
 参考文章：十分钟色彩科学系列
 https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIxMzc3NTQ5OA==&action=getalbum&album_id=1988071137502691328&scene=173&from_msgid=2247483701&from_itemidx=1&count=3&nolastread=1#wechat_redirect
 
