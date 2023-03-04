@@ -4,7 +4,7 @@ AIConfigCategory：将AIConfig数据根据AIConfigId分类整理
     Name：AI节点名
 
 AIDispatcherComponent：单例 AI事件分发
-    Load：收集用用AIHandlerAttribute标记的AI事件类型 Name对应AI节点名
+    Load：收集用AIHandlerAttribute标记的AI事件类型 Name对应AI节点名
 
 AIComponent：AI组件的本体
     Awake：指定一个AIConfigId 每秒重复执行AITimer委托=>AIComponent的Check方法
