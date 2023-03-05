@@ -11,6 +11,6 @@ ETTask是对.Net原生async/await的简化包装 而async/await是一个异步�
     await时创建状态机 当状态机被标记为完成时才执行await后的代码
 使用上的区分：
     ETVoid：在主线程开启协程
-    ETTask：在协程中开启另一个协程且无返回值
+    ETTask：在主线程开启协程or协程中开启 无返回值
     ETTask<>：在协程中开启另一个协程且有返回值
 
