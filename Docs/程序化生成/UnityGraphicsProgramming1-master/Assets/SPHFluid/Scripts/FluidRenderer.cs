@@ -19,7 +19,7 @@ namespace Kodai.Fluid.SPH {
             RenderParticleMat.SetPass(0);
             RenderParticleMat.SetColor("_WaterColor", WaterColor);
             RenderParticleMat.SetBuffer("_ParticlesBuffer", solver.ParticlesBufferRead);
-            Graphics.DrawProcedural(MeshTopology.Points, solver.NumParticles);
+            Graphics.DrawProceduralNow(MeshTopology.Points, solver.NumParticles);
         }
     }
 }
