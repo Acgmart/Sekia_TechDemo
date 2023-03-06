@@ -17,7 +17,7 @@ namespace UnityStandardAssets.CinematicEffects
         bool CheckHdr(Bloom target)
         {
             var camera = target.GetComponent<Camera>();
-            return camera != null && camera.hdr;
+            return camera != null && camera.allowHDR;
         }
 
         void OnEnable()
