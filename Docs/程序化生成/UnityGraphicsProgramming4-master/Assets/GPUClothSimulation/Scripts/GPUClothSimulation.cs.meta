@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 3fe7ce99e11d16f49985250036c30ea3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - CollideSphereTransform: {instanceID: 0}
+  - KernelCS: {fileID: 7200000, guid: e474e34e988c3e54cac2294d0e20aa8e, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

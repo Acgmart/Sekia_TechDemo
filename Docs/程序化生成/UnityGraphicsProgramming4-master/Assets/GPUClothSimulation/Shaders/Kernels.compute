@@ -1,0 +1,171 @@
+﻿#pragma kernel CSInit
+#pragma kernel CSSimulation
+
+#define NUM_THREADS_XY 32 // カーネルのスレッド数
+
+// 位置データ（1つ前のタイムステップ）読み込み用
+Texture2D<float4>   _PositionPrevBufferRO;
+// 位置データ 読み込み用
+Texture2D<float4>   _PositionBufferRO;
+// 位置データ（1つ前のタイムステップ）書き込み用
+RWTexture2D<float4> _PositionPrevBufferRW;
+// 位置データ 書き込み用
+RWTexture2D<float4> _PositionBufferRW;
+// 法線データ 書き込み用
+RWTexture2D<float4> _NormalBufferRW;
+
+int2   _ClothResolution;  // 布の解像度（パーティクル数）（横, 縦）
+float2 _TotalClothLength; // 布の総合的な長さ
+
+float  _RestLength;		  // バネの自然長
+
+float3 _Gravity;		  // 重力
+float  _Stiffness;	      // 布の伸縮度合いを決定する定数
+float  _Damp;			  // 布の速度の減衰率
+float  _InverseMass;	  // 1.0/質量
+
+float  _TimeStep;		  // タイムステップの大きさ
+
+bool   _EnableCollideSphere; // 衝突処理を行うかのフラグ
+float4 _CollideSphereParams; // 衝突処理用パラメータ（pos.xyz, radius）
+
+// 近傍のパーティクルのIDオフセット（x, y）の配列
+static const int2 m_Directions[12] =
+{
+	int2(-1, -1), //  0
+	int2( 0, -1), //  1
+	int2( 1, -1), //  2
+	int2( 1,  0), //  3
+	int2( 1,  1), //  4
+	int2( 0,  1), //  5
+	int2(-1,  1), //  6
+	int2(-1,  0), //  7
+	int2(-2, -2), //  8
+	int2( 2, -2), //  9
+	int2( 2,  2), // 10
+	int2(-2,  2)  // 11
+};
+// 近傍のパーティクルのIDのオフセットを返す
+int2 NextNeigh(int n)
+{
+	return m_Directions[n];
+}
+
+// シミュレーション用バッファの初期化を行うカーネル
+[numthreads(NUM_THREADS_XY, NUM_THREADS_XY, 1)]
+void CSInit(uint3 DTid : SV_DispatchThreadID)
+{
+	uint2 idx = DTid.xy;
+
+	// 位置
+	float3 pos = float3(idx.x * _RestLength, idx.y * _RestLength, 0);
+	pos.xy -= _TotalClothLength.xy * 0.5;
+	// 法線
+	float3 nrm = float3(0, 0, -1);
+	// バッファに書き込み
+	_PositionPrevBufferRW[idx] = float4(pos.xyz, 1.0);
+	_PositionBufferRW[idx]     = float4(pos.xyz, 1.0);
+	_NormalBufferRW[idx]       = float4(nrm.xyz, 1.0);
+}
+
+// シミュレーションを行うカーネル
+[numthreads(NUM_THREADS_XY, NUM_THREADS_XY, 1)]
+void CSSimulation(uint2 DTid : SV_DispatchThreadID)
+{
+	int2 idx = (int2)DTid.xy;
+	// 布の解像度（パーティクル数）（横, 縦）
+	int2   res = _ClothResolution.xy;
+	// 位置を読み込み
+	float3 pos = _PositionBufferRO[idx.xy].xyz;
+	// 位置（ひとつ前のタイムステップ）の読み込み
+	float3 posPrev = _PositionPrevBufferRO[idx.xy].xyz;
+	// 位置とひとつ前のタイムステップの位置より, 速度を計算
+	float3 vel = (pos - posPrev) / _TimeStep;
+
+	float3 normal   = (float3)0; // 法線
+	float3 lastDiff = (float3)0; // 法線計算時に使用する方向ベクトル格納用変数
+	float  iters    = 0.0;       // 法線計算時のイテレーション数加算用変数
+
+	// パーティクルにかかる力, 初期値として重力の値を代入
+	float3 force = _Gravity.xyz;
+	// 1.0 / 質量
+	float  invMass = _InverseMass;
+	
+	// 布の上辺であれば位置を固定するために計算しない
+	if (idx.y == _ClothResolution.y - 1)
+		return;
+
+	// 近傍のパーティクル（12個）についての計算を行う
+	[unroll]
+	for (int k = 0; k < 12; k++)
+	{
+		// 近傍パーティクルのID（座標）のオフセット
+		int2 neighCoord = NextNeigh(k);
+		// X軸, 端のパーティクルについては計算しない
+		if (((idx.x+neighCoord.x) < 0) || ((idx.x+neighCoord.x) > (res.x-1)))
+			continue;
+		// Y軸, 端のパーティクルについては計算しない
+		if (((idx.y+neighCoord.y) < 0) || ((idx.y+neighCoord.y) > (res.y-1)))
+			continue;
+		// 近傍のパーティクルのID
+		int2   idxNeigh = int2(idx.x + neighCoord.x, idx.y + neighCoord.y);
+		// 近傍のパーティクルの位置
+		float3 posNeigh = _PositionBufferRO[idxNeigh].xyz;
+		// 近傍のパーティクルの位置の差
+		float3 posDiff = posNeigh - pos;
+
+		// 法線の計算
+		// 基点から近傍のパーティクルへの方向ベクトル
+		float3 currDiff = normalize(posDiff);
+		if ((iters > 0.0) && (k < 8))
+		{
+			// 1つ前に調べた近傍パーティクルとの方向ベクトルと
+			// 現在のものの角度が鈍角であれば
+			float a = dot(currDiff, lastDiff);
+			if (a > 0.0) {
+				// 外積による直行するベクトルを求めて加算
+				normal += cross(lastDiff, currDiff);
+			}
+		}
+		lastDiff = currDiff; // 次の近傍パーティクルとの計算時のために保持
+
+		// 近傍パーティクルとのバネの自然長を計算
+		float  restLength = length(neighCoord * _RestLength);
+		// バネの力を計算
+		force += (currDiff*(length(posDiff)-restLength))*_Stiffness-vel*_Damp;
+		// 加算
+		if (k < 8) iters += 1.0;
+	}
+	// 法線ベクトルを計算
+	normal = normalize(normal / -(iters - 1.0));
+
+	// 加速度
+	float3 acc = (float3)0.0;
+	// 運動の法則を適用（加速度の大きさは,力の大きさに比例し質量に反比例する）
+	acc = force * invMass;
+
+	// ベレ法による位置計算
+	float3 tmp = pos;
+	pos = pos * 2.0 - posPrev + acc * (_TimeStep * _TimeStep);
+	posPrev = tmp; // ひとつ前のタイムステップの位置
+
+	// 衝突を計算
+	if (_EnableCollideSphere)
+	{
+		float3 center = _CollideSphereParams.xyz; // 中心位置
+		float  radius = _CollideSphereParams.w;   // 半径
+
+		if (length(pos - center) < radius)
+		{
+			// 衝突球の中心から,布のパーティクルの位置への単位ベクトルを計算
+			float3 collDir = normalize(pos - center);
+			// 衝突球の表面にパーティクルの位置を移動
+			pos = center + collDir * radius;
+		}
+	}
+
+	// 書き込み
+	_PositionBufferRW[idx.xy]     = float4(pos.xyz,     1.0);
+	_PositionPrevBufferRW[idx.xy] = float4(posPrev.xyz, 1.0);
+	_NormalBufferRW[idx.xy]       = float4(normal.xyz,  1.0);
+}

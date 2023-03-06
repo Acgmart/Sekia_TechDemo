@@ -1,0 +1,252 @@
+﻿#pragma kernel Setup
+#pragma kernel Seed
+#pragma kernel Search
+#pragma kernel Attract
+#pragma kernel Connect
+#pragma kernel Remove
+#pragma kernel Grow
+
+#define THREAD_1D [numthreads(128, 1, 1)]
+
+#include "Assets/SpaceColonization/Shaders/Common/Random.hlsl"
+
+#include "../Common/Attraction.hlsl"
+#include "../Common/Node.hlsl"
+#include "../Common/Edge.hlsl"
+#include "../Common/Candidate.hlsl"
+
+StructuredBuffer<float3> _Seeds;
+uint _ConnectCount;
+
+float _InfluenceDistance, _GrowthDistance, _KillDistance;
+float _GrowthLength;
+
+float _AttractionThreshold;
+float _DT;
+
+float _MassMin, _MassMax;
+
+RWStructuredBuffer<Attraction> _Attractions;
+
+AppendStructuredBuffer<uint> _NodesPoolAppend;
+ConsumeStructuredBuffer<uint> _NodesPoolConsume;
+RWStructuredBuffer<Node> _Nodes;
+
+AppendStructuredBuffer<Edge> _EdgesAppend;
+
+AppendStructuredBuffer<Candidate> _CandidatesAppend;
+ConsumeStructuredBuffer<Candidate> _CandidatesConsume;
+
+uint CreateNode(out Node node)
+{
+  uint i = _NodesPoolConsume.Consume();
+  node.position = float3(0, 0, 0);
+  node.t = 0;
+  node.offset = 0;
+  node.from = -1;
+  node.mass = 0;
+  node.active = true;
+  return i;
+}
+
+void CreateEdge(int a, int b)
+{
+  Edge e;
+  e.a = a;
+  e.b = b;
+  _EdgesAppend.Append(e);
+}
+
+THREAD_1D
+void Setup (uint3 id : SV_DispatchThreadID)
+{
+  uint idx = id.x;
+  uint count, stride;
+  _Nodes.GetDimensions(count, stride);
+  if (idx >= count)
+    return;
+
+  _NodesPoolAppend.Append(idx);
+
+  Node n = _Nodes[idx];
+  n.active = false;
+  _Nodes[idx] = n;
+}
+
+THREAD_1D
+void Seed (uint3 id : SV_DispatchThreadID)
+{
+  uint idx = id.x;
+
+  uint count, stride;
+  _Seeds.GetDimensions(count, stride);
+  if (idx >= count)
+    return;
+
+  Node n;
+  uint i = CreateNode(n);
+  n.position = _Seeds[idx];
+  n.t = 1;
+  n.offset = 0;
+  n.from = -1;
+  n.mass = lerp(_MassMin, _MassMax, nrand(float2(1.0 * id.x / count, 0)));
+  _Nodes[i] = n;
+}
+
+THREAD_1D
+void Search (uint3 id : SV_DispatchThreadID)
+{
+  uint idx = id.x;
+  uint count, stride;
+  _Attractions.GetDimensions(count, stride);
+  if (idx >= count)
+    return;
+
+  Attraction attr = _Attractions[idx];
+
+  attr.found = false;
+  if (attr.active)
+  {
+    _Nodes.GetDimensions(count, stride);
+
+    float min_dist = _InfluenceDistance;
+    uint nearest = -1;
+
+    for (uint i = 0; i < count; i++)
+    {
+      Node n = _Nodes[i];
+
+      if (n.active)
+      {
+        float3 dir = attr.position - n.position;
+        float d = length(dir);
+        if (d < min_dist)
+        {
+          min_dist = d;
+          nearest = i;
+
+          attr.found = true;
+          attr.nearest = nearest;
+        }
+      }
+    }
+
+    _Attractions[idx] = attr;
+  }
+}
+
+
+THREAD_1D
+void Attract (uint3 id : SV_DispatchThreadID)
+{
+  uint idx = id.x;
+  uint count, stride;
+  _Nodes.GetDimensions(count, stride);
+  if (idx >= count)
+    return;
+
+  Node n = _Nodes[idx];
+  if (n.active && n.t >= 1.0)
+  {
+    float3 dir = (0.0).xxx;
+    uint counter = 0;
+
+    // Search neighbors in radius
+    _Attractions.GetDimensions(count, stride);
+    for (uint i = 0; i < count; i++)
+    {
+      Attraction attr = _Attractions[i];
+      if (attr.active && attr.found && attr.nearest == idx)
+      {
+        float3 dir2 = (attr.position - n.position);
+        dir += normalize(dir2);
+        counter++;
+      }
+    }
+
+    if (counter > 0)
+    {
+      Candidate c;
+      dir = dir / counter;
+      c.position = n.position + (dir * _GrowthDistance);
+      c.node = idx;
+      _CandidatesAppend.Append(c);
+    }
+  }
+
+}
+
+
+THREAD_1D
+void Connect (uint3 id : SV_DispatchThreadID)
+{
+  uint idx = id.x;
+  if (idx >= _ConnectCount)
+    return;
+
+  Candidate c = _CandidatesConsume.Consume();
+
+  Node n1 = _Nodes[c.node];
+  Node n2;
+  uint idx2 = CreateNode(n2);
+  n2.position = c.position;
+
+  n2.offset = n1.offset + 1.0;
+  n2.from = c.node;
+  n2.mass = lerp(_MassMin, _MassMax, nrand(float2(c.node, idx2)));
+
+  _Nodes[c.node] = n1;
+  _Nodes[idx2] = n2;
+  CreateEdge(c.node, idx2);
+}
+
+
+THREAD_1D
+void Remove(uint3 id : SV_DispatchThreadID)
+{
+  uint idx = id.x;
+  uint count, stride;
+  _Attractions.GetDimensions(count, stride);
+  if (idx >= count)
+    return;
+
+  Attraction attr = _Attractions[idx];
+  if (!attr.active)
+    return;
+
+  _Nodes.GetDimensions(count, stride);
+  for (uint i = 0; i < count; i++)
+  {
+    Node n = _Nodes[i];
+    if (n.active)
+    {
+      float d = distance(attr.position, n.position);
+      if (d < _KillDistance)
+      {
+        attr.active = false;
+        _Attractions[idx] = attr;
+        return;
+      }
+    }
+  }
+}
+
+
+THREAD_1D
+void Grow (uint3 id : SV_DispatchThreadID)
+{
+  uint idx = id.x;
+  uint count, stride;
+  _Nodes.GetDimensions(count, stride);
+  if (idx >= count)
+    return;
+
+  Node n = _Nodes[idx];
+
+  if (n.active)
+  {
+    n.t = saturate(n.t + _DT * n.mass);
+    _Nodes[idx] = n;
+  }
+}
+
