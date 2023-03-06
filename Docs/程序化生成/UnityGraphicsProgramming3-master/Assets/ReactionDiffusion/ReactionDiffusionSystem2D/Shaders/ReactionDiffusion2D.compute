@@ -1,0 +1,142 @@
+﻿#pragma kernel Update
+#pragma kernel Draw
+#pragma kernel AddSeed
+
+#define THREAD_NUM_X 32
+
+struct RDData
+{
+	float u;
+	float v;
+};
+
+int _TexWidth;
+int _TexHeight;
+float _DU;
+float _DV;
+float _Feed;
+float _K;
+float _DT;
+
+int _SeedSize;
+int _InputNum;
+
+StructuredBuffer<RDData> _BufferRead;		// 読み込み先のバッファ（１フレーム前のバッファ）
+RWStructuredBuffer<RDData> _BufferWrite;	// 書き込み先のバッファ
+StructuredBuffer<float2> _InputBufferRead;	// Seedの入力座標の配列
+
+RWTexture2D<float> _HeightMap;	// ハイトマップ（描き込み先テクスチャ）
+
+// ラプラシアン関数で参照する周囲のインデックス計算用テーブル
+static const int2 laplaceIndex[9] = {
+	int2(-1, -1), int2(0, -1), int2(1, -1),
+	int2(-1, 0), int2(0, 0), int2(1, 0),
+	int2(-1, 1), int2(0, 1), int2(1, 1),
+};
+
+// ラプラシアンの周囲のグリッドの影響度
+static const float laplacePower[9] = {
+	0.05, 0.2, 0.05,
+	0.2, -1, 0.2,
+	0.05, 0.2, 0.05,
+};
+
+// バッファのインデックス計算
+int GetIndex(int x, int y) {
+	x = (x < 0) ? x + _TexWidth : x;
+	x = (x >= _TexWidth) ? x - _TexWidth : x;
+
+	y = (y < 0) ? y + _TexHeight : y;
+	y = (y >= _TexHeight) ? y - _TexHeight : y;
+
+	return y * _TexWidth + x;
+}
+
+// Uのラプラシアン関数
+float LaplaceU(int x, int y) {
+	float sumU = 0;
+
+	for (int i = 0; i < 9; i++) {
+		int2 pos = laplaceIndex[i];
+		int idx = GetIndex(x + pos.x, y + pos.y);
+		sumU += _BufferRead[idx].u * laplacePower[i];
+	}
+
+	return sumU;
+}
+
+// Vのラプラシアン関数
+float LaplaceV(int x, int y) {
+	float sumV = 0;
+
+	for (int i = 0; i < 9; i++) {
+		int2 pos = laplaceIndex[i];
+		int idx = GetIndex(x + pos.x, y + pos.y);
+		sumV += _BufferRead[idx].v * laplacePower[i];
+	}
+
+	return sumV;
+}
+
+// 濃度差の計算
+float GetValue(int x, int y) {
+	int idx = GetIndex(x, y);
+	float u = _BufferRead[idx].u;
+	float v = _BufferRead[idx].v;
+	return 1 - clamp(u - v, 0, 1);
+}
+
+// 更新処理
+[numthreads(THREAD_NUM_X, THREAD_NUM_X, 1)]
+void Update(uint3 id : SV_DispatchThreadID)
+{
+
+	int idx = GetIndex(id.x, id.y);
+	float u = _BufferRead[idx].u;
+	float v = _BufferRead[idx].v;
+	float uvv = u * v * v;
+	float f, k;
+
+	f = _Feed;
+	k = _K;
+
+	_BufferWrite[idx].u = saturate(u + (_DU * LaplaceU(id.x, id.y) - uvv + f * (1.0 - u)));
+	_BufferWrite[idx].v = saturate(v + (_DV * LaplaceV(id.x, id.y) + uvv - (k + f) * v));
+}
+
+// テクスチャに描画
+[numthreads(THREAD_NUM_X, THREAD_NUM_X, 1)]
+void Draw(uint3 id : SV_DispatchThreadID)
+{
+	float c = GetValue(id.x, id.y);
+
+	// height map
+	_HeightMap[id.xy] = c;
+}
+
+// シードの追加
+[numthreads(THREAD_NUM_X, 1, 1)]
+void AddSeed(uint id : SV_DispatchThreadID)
+{
+	if (_InputNum <= id) return;
+
+	int w = _SeedSize;
+	int h = _SeedSize;
+	float radius = _SeedSize * 0.5;
+
+	int centerX = _InputBufferRead[id].x;
+	int centerY = _InputBufferRead[id].y;
+	int startX = _InputBufferRead[id].x - w / 2;
+	int startY = _InputBufferRead[id].y - h / 2;
+	for (int x = 0; x < w; x++)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			float dis = distance(float2(centerX, centerY), float2(startX + x, startY + y));
+			if (dis <= radius) {
+				_BufferWrite[GetIndex((centerX + x), (centerY + y))].v = 1;
+			}
+		}
+	}
+
+}

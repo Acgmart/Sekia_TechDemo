@@ -1,0 +1,226 @@
+﻿#pragma kernel Clear
+#pragma kernel Update
+#pragma kernel Draw
+#pragma kernel AddSeed
+#pragma kernel DellSeed
+
+#define THREAD_NUM_X 10
+
+struct RDData
+{
+	float u;
+	float v;
+};
+
+int _TexWidth;
+int _TexHeight;
+int _TexDepth;
+float _DU;
+float _DV;
+float _Feed;
+float _K;
+float _DT;
+
+int _SeedSize;
+int _InputNum;
+
+StructuredBuffer<RDData> _BufferRead;
+RWStructuredBuffer<RDData> _BufferWrite;
+StructuredBuffer<float3> _InputBufferRead;
+
+RWTexture3D<float> _HeightMap;	// ハイトマップ
+
+// ラプラシアン関数で参照する周囲のインデックス計算用テーブル
+static const int3 laplaceIndex[27] = {
+	int3(-1,-1,-1), int3(0,-1,-1), int3( 1,-1,-1),
+	int3(-1, 0,-1), int3(0, 0,-1), int3(1, 0,-1),
+	int3(-1, 1,-1), int3(0, 1,-1), int3(1, 1,-1), 
+
+	int3(-1,-1, 0), int3(0,-1, 0), int3(1,-1, 0),
+	int3(-1, 0, 0), int3(0, 0, 0), int3(1, 0, 0),
+	int3(-1, 1, 0), int3(0, 1, 0), int3(1, 1, 0),
+
+	int3(-1,-1, 1), int3(0,-1, 1), int3(1,-1, 1),
+	int3(-1, 0, 1), int3(0, 0, 1), int3(1, 0, 1),
+	int3(-1, 1, 1), int3(0, 1, 1), int3(1, 1, 1),
+};
+
+// ラプラシアンの周囲のグリッドの影響度
+static const float laplacePower[27] = {
+	0.02,	0.02,	0.02,
+	0.02,	0.1,	0.02,
+	0.02,	0.02,	0.02,
+
+	0.02,	0.1,	0.02,
+	0.1,	-1.0,	0.1,
+	0.02,	0.1,	0.02,
+
+	0.02,	0.02,	0.02,
+	0.02,	0.1,	0.02,
+	0.02,	0.02,	0.02
+};
+
+// バッファのインデックス計算
+int GetIndex(int x, int y, int z) {
+	x = (x < 0) ? x + _TexWidth : x;
+	x = (x >= _TexWidth) ? x - _TexWidth : x;
+
+	y = (y < 0) ? y + _TexHeight : y;
+	y = (y >= _TexHeight) ? y - _TexHeight : y;
+
+	z = (z < 0) ? z + _TexDepth : z;
+	z = (z >= _TexDepth) ? z - _TexDepth : z;
+
+	return z * _TexWidth * _TexHeight + y * _TexWidth + x;
+}
+
+// Uのラプラシアン関数
+float LaplaceU(int x, int y, int z) {
+	float sumU = 0;
+	
+	for (int i = 0; i < 27; i++) {
+		int3 pos = laplaceIndex[i];
+
+		int idx = GetIndex(x + pos.x, y + pos.y, z + pos.z);
+		sumU += _BufferRead[idx].u * laplacePower[i];
+	}
+	return sumU;
+}
+
+// Vのラプラシアン関数
+float LaplaceV(int x, int y, int z) {
+	float sumV = 0;
+
+	for (int i = 0; i < 27; i++) {
+		int3 pos = laplaceIndex[i];
+		int idx = GetIndex(x + pos.x, y + pos.y, z + pos.z);
+		sumV += _BufferRead[idx].v * laplacePower[i];
+	}
+	return sumV;
+}
+
+float GetValue(int x, int y, int z) {
+	int idx = GetIndex(x, y, z);
+	float a = _BufferRead[idx].u;
+	float b = _BufferRead[idx].v;
+	return 1 - clamp(a - b, 0, 1);
+}
+
+float3 GetNormal(int x, int y, int z) {
+	float3 normal = float3(0, 0, 0);
+	float c = GetValue(x, y, z);
+	normal.x = ((GetValue(x - 1, y, z) - c) - (GetValue(x + 1, y, z) - c));
+	normal.y = ((GetValue(x, y - 1, z) - c) - (GetValue(x, y + 1, z) - c));
+	normal.z = ((GetValue(x, y, z - 1) - c) - (GetValue(x, y, z + 1) - c));
+	normal = normalize(normal) * 0.5 + 0.5;
+	return normal;
+}
+
+// クリア
+[numthreads(THREAD_NUM_X, THREAD_NUM_X, THREAD_NUM_X)]
+void Clear(uint3 id : SV_DispatchThreadID)
+{
+	int idx = GetIndex(id.x, id.y, id.z);
+	_BufferWrite[idx].u = 1;
+	_BufferWrite[idx].v = 0;
+}
+
+// 更新処理
+[numthreads(THREAD_NUM_X, THREAD_NUM_X, THREAD_NUM_X)]
+void Update(uint3 id : SV_DispatchThreadID)
+{
+	// 端っこは何もしない
+	//if ((id.x == 0) || (id.x == (_TexWidth - 1))) return;
+	//if ((id.y == 0) || (id.y == (_TexHeight - 1))) return;
+	//if ((id.z == 0) || (id.z == (_TexDepth - 1))) return;
+
+	int idx = GetIndex(id.x, id.y, id.z);
+	float u = _BufferRead[idx].u;
+	float v = _BufferRead[idx].v;
+	float uvv = u * v * v;
+	_BufferWrite[idx].u = clamp(u + (_DU * LaplaceU(id.x, id.y, id.z) - uvv + _Feed * (1.0 - u)), 0, 1);
+	_BufferWrite[idx].v = clamp(v + (_DV * LaplaceV(id.x, id.y, id.z) + uvv - (_K + _Feed) * v), 0, 1);
+
+}
+
+// テクスチャに描画
+[numthreads(THREAD_NUM_X, THREAD_NUM_X, THREAD_NUM_X)]
+void Draw(uint3 id : SV_DispatchThreadID)
+{
+	float c = GetValue(id.x, id.y, id.z);
+
+	// height map
+	_HeightMap[id.xyz] = c;
+}
+
+// シードの追加
+[numthreads(THREAD_NUM_X, 1, 1)]
+void AddSeed(uint id : SV_DispatchThreadID)
+{
+	if (_InputNum <= id) return;
+
+	int w = _SeedSize;
+	int h = _SeedSize;
+	int d = _SeedSize;
+	float radius = _SeedSize * 0.5;
+
+	int centerX = _InputBufferRead[id].x;
+	int centerY = _InputBufferRead[id].y;
+	int centerZ = _InputBufferRead[id].z;
+
+	int startX = centerX - w / 2;
+	int startY = centerY - h / 2;
+	int startZ = centerZ - d / 2;
+
+	for (int x = 0; x < w; x++)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			for (int z = 0; z < d; z++)
+			{
+				float dis = distance(float3(centerX, centerY, centerZ), float3(startX + x, startY + y, startZ + z));
+				if (dis <= radius) {
+					//_BufferWrite[GetIndex((centerX + x), (centerY + y), (centerZ + z))].u = 1;
+					_BufferWrite[GetIndex((centerX + x), (centerY + y), (centerZ + z))].v = 1;
+				}
+			}
+		}
+	}
+	
+}
+
+// 部分的に削除
+[numthreads(THREAD_NUM_X, 1, 1)]
+void DellSeed(uint id : SV_DispatchThreadID)
+{
+	if (_InputNum <= id) return;
+
+	int w = _SeedSize;
+	int h = _SeedSize;
+	int d = _SeedSize;
+	float radius = _SeedSize * 0.5;
+
+	int centerX = _InputBufferRead[id].x;
+	int centerY = _InputBufferRead[id].y;
+	int centerZ = _InputBufferRead[id].z;
+
+	int startX = centerX - w / 2;
+	int startY = centerY - h / 2;
+	int startZ = centerZ - d / 2;
+
+	for (int x = 0; x < w; x++)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			for (int z = 0; z < d; z++)
+			{
+				float dis = distance(float3(centerX, centerY, centerZ), float3(startX + x, startY + y, startZ + z));
+				if (dis <= radius) {
+					//_BufferWrite[GetIndex((centerX + x), (centerY + y), (centerZ + z))].u = 0;
+					_BufferWrite[GetIndex((centerX + x), (centerY + y), (centerZ + z))].v = 0;
+				}
+			}
+		}
+	}
+
+}

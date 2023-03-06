@@ -1,0 +1,56 @@
+﻿#pragma kernel Emit
+#pragma kernel Iterator
+
+#define THREAD_X 128
+#define THREAD_Y 1
+#define THREAD_Z 1
+#define DT 0.022
+
+struct Params
+{
+    float3 emitPos;
+    float3 position;
+    float3 velocity; //xyz = velocity
+    float  life;
+    float2 size;     // x = current size, y = target size.
+    float4 color;
+};
+
+RWStructuredBuffer<Params> buf;
+
+// Lorenz Attractor parameters
+float p;
+float r;
+float b;
+
+float3 LorenzAttractor(float3 pos)
+{
+    float dxdt = p * (pos.y - pos.x);
+    float dydt = pos.x * (r - pos.z) - pos.y;
+    float dzdt = pos.x * pos.y - b * pos.z;
+    return float3(dxdt, dydt, dzdt) * DT;
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void Emit(uint id : SV_DispatchThreadID)
+{
+    Params p = buf[id];
+    p.life = (float)id*-1e-05;
+    p.position = p.emitPos;
+    p.size.x = 0.0;
+    buf[id] = p;
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void Iterator(uint id : SV_DispatchThreadID)
+{
+    Params p = buf[id];
+    p.life.x += DT;
+    p.size.x = p.size.y * saturate(length(p.velocity));
+    if (p.life.x > 0)
+    {
+        p.velocity = LorenzAttractor(p.position);
+        p.position += p.velocity;
+    }
+    buf[id] = p;
+}

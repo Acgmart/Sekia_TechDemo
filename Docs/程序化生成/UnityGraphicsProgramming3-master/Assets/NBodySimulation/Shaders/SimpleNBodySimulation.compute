@@ -1,0 +1,138 @@
+﻿#pragma kernel CSMain
+
+#define SIMULATION_BLOCK_SIZE 256
+
+#include "Body.cginc"
+
+// 定数
+cbuffer cb {
+	float	_SofteningSquared,
+			_DeltaTime,
+			_Damping;
+
+	uint	_NumBodies;
+
+	float4	_GroupDim,
+			_ThreadDim;
+};
+
+
+// 粒子のバッファ
+StructuredBuffer<Body> _BodiesBufferRead;
+RWStructuredBuffer<Body> _BodiesBufferWrite;
+
+// 共有メモリ (ブロック内で共有される)
+groupshared Body sharedBody[SIMULATION_BLOCK_SIZE];
+
+
+
+// ブロック数が実際に確保されたものの範囲から外れた場合、オフセット分戻す
+uint wrap(uint gid, uint gdim) {
+	return gid < gdim ? gid : gid - gdim;
+}
+
+// シグマ内の計算
+float3 bodyBodyInteraction(float3 acc, Body b_i, Body b_j) 
+{
+    float3 r = b_i.position - b_j.position;
+
+    // distSqr = dot(r_ij, r_ij) + EPS^2
+    float distSqr = r.x * r.x + r.y * r.y + r.z * r.z;
+    distSqr += _SofteningSquared;
+
+    // invDistCube = 1/distSqr^(3/2) 
+    float distSixth = distSqr * distSqr * distSqr;
+    float invDistCube = 1.0f / sqrt(distSixth);
+    
+    // s = m_j * invDistCube
+	float s = b_j.mass * invDistCube;
+
+    // a_i =  a_i + s * r_ij
+    acc += r * s;
+
+    return acc;
+}
+
+
+// タイル内で計算
+float3 gravitation(Body body, float3 accel, uint3 threadID)
+{
+
+	// 全数調査
+	// ブロック内のスレッド数分実行
+    for (uint i = 0; i < SIMULATION_BLOCK_SIZE;)
+    {
+		accel = bodyBodyInteraction(accel, sharedBody[i], body); i++;
+    }
+
+    return accel;
+}
+
+float3 computeBodyForce(Body body, uint3 groupID, uint3 threadID)
+{
+
+    uint start = 0;				// 開始
+	uint finish = _NumBodies;	
+    
+	float3 acc = (float3)0;
+	int currentTile = 0;
+
+	// タイル数(ブロック数)分実行
+    for (uint i = start; i < finish; i += SIMULATION_BLOCK_SIZE)
+    {
+		// 共有メモリに格納
+		// sharedBody[スレッドID(0-SIMULATION_BLOCK_SIZE)] = _BodiesBufferRead[(タイルグループ) * ブロック当たりのスレッド数 + スレッドID]
+        sharedBody[threadID.x] = _BodiesBufferRead[wrap(groupID.x + currentTile, _GroupDim.x) * SIMULATION_BLOCK_SIZE + threadID.x];
+        
+		// グループ同期
+        GroupMemoryBarrierWithGroupSync();
+
+		// 周囲からの重力の影響を計算
+        acc = gravitation(body, acc, threadID);
+
+        GroupMemoryBarrierWithGroupSync();
+
+		currentTile++;	// 次のタイルへ
+    }
+
+	return acc;
+
+}
+
+[numthreads(SIMULATION_BLOCK_SIZE,1,1)]
+void CSMain (
+	uint3 groupID : SV_GroupID,				// グループID
+	uint3 threadID : SV_GroupThreadID,		// "グループ内の"スレッドID
+	uint3 DTid : SV_DispatchThreadID		// グローバルスレッドID
+) {
+
+	// 現在のグローバルスレッドインデックス
+	uint index = DTid.x;	// つまり、 = groupID.x * SIMULATION_BLOCK_SIZE + threadID.x;
+	
+	// 粒子をバッファから読み込み
+	Body body = _BodiesBufferRead[index];
+	
+	float3 force = computeBodyForce(body, groupID, threadID);
+	
+	body.velocity += force * _DeltaTime;
+	body.velocity *= _Damping;
+	
+	// 差分法
+    // (更新された位置) = old position + velocity * deltaTime
+	body.position += body.velocity * _DeltaTime;
+	
+	_BodiesBufferWrite[index] = body;
+   
+}
+
+
+
+
+
+
+
+
+
+
+
+

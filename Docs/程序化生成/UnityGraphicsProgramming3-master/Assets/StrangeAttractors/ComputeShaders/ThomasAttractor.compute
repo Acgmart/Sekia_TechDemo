@@ -1,0 +1,53 @@
+﻿#pragma kernel Emit
+#pragma kernel Iterator
+
+#define THREAD_X 128
+#define THREAD_Y 1
+#define THREAD_Z 1
+#define DT 0.065
+
+struct Params
+{
+    float3 emitPos;
+    float3 position;
+    float3 velocity; //xyz = velocity
+    float  life;
+    float2 size;     // x = current size, y = target size.
+    float4 color;
+};
+
+RWStructuredBuffer<Params> buf;
+
+// Thomas Attractor parameters
+float b;
+
+float3 ThomasAttractor(float3 pos)
+{
+    float dxdt = -b*pos.x + sin(pos.y);
+    float dydt = -b*pos.y + sin(pos.z);
+    float dzdt = -b*pos.z + sin(pos.x);
+    return float3(dxdt, dydt, dzdt) * DT;
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void Emit(uint id : SV_DispatchThreadID)
+{
+    Params p = buf[id];
+    p.life = (float)id*-1e-05;
+    p.position = p.emitPos;
+    p.size.x = p.size.y;
+    buf[id] = p;
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void Iterator(uint id : SV_DispatchThreadID)
+{
+    Params p = buf[id];
+    p.life.x += DT;
+    if (p.life.x > 0)
+    {
+        p.velocity = ThomasAttractor(p.position);
+        p.position += p.velocity;
+    }
+    buf[id] = p;
+}

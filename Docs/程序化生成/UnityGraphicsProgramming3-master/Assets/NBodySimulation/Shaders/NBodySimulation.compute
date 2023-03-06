@@ -1,0 +1,114 @@
+﻿#pragma kernel CSMain
+
+#define SIMULATION_BLOCK_SIZE 256
+
+#include "Body.cginc"
+
+cbuffer cb {
+	float	_SofteningSquared,
+			_DeltaTime,
+			_Damping;
+
+	uint	_NumBodies,
+			_Division;
+
+	float4	_GroupDim,
+			_ThreadDim;
+};
+
+
+StructuredBuffer<Body> _BodiesBufferRead;
+RWStructuredBuffer<Body> _BodiesBufferWrite;
+
+groupshared Body sharedBody[SIMULATION_BLOCK_SIZE];
+
+uint wrap(uint gid, uint gdim) {
+	return gid < gdim ? gid : gid - gdim;
+}
+
+float3 bodyBodyInteraction(float3 acc, Body b_i, Body b_j)
+{
+	float3 r = b_i.position - b_j.position;
+
+	float distSqr = r.x * r.x + r.y * r.y + r.z * r.z;
+	distSqr += _SofteningSquared;
+
+	float distSixth = distSqr * distSqr * distSqr;
+	float invDistCube = 1.0f / sqrt(distSixth);
+
+	float s = b_j.mass * invDistCube;
+
+	acc += r * s;
+
+	return acc;
+}
+
+float3 gravitation(Body body, float3 accel, uint3 threadID)
+{
+
+    for (uint i = 0; i < SIMULATION_BLOCK_SIZE;)
+    {
+		accel = bodyBodyInteraction(accel, sharedBody[i], body); i++;
+    }
+
+    return accel;
+}
+
+float3 computeBodyForce(Body body, uint3 groupID, uint3 threadID)
+{
+    float3 acc = (float3)0;
+    
+    uint div = _Division;
+
+    uint start = 0;
+	uint finish = _NumBodies / div;	// 途中で切る
+    
+	int currentTile = 0;
+
+    for (uint i = start; i < finish; i += SIMULATION_BLOCK_SIZE)
+    {
+        sharedBody[threadID.x] = _BodiesBufferRead[wrap(groupID.x + currentTile, _GroupDim.x) * SIMULATION_BLOCK_SIZE + threadID.x];
+        
+        GroupMemoryBarrierWithGroupSync();
+
+        acc = gravitation(body, acc, threadID);
+
+        GroupMemoryBarrierWithGroupSync();
+
+		currentTile++;
+    }
+
+	return acc;
+
+}
+
+[numthreads(SIMULATION_BLOCK_SIZE,1,1)]
+void CSMain (uint3 groupID : SV_GroupID, uint3 threadID : SV_GroupThreadID,	uint3 DTid : SV_DispatchThreadID)
+{
+
+	uint index = DTid.x;
+	
+	Body body = _BodiesBufferRead[index];
+	
+	float3 force = computeBodyForce(body, groupID, threadID);
+	
+	body.velocity += force * _DeltaTime;
+	body.velocity *= _Damping;
+ 
+	body.position += body.velocity * _DeltaTime;
+	
+	_BodiesBufferWrite[index] = body;
+   
+}
+
+
+
+
+
+
+
+
+
+
+
+
