@@ -9,8 +9,10 @@
         "Unity.RenderPipelines.Core.Editor",
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.RenderPipelines.Universal.Runtime",
-        "Unity.Formats.Fbx.Editor",
-        "Unity.Loader"
+        "Unity.Loader",
+        "Unity.Timeline",
+        "Unity.Timeline.Editor",
+        "Autodesk.Fbx"
     ],
     "includePlatforms": [
         "Editor"
