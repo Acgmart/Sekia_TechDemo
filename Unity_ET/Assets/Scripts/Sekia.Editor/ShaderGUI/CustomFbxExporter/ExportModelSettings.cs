@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityEditor.Formats.Fbx.Exporter
+namespace UnityEditor.CustomFbxExporter
 {
     [CustomEditor(typeof(ExportModelSettings))]
     internal class ExportModelSettingsEditor : UnityEditor.Editor
@@ -22,26 +22,6 @@ namespace UnityEditor.Formats.Fbx.Exporter
 
         private bool disableIncludeDropdown = false;
 
-        private bool m_exportingOutsideProject = false;
-        public void SetExportingOutsideProject(bool val)
-        {
-            m_exportingOutsideProject = val;
-        }
-
-        public void SetIsSingleHierarchy(bool singleHierarchy)
-        {
-            if (singleHierarchy)
-            {
-                hierarchyDepOption = singleHierarchyOption;
-                return;
-            }
-            hierarchyDepOption = multiHerarchyOption;
-        }
-
-        public void DisableIncludeDropdown(bool disable)
-        {
-            disableIncludeDropdown = disable;
-        }
 
         public override void OnInspectorGUI()
         {
@@ -112,7 +92,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
             EditorGUILayout.LabelField(new GUIContent("Preserve Import Settings",
                 "If checked, the import settings from the overwritten FBX will be carried over to the new version."), GUILayout.Width(LabelWidth - FieldOffset));
             // greyed out if exporting outside assets folder
-            EditorGUI.BeginDisabledGroup(m_exportingOutsideProject);
+            EditorGUI.BeginDisabledGroup(false);
             exportSettings.SetPreserveImportSettings(EditorGUILayout.Toggle(exportSettings.PreserveImportSettings));
             EditorGUI.EndDisabledGroup();
             GUILayout.EndHorizontal();
@@ -202,7 +182,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
         public Transform AnimationSource { get { return animSource; } }
         public void SetAnimationSource(Transform source) { this.animSource = source; }
         public Transform AnimationDest { get { return animDest; } }
-        public void SetAnimationDest(Transform dest) { this.animDest = dest; }
+
         public abstract ExportSettings.Include ModelAnimIncludeOption { get; }
         public abstract ExportSettings.LODExportType LODExportType { get; }
         public abstract ExportSettings.ObjectPosition ObjectPosition { get; }

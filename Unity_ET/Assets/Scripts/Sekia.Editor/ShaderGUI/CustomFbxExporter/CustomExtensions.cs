@@ -2,7 +2,7 @@
 using UnityEngine;
 using Autodesk.Fbx;
 
-namespace UnityEditor.Formats.Fbx.Exporter
+namespace UnityEditor.CustomFbxExporter
 {
     namespace CustomExtensions
     {

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 4
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8253f816d32d9641b1f6978e3a4c2c5, type: 3}
+  m_Name: CustomFbxExporterSettings
+  m_EditorClassIdentifier: 
+  Verbose: 0
+  launchAfterInstallation: 1
+  HideSendToUnityMenu: 1
+  BakeAnimation: 0
+  showConvertToPrefabDialog: 1
+  exportModelSettingsSerialize:
+    exportFormat: 1
+    animatedSkinnedMesh: 0
+    mayaCompatibleNaming: 1
+    include: 2
+    lodLevel: 0
+    objectPosition: 0
+    exportUnrendered: 1
+    preserveImportSettings: 0
+    keepInstances: 1
+    embedTextures: 0
+  convertToPrefabSettingsSerialize:
+    exportFormat: 1
+    animatedSkinnedMesh: 0
+    mayaCompatibleNaming: 1

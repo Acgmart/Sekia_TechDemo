@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-namespace UnityEditor.Formats.Fbx.Exporter
+namespace UnityEditor.CustomFbxExporter
 {
     internal class RepairMissingScripts
     {

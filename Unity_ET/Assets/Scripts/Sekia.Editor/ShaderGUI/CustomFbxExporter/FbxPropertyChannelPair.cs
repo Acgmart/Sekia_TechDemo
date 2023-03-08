@@ -1,7 +1,7 @@
 ﻿using Autodesk.Fbx;
 using System.Collections.Generic;
 
-namespace UnityEditor.Formats.Fbx.Exporter
+namespace UnityEditor.CustomFbxExporter
 {
     /// <summary>
     /// Store FBX property name and channel name 

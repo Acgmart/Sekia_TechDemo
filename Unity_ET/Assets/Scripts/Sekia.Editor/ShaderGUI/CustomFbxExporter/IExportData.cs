@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.Timeline;
 using System.Collections.Generic;
-using UnityEngine.Playables;
 
-namespace UnityEditor.Formats.Fbx.Exporter
+namespace UnityEditor.CustomFbxExporter
 {
     /// <summary>
     /// Export data containing extra information required to export
@@ -129,81 +127,6 @@ namespace UnityEditor.Formats.Fbx.Exporter
             {
                 CollectDependencies(animClip, rootObject, exportOptions);
             }
-        }
-
-        /// <summary>
-        /// Get the GameObject that the clip is bound to in the timeline.
-        /// </summary>
-        /// <param name="timelineClip"></param>
-        /// <returns>The GameObject bound to the timeline clip or null if none.</returns>
-        private static GameObject GetGameObjectBoundToTimelineClip(TimelineClip timelineClip, PlayableDirector director = null)
-        {
-            object parentTrack = timelineClip.GetParentTrack();
-            AnimationTrack animTrack = parentTrack as AnimationTrack;
-
-            var inspectedDirector = director ? director : UnityEditor.Timeline.TimelineEditor.inspectedDirector;
-            if (!inspectedDirector)
-            {
-                Debug.LogWarning("No Timeline selected in inspector, cannot retrieve GameObject bound to track");
-                return null;
-            }
-
-            Object animationTrackObject = inspectedDirector.GetGenericBinding(animTrack);
-
-            GameObject animationTrackGO = null;
-            if (animationTrackObject is GameObject)
-            {
-                animationTrackGO = animationTrackObject as GameObject;
-            }
-            else if (animationTrackObject is Animator)
-            {
-                animationTrackGO = (animationTrackObject as Animator).gameObject;
-            }
-
-            if (animationTrackGO == null)
-            {
-                Debug.LogErrorFormat("Could not export animation track object of type {0}", animationTrackObject.GetType().Name);
-                return null;
-            }
-            return animationTrackGO;
-        }
-
-        /// <summary>
-        /// Get the GameObject and it's corresponding animation clip from the given timeline clip.
-        /// </summary>
-        /// <param name="timelineClip"></param>
-        /// <returns>KeyValuePair containing GameObject and corresponding AnimationClip</returns>
-        public static KeyValuePair<GameObject, AnimationClip> GetGameObjectAndAnimationClip(TimelineClip timelineClip, PlayableDirector director = null)
-        {
-            var animationTrackGO = GetGameObjectBoundToTimelineClip(timelineClip, director);
-            if (!animationTrackGO)
-            {
-                return new KeyValuePair<GameObject, AnimationClip>();
-            }
-
-            return new KeyValuePair<GameObject, AnimationClip>(animationTrackGO, timelineClip.animationClip);
-        }
-
-        /// <summary>
-        /// Get the filename of the format {model}@{anim}.fbx from the given timeline clip
-        /// </summary>
-        /// <param name="timelineClip"></param>
-        /// <returns>filename for use for exporting animation clip</returns>
-        public static string GetFileName(TimelineClip timelineClip)
-        {
-            // if the timeline clip name already contains an @, then take this as the
-            // filename to avoid duplicate @
-            if (timelineClip.displayName.Contains("@"))
-            {
-                return timelineClip.displayName;
-            }
-
-            var goBound = GetGameObjectBoundToTimelineClip(timelineClip);
-            if (goBound == null)
-            {
-                return timelineClip.displayName;
-            }
-            return string.Format("{0}@{1}", goBound.name, timelineClip.displayName);
         }
     }
 }

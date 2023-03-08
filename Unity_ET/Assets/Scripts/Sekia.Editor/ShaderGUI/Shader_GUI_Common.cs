@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.Rendering;
 using Autodesk.Fbx;
 using System.Linq;
-using UnityEditor.Formats.Fbx.Exporter;
+using UnityEditor.CustomFbxExporter;
 
 namespace UnityEditor
 {
@@ -985,8 +985,12 @@ namespace UnityEditor
                 var folderPath = Path.GetDirectoryName(file);
                 var filePath = System.IO.Path.Combine(folderPath, filename + "1.fbx");
 
+                var exportDir = Path.GetDirectoryName(filePath);
+                var lastFileName = Path.GetFileName(filePath);
+                var tempFileName = "_CustomFbxExportTempFile" + lastFileName;
+                var tempFilePath = Path.Combine(exportDir, tempFileName);
+
                 {
-                    ModelExporter.LastFilePath = filePath;
                     Dictionary<Mesh, FbxNode> sharedMeshes = new Dictionary<Mesh, FbxNode>();
                     int meshNodeCounter = 0;
 
@@ -996,7 +1000,9 @@ namespace UnityEditor
                         if (exportOptions == null)
                             exportOptions = ModelExporter.DefaultOptions as ExportModelSettingsSerialize;
                         Debug.Log($"当前的动画导出设置：{exportOptions.ModelAnimIncludeOption}");
-                        Debug.Log($"KeepInstances设置：{exportOptions.KeepInstances}");
+                        //Debug.Log($"KeepInstances设置：{exportOptions.KeepInstances}");
+                        Debug.Log($"Format设置：{exportOptions.ExportFormat}");
+                        Debug.Log($"是否维持meta设置：{exportOptions.PreserveImportSettings}");
 
                         fbxExporter.ExportOptions = exportOptions;
 
@@ -1183,15 +1189,7 @@ namespace UnityEditor
                                 System.Type compType;
                                 if (exportData.exportComponent.TryGetValue(go, out compType))
                                 {
-                                    if (compType == typeof(Light))
-                                    {
-                                        fbxExporter.ExportLight(go, fbxScene, node);
-                                    }
-                                    else if (compType == typeof(Camera))
-                                    {
-                                        fbxExporter.ExportCamera(go, fbxScene, node);
-                                    }
-                                    else if (compType == typeof(SkinnedMeshRenderer))
+                                    if (compType == typeof(SkinnedMeshRenderer))
                                     {
                                         // export only what is necessary for exporting blendshape animation
                                         var unitySkin = go.GetComponent<SkinnedMeshRenderer>();
@@ -1372,7 +1370,7 @@ namespace UnityEditor
                             // create the mesh structure.
                             var fbxScene = fbxNode.GetScene();
                             FbxMesh fbxMesh = FbxMesh.Create(fbxScene, "Scene");
-                            Debug.LogError($"fbxMeshName：{fbxMesh.GetName()}");
+                            //Debug.LogError($"fbxMeshName：{fbxMesh.GetName()}");
 
                             // Create control points.
                             fbxExporter.ControlPointToIndex.Clear();
@@ -1489,15 +1487,6 @@ namespace UnityEditor
                         //判断Mesh导出类型
                         bool ExportMesh1(GameObject gameObject, FbxNode fbxNode)
                         {
-                            // First allow the object-based callbacks to have a hack at it.
-                            foreach (var callback in ModelExporter.MeshForObjectCallbacks)
-                            {
-                                if (callback(fbxExporter, gameObject, fbxNode))
-                                {
-                                    return true;
-                                }
-                            }
-
                             // Next iterate over components and allow the component-based
                             // callbacks to have a hack at it. This is complicated by the
                             // potential of subclassing. While we're iterating we keep the
@@ -1525,28 +1514,6 @@ namespace UnityEditor
                                     {
                                         defaultComponent = component;
                                     }
-                                }
-                                else
-                                {
-                                    // Check if we have custom behaviour for this component type, or
-                                    // one of its base classes.
-                                    if (!monoBehaviour.enabled)
-                                    {
-                                        continue;
-                                    }
-                                    var componentType = monoBehaviour.GetType();
-                                    do
-                                    {
-                                        GetMeshForComponent callback;
-                                        if (ModelExporter.MeshForComponentCallbacks.TryGetValue(componentType, out callback))
-                                        {
-                                            if (callback(fbxExporter, monoBehaviour, fbxNode))
-                                            {
-                                                return true;
-                                            }
-                                        }
-                                        componentType = componentType.BaseType;
-                                    } while (componentType.IsSubclassOf(typeof(MonoBehaviour)));
                                 }
                             }
 
@@ -1622,33 +1589,127 @@ namespace UnityEditor
                                     exportedMesh = ExportMesh1(unityGo, fbxNode);
                                 }
 
-                                // export camera, but only if no mesh was exported
-                                bool exportedCamera = false;
-                                if (!exportedMesh)
-                                {
-                                    exportedCamera = fbxExporter.ExportCamera(unityGo, fbxScene, fbxNode);
-                                }
-
-                                // export light, but only if no mesh or camera was exported
-                                if (!exportedMesh && !exportedCamera)
-                                {
-                                    fbxExporter.ExportLight(unityGo, fbxScene, fbxNode);
-                                }
-
                                 fbxExporter.ExportConstraints(unityGo, fbxScene, fbxNode);
                             }
                             return true;
+                        }
+
+                        void ReplaceFile()
+                        {
+                            if (tempFilePath.Equals(filePath) || !File.Exists(tempFilePath))
+                            {
+                                return;
+                            }
+
+                            // delete old file
+                            try
+                            {
+                                File.Delete(filePath);
+                                // delete meta file also
+                                File.Delete(filePath + ".meta");
+                            }
+                            catch (IOException)
+                            {
+                            }
+
+                            if (File.Exists(filePath))
+                            {
+                                Debug.LogWarning("Failed to delete file: " + filePath);
+                            }
+
+                            // rename the new file
+                            try
+                            {
+                                File.Move(tempFilePath, filePath);
+                            }
+                            catch (IOException)
+                            {
+                                Debug.LogWarning(string.Format("Failed to move file {0} to {1}", tempFilePath, filePath));
+                            }
+                        }
+
+                        string SaveMetafile()
+                        {
+                            var tempMetafilePath = Path.GetTempFileName();
+
+                            if (AssetDatabase.LoadAssetAtPath(filePath, typeof(Object)) == null)
+                            {
+                                Debug.LogWarning(string.Format("Failed to find a valid asset at {0}. Import settings will be reset to default values.", filePath));
+                                return "";
+                            }
+
+                            // get metafile for original fbx file
+                            var metafile = filePath + ".meta";
+
+#if UNITY_2019_1_OR_NEWER
+                            metafile = VersionControl.Provider.GetAssetByPath(filePath).metaPath;
+#endif
+
+                            // save it to a temp file
+                            try
+                            {
+                                File.Copy(metafile, tempMetafilePath, true);
+                            }
+                            catch (IOException)
+                            {
+                                Debug.LogWarning(string.Format("Failed to copy file {0} to {1}. Import settings will be reset to default values.", metafile, tempMetafilePath));
+                                return "";
+                            }
+
+                            return tempMetafilePath;
+                        }
+
+                        void ReplaceMetafile(string metafilePath)
+                        {
+                            if (AssetDatabase.LoadAssetAtPath(filePath, typeof(Object)) == null)
+                            {
+                                Debug.LogWarning(string.Format("Failed to find a valid asset at {0}. Import settings will be reset to default values.", filePath));
+                                return;
+                            }
+
+                            // get metafile for new fbx file
+                            var metafile = filePath + ".meta";
+
+#if UNITY_2019_1_OR_NEWER
+                            metafile = VersionControl.Provider.GetAssetByPath(filePath).metaPath;
+#endif
+
+                            // replace metafile with original one in temp file
+                            try
+                            {
+                                File.Copy(metafilePath, metafile, true);
+                            }
+                            catch (IOException)
+                            {
+                                Debug.LogWarning(string.Format("Failed to copy file {0} to {1}. Import settings will be reset to default values.", metafilePath, filePath));
+                            }
+                        }
+
+                        void DeleteTempFile()
+                        {
+                            if (!File.Exists(tempFilePath))
+                            {
+                                return;
+                            }
+
+                            try
+                            {
+                                File.Delete(tempFilePath);
+                            }
+                            catch (IOException)
+                            {
+                            }
+
+                            if (File.Exists(tempFilePath))
+                            {
+                                Debug.LogWarning("Failed to delete file: " + tempFilePath);
+                            }
                         }
 
                         void ExportAll(ModelExporter instance, GameObject root, IExportData exportData)
                         {
                             ModelExporter.exportCancelled = false;
 
-                            instance.m_lastFilePath = ModelExporter.LastFilePath;
-                            var exportDir = Path.GetDirectoryName(filePath);
-                            var lastFileName = Path.GetFileName(filePath);
-                            var tempFileName = "_CustomFbxExportTempFile" + lastFileName;
-                            instance.m_tempFilePath = Path.Combine(exportDir, tempFileName);
 
                             bool animOnly = exportData != null && exportOptions.ModelAnimIncludeOption == ExportSettings.Include.Anim;
 
@@ -1675,7 +1736,7 @@ namespace UnityEditor
                                     int fileFormat = -1;
                                     if (exportOptions.ExportFormat == ExportSettings.ExportFormat.ASCII)
                                         fileFormat = fbxManager.GetIOPluginRegistry().FindWriterIDByDescription("FBX ascii (*.fbx)");
-                                    bool success = fbxExporter.Initialize(instance.m_tempFilePath, fileFormat, fbxManager.GetIOSettings());
+                                    bool success = fbxExporter.Initialize(tempFilePath, fileFormat, fbxManager.GetIOSettings());
                                     // Check that initialization of the fbxExporter was successful
                                     if (!success)
                                         return;
@@ -1782,7 +1843,7 @@ namespace UnityEditor
                                     }
                                 }
 
-                                //导出Mesh、Camera、Light
+                                //导出Mesh
                                 if (!animOnly)
                                 {
                                     if (!ExportComponents(fbxScene))
@@ -1793,7 +1854,6 @@ namespace UnityEditor
                                 }
 
                                 //导出动画
-                                // Export animation if any
                                 if (exportData != null)
                                 {
                                     {
@@ -1848,35 +1908,25 @@ namespace UnityEditor
                                 return;
                             }
 
-                            // make a temporary copy of the original metafile
+                            //保持导入设置：缓存原始文件meta
                             string originalMetafilePath = "";
-                            if (instance.ExportOptions.PreserveImportSettings && File.Exists(instance.m_lastFilePath))
+                            if (exportOptions.PreserveImportSettings && File.Exists(filePath))
                             {
-                                originalMetafilePath = instance.SaveMetafile();
+                                originalMetafilePath = SaveMetafile();
                             }
 
-                            // delete old file, move temp file
-                            instance.ReplaceFile();
+                            //删除目标路径的文件和meta 移动临时文件到目标路径
+                            ReplaceFile();
 
-                            // refresh the database so Unity knows the file's been deleted
-                            AssetDatabase.Refresh();
-
-                            // replace with original metafile if specified to
+                            //保持导入设置：使用原始文件的导入设置
                             if (instance.ExportOptions.PreserveImportSettings && !string.IsNullOrEmpty(originalMetafilePath))
-                            {
-                                instance.ReplaceMetafile(originalMetafilePath);
-                            }
+                                ReplaceMetafile(originalMetafilePath);
 
-                            //return status == true ? instance.NumNodes : 0;
+                            //删除临时文件
+                            DeleteTempFile();
 
-                            // You must clear the progress bar when you're done,
-                            // otherwise it never goes away and many actions in Unity
-                            // are blocked (e.g. you can't quit).
+                            AssetDatabase.Refresh();
                             EditorUtility.ClearProgressBar();
-
-                            // make sure the temp file is deleted, no matter
-                            // when we return
-                            instance.DeleteTempFile();
                         }
 
                         AnimationOnlyExportData animData = GetExportData(fbxGameObject, exportOptions);

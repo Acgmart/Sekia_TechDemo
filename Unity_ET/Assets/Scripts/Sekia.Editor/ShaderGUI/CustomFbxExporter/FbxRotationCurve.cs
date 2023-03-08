@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Security.Permissions;
 
-namespace UnityEditor.Formats.Fbx.Exporter
+namespace UnityEditor.CustomFbxExporter
 {
     /// <summary>
     /// Base class for QuaternionCurve and EulerCurve.
