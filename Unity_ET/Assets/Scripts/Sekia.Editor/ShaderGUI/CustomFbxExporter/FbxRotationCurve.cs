@@ -1,7 +1,6 @@
 ﻿using Autodesk.Fbx;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Security.Permissions;
 
 namespace UnityEditor.CustomFbxExporter
 {
@@ -10,7 +9,7 @@ namespace UnityEditor.CustomFbxExporter
     /// Provides implementation for computing keys and generating FbxAnimCurves
     /// for euler rotation.
     /// </summary>
-    internal abstract class RotationCurve
+    public abstract class RotationCurve
     {
         private double m_sampleRate;
         public double SampleRate
@@ -48,7 +47,6 @@ namespace UnityEditor.CustomFbxExporter
 
         protected abstract FbxQuaternion GetConvertedQuaternionRotation(float seconds, UnityEngine.Quaternion restRotation);
 
-        [SecurityPermission(SecurityAction.LinkDemand)]
         private Key[] ComputeKeys(UnityEngine.Quaternion restRotation, FbxNode node)
         {
             // Get the source pivot pre-rotation if any, so we can
@@ -58,11 +56,11 @@ namespace UnityEditor.CustomFbxExporter
                 : new FbxVector4();
 
             // Get the inverse of the prerotation
-            var fbxPreRotationInverse = ModelExporter.EulerToQuaternionXYZ(fbxPreRotationEuler);
+            var fbxPreRotationInverse = MeshInfo.EulerToQuaternionXYZ(fbxPreRotationEuler);
             fbxPreRotationInverse.Inverse();
 
             // Find when we have keys set.
-            var keyTimes = ModelExporter.GetSampleTimes(GetCurves(), SampleRate);
+            var keyTimes = MeshInfo.GetSampleTimes(GetCurves(), SampleRate);
 
             // Convert to the Key type.
             var keys = new Key[keyTimes.Count];
@@ -83,7 +81,7 @@ namespace UnityEditor.CustomFbxExporter
                 // Store the key so we can sort them later.
                 Key key = new Key();
                 key.time = FbxTime.FromSecondDouble(seconds);
-                key.euler = ModelExporter.ConvertToFbxVector4(finalUnityQuat.eulerAngles);
+                key.euler = MeshInfo.ConvertToFbxVector4(finalUnityQuat.eulerAngles);
                 keys[i++] = key;
             }
 
@@ -93,7 +91,6 @@ namespace UnityEditor.CustomFbxExporter
             return keys;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand)]
         public void Animate(Transform unityTransform, FbxNode fbxNode, FbxAnimLayer fbxAnimLayer, bool Verbose)
         {
 
@@ -182,7 +179,7 @@ namespace UnityEditor.CustomFbxExporter
 
             // convert the final animation to righthanded coords
 
-            return ModelExporter.EulerToQuaternionZXY(unityFinalAnimation);
+            return MeshInfo.EulerToQuaternionZXY(unityFinalAnimation);
         }
     }
 
