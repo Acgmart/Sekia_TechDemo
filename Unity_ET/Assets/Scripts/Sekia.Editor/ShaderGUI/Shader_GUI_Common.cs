@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 using Autodesk.Fbx;
 using System.Linq;
 using UnityEditor.CustomFbxExporter;
+using UnityEditor.SceneManagement;
 
 namespace UnityEditor
 {
@@ -1937,6 +1938,36 @@ namespace UnityEditor
             AssetDatabase.Refresh();
             Debug.LogError("结束...  处理次数：" + count);
 
+        }
+
+        [MenuItem("Window/TA工具/复制场景")]
+        static void CopyScene()
+        {
+            //https://github.com/guycalledfrank/lighting-data-asset-reverse
+            //GI信息的format不能读
+            //可以将GI保存在空场景里面然后加载副场景
+            //https://docs.unity3d.com/ScriptReference/LightProbes.Tetrahedralize.html
+            //加载场景后强制刷新LightProbes的
+
+            string sceneTargetPath = "Assets/Bundles/Scenes/testGI/testEmptyGI.unity";
+            EditorSceneManager.MarkAllScenesDirty();
+            EditorSceneManager.SaveOpenScenes();
+            EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene(), sceneTargetPath, true);
+            var Scene = EditorSceneManager.OpenScene(sceneTargetPath);
+
+            //复制场景后新场景的Lightmapping.lightingDataAsset和旧场景共用 导致参与引用 
+            LightingDataAsset asset = GameObject.Instantiate(Lightmapping.lightingDataAsset);
+            SerializedObject obj = new SerializedObject(asset);
+            SerializedProperty property = obj.FindProperty("m_Scene");
+            SceneAsset assetscene = AssetDatabase.LoadAssetAtPath<SceneAsset>(Scene.path); //替换新场景
+            property.objectReferenceValue = assetscene;
+            obj.ApplyModifiedProperties();
+            string lightDataPath = AssetDatabase.GetAssetPath(Lightmapping.lightingDataAsset);
+            AssetDatabase.CreateAsset(asset, lightDataPath);
+
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)

@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Bundles/Scenes/testBRDF/SampleScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
+  - enabled: 1
+    path: Assets/Bundles/Scenes/testGI/testEmptyGI.unity
+    guid: 12074a8570f5333428708a04fe005244
+  - enabled: 1
+    path: Assets/Bundles/Scenes/testGI/testWithGI.unity
+    guid: 773753010dcac534e9fc915a3d8b22ef
   m_configObjects: {}
