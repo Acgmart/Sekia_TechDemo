@@ -18,9 +18,9 @@ MonoBehaviour:
   mayaCompatibleNaming: 1
   keepInstances: 1
   animatedSkinnedMesh: 1
-  exportUnrendered: 1
+  exportUnrendered: 0
   objectSpace: 0
-  fbxChannels: -16
+  fbxChannels: -1
   showDebugInfo: 0
   bakeAnimationProperty: 0
   animationSource: {fileID: 0}

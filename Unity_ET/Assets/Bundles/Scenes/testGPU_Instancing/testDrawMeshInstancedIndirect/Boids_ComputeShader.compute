@@ -1,0 +1,196 @@
+﻿#pragma kernel ForceCS
+#pragma kernel IntegrateCS
+
+struct BoidData
+{
+	float3 velocity;
+	float3 position;
+};
+
+#define SIMULATION_BLOCK_SIZE 256
+
+//公共
+float _MaxSpeed;
+
+//Force
+StructuredBuffer<BoidData>   _BoidDataBufferRead;
+RWStructuredBuffer<float3>   _BoidForceBufferWrite;
+int _MaxBoidObjectNum;
+float _SeparateNeighborhoodRadius;
+float _SeparateWeight;
+float _AlignmentNeighborhoodRadius;
+float _AlignmentWeight;
+float _CohesionNeighborhoodRadius;
+float _CohesionWeight;
+float _MaxSteerForce;
+
+//Integrate
+StructuredBuffer<float3>     _BoidForceBufferRead;
+RWStructuredBuffer<BoidData> _BoidDataBufferWrite;
+float _DeltaTime;
+float4 _WallCenter;
+float4 _WallSize;
+float  _AvoidWallWeight;
+
+//限制向量的长度
+float3 limit(float3 vec, float max)
+{
+	float length = sqrt(dot(vec, vec)); // 大きさ
+	return length > max ? vec * (max / length) : vec;
+}
+
+//墙壁碰撞后提供的加速度
+float3 avoidWall(float3 position)
+{
+	float3 wc = _WallCenter.xyz;
+	float3 ws = _WallSize.xyz;
+	float3 acc = float3(0, 0, 0);
+	// x
+	acc.x = (position.x < wc.x - ws.x * 0.5) ? acc.x + 1.0 : acc.x;
+	acc.x = (position.x > wc.x + ws.x * 0.5) ? acc.x - 1.0 : acc.x;
+	
+	// y
+	acc.y = (position.y < wc.y - ws.y * 0.5) ? acc.y + 1.0 : acc.y;
+	acc.y = (position.y > wc.y + ws.y * 0.5) ? acc.y - 1.0 : acc.y;
+	
+	// z
+	acc.z = (position.z < wc.z - ws.z * 0.5) ? acc.z + 1.0 : acc.z;
+	acc.z = (position.z > wc.z + ws.z * 0.5) ? acc.z - 1.0 : acc.z;
+
+	return acc;
+}
+
+//组内共享缓存
+groupshared BoidData boid_data[SIMULATION_BLOCK_SIZE];
+
+//计算加速度
+[numthreads(SIMULATION_BLOCK_SIZE, 1, 1)]
+void ForceCS
+(
+	uint3 DTid : SV_DispatchThreadID,
+	uint3 Gid : SV_GroupID,
+	uint3 GTid : SV_GroupThreadID,
+	uint  GI : SV_GroupIndex
+)
+{
+	const unsigned int P_ID = DTid.x;
+	float3 P_position = _BoidDataBufferRead[P_ID].position;
+	float3 P_velocity = _BoidDataBufferRead[P_ID].velocity;
+
+	float3 force = float3(0, 0, 0);
+	float3 sepPosSum = float3(0, 0, 0);
+	int sepCount = 0;
+	float3 aliVelSum = float3(0, 0, 0);
+	int aliCount = 0;
+	float3 cohPosSum = float3(0, 0, 0);
+	int cohCount = 0;
+
+	//Group与Group之间是互相隔离的 所以多线程计算中只考虑组内线程
+	[loop]
+	for (uint N_block_ID = 0; N_block_ID < (uint)_MaxBoidObjectNum; N_block_ID += SIMULATION_BLOCK_SIZE)
+	{
+		//Group所有Thread循环计算_MaxBoidObjectNum/SIMULATION_BLOCK_SIZE次 也就是遍历每个Group
+		//	遍历完后 每个Thread相当于与所有Thread都进行了一次互动 运算量是指数级的
+		//从全局缓存保存数据到groupshared
+		boid_data[GI] = _BoidDataBufferRead[N_block_ID + GI];
+		//Group内Thread同步 完成异步数据写入 Group内的每个Thread写入一次刚好填满数组
+		GroupMemoryBarrierWithGroupSync();
+
+		//遍历所有Thread
+		//dist > 0.0：排除自身 不能自己和自己进行互动
+		for (int N_tile_ID = 0; N_tile_ID < SIMULATION_BLOCK_SIZE; N_tile_ID++)
+		{
+			float3 N_position = boid_data[N_tile_ID].position;
+			float3 N_velocity = boid_data[N_tile_ID].velocity;
+
+			float3 diff = P_position - N_position;
+			float  dist = sqrt(dot(diff, diff));
+
+			//分离-距离非常近时加速分离
+			if (dist > 0.0 && dist < _SeparateNeighborhoodRadius)
+			{
+				float3 repulse = normalize(P_position - N_position);  
+				repulse /= dist;
+				sepPosSum += repulse;
+				sepCount++;
+			}
+
+			//整列 求平均速度
+			if (dist > 0.0 && dist < _AlignmentNeighborhoodRadius)
+			{
+				aliVelSum += N_velocity;
+				aliCount++;
+			}
+
+			//结合-求平均坐标
+			if (dist > 0.0 && dist < _CohesionNeighborhoodRadius)
+			{
+				cohPosSum += N_position;
+				cohCount++;
+			}
+		}
+
+		//Group内Thread同步 在接下来写入groupshared之前确保读取全部结束
+		GroupMemoryBarrierWithGroupSync();
+	}
+
+	//加速度-分离
+	float3 sepSteer = (float3)0.0;
+	if (sepCount > 0)
+	{
+		sepSteer = sepPosSum / (float)sepCount;
+		sepSteer = normalize(sepSteer) * _MaxSpeed; //归一化
+		sepSteer = sepSteer - P_velocity;           
+		sepSteer = limit(sepSteer, _MaxSteerForce);
+	}
+
+	//加速度-整列
+	float3 aliSteer = (float3)0.0;
+	if (aliCount > 0)
+	{
+		aliSteer = aliVelSum / (float)aliCount;
+		aliSteer = normalize(aliSteer) * _MaxSpeed; //归一化
+		aliSteer = aliSteer - P_velocity;
+		aliSteer = limit(aliSteer, _MaxSteerForce);
+	}
+
+	//加速度-结合
+	float3 cohSteer = (float3)0.0;
+	if (cohCount > 0)
+	{
+		cohPosSum = cohPosSum / (float)cohCount;
+		cohSteer = cohPosSum - P_position;
+		cohSteer = normalize(cohSteer) * _MaxSpeed; //归一化
+		cohSteer = cohSteer - P_velocity;
+		cohSteer = limit(cohSteer, _MaxSteerForce);
+	}
+
+	//三者都是归一化后的加速度向量 应用权重
+	force += aliSteer * _AlignmentWeight;
+	force += cohSteer * _CohesionWeight;
+	force += sepSteer * _SeparateWeight;
+
+	_BoidForceBufferWrite[P_ID] = force;
+}
+
+//计算速度和坐标
+[numthreads(SIMULATION_BLOCK_SIZE, 1, 1)]
+void IntegrateCS
+(
+	uint3 DTid : SV_DispatchThreadID
+)
+{
+	const unsigned int P_ID = DTid.x;
+											           
+	BoidData b = _BoidDataBufferWrite[P_ID];
+	float3 force = _BoidForceBufferRead[P_ID]; // 操舵力を読み込む
+	
+	// 壁に近づいたら反発する力を与える
+	force += avoidWall(b.position) * _AvoidWallWeight; 
+
+	b.velocity += force * _DeltaTime;          // 操舵力を速度に適用
+	b.velocity = limit(b.velocity, _MaxSpeed); // 速度を制限
+	b.position += b.velocity * _DeltaTime;     // 位置を更新
+											           
+	_BoidDataBufferWrite[P_ID] = b;            // 計算結果を書き込む
+}

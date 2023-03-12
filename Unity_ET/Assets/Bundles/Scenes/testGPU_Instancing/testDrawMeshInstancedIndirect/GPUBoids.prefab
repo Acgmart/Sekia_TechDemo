@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7119972402285364589
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 704543774505024945}
+  - component: {fileID: 1506559613526415999}
+  - component: {fileID: 2474846543413814203}
+  m_Layer: 0
+  m_Name: GPUBoids
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &704543774505024945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7119972402285364589}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1506559613526415999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7119972402285364589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be9a8d5d645e4545886be6914d2e5e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxObjectNum: 16384
+  CohesionNeighborhoodRadius: 2
+  AlignmentNeighborhoodRadius: 2
+  SeparateNeighborhoodRadius: 1
+  MaxSpeed: 5
+  MaxSteerForce: 0.5
+  CohesionWeight: 1
+  AlignmentWeight: 1
+  SeparateWeight: 3
+  AvoidWallWeight: 10
+  WallCenter: {x: 0, y: 0, z: 0}
+  WallSize: {x: 32, y: 32, z: 32}
+  BoidsCS: {fileID: 7200000, guid: 47567044d261e474db26e25410628c0a, type: 3}
+--- !u!114 &2474846543413814203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7119972402285364589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1088025d887acd4189b6dc124e0ebc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectScale: {x: 0.1, y: 0.2, z: 0.5}
+  GPUBoidsScript: {fileID: 1506559613526415999}
+  InstanceMesh: {fileID: -5495902117074765545, guid: 34460c3da7e6149469fdd37ef3e401a2, type: 3}
+  InstanceRenderMaterial: {fileID: 2100000, guid: 91dbb6b6149df404a986444779bcb3a3, type: 2}

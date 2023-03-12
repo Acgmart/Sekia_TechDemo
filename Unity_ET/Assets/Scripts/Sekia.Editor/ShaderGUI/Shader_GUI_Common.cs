@@ -974,26 +974,11 @@ namespace UnityEditor
 
         public static void ExportOneFbx(GameObject fbxGameObject, string filePath, ExportSettings exportSettings)
         {
-            Dictionary<GameObject, FbxNode> MapUnityObjectToFbxNode = new Dictionary<GameObject, FbxNode>();
-            Dictionary<Mesh, FbxNode> sharedMeshes = new Dictionary<Mesh, FbxNode>();
             int meshNodeCounter = 0;
             int NumMeshes = 0;
             int NumTriangles = 0;
-            Dictionary<System.Type, KeyValuePair<System.Type, FbxNodeRelationType>> MapsToFbxObject = new Dictionary<System.Type, KeyValuePair<System.Type, FbxNodeRelationType>>()
-            {
-                { typeof(Transform),            new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxProperty), FbxNodeRelationType.Property) },
-                { typeof(MeshFilter),           new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxMesh), FbxNodeRelationType.NodeAttribute) },
-                { typeof(SkinnedMeshRenderer),  new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxMesh), FbxNodeRelationType.NodeAttribute) },
-                { typeof(Light),                new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxLight), FbxNodeRelationType.NodeAttribute) },
-                { typeof(Camera),               new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxCamera), FbxNodeRelationType.NodeAttribute) },
-                { typeof(Material),             new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxSurfaceMaterial), FbxNodeRelationType.Material) },
-            };
 
-
-            /// <summary>
-            /// Format for creating unique names
-            /// </summary>
-
+            bool exportCancelled = false;
             var exportDir = Path.GetDirectoryName(filePath);
             var lastFileName = Path.GetFileName(filePath);
             var tempFileName = "_CustomFbxExportTempFile" + lastFileName;
@@ -1016,7 +1001,18 @@ namespace UnityEditor
             string SkeletonPrefix = "_Skel";
             string SkinPrefix = "_Skin";
 
+            Dictionary<GameObject, FbxNode> MapUnityObjectToFbxNode = new Dictionary<GameObject, FbxNode>();
+            Dictionary<Mesh, FbxNode> sharedMeshes = new Dictionary<Mesh, FbxNode>();
 
+            Dictionary<System.Type, KeyValuePair<System.Type, FbxNodeRelationType>> MapsToFbxObject = new Dictionary<System.Type, KeyValuePair<System.Type, FbxNodeRelationType>>()
+            {
+                { typeof(Transform),            new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxProperty), FbxNodeRelationType.Property) },
+                { typeof(MeshFilter),           new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxMesh), FbxNodeRelationType.NodeAttribute) },
+                { typeof(SkinnedMeshRenderer),  new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxMesh), FbxNodeRelationType.NodeAttribute) },
+                { typeof(Light),                new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxLight), FbxNodeRelationType.NodeAttribute) },
+                { typeof(Camera),               new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxCamera), FbxNodeRelationType.NodeAttribute) },
+                { typeof(Material),             new KeyValuePair<System.Type, FbxNodeRelationType>(typeof(FbxSurfaceMaterial), FbxNodeRelationType.Material) },
+            };
             /// <summary>
             /// keep a map between the constrained FbxNode (in Unity this is the GameObject with constraint component)
             /// and its FbxConstraints for quick lookup when exporting constraint animations.
@@ -1043,21 +1039,12 @@ namespace UnityEditor
             /// </summary>
             Dictionary<Mesh, FbxNode> SharedMeshes = new Dictionary<Mesh, FbxNode>();
 
-
-
             /// <summary>
             /// Keeps track of the index of each point in the exported vertex array.
             /// </summary>
             Dictionary<Vector3, int> ControlPointToIndex = new Dictionary<Vector3, int>();
 
-
-
-
-
-
-
-
-
+            #region SkinnedMeshRenderer蒙皮骨骼动画
             /// <summary>
             /// Gets the bind pose for the Unity bone.
             /// </summary>
@@ -1126,10 +1113,7 @@ namespace UnityEditor
                 return bindPose;
             }
 
-            /// <summary>
-            /// Export bones of skinned mesh, if this is a skinned mesh with
-            /// bones and bind poses.
-            /// </summary> 
+            //导出骨架 if this is a skinned mesh with bones and bind poses.
             bool ExportSkeleton(SkinnedMeshRenderer skinnedMesh, FbxScene fbxScene, out Dictionary<SkinnedMeshRenderer, Transform[]> skinnedMeshToBonesMap)
             {
                 skinnedMeshToBonesMap = new Dictionary<SkinnedMeshRenderer, Transform[]>();
@@ -1307,8 +1291,7 @@ namespace UnityEditor
             /// <summary>
             /// Export bind pose of mesh to skeleton
             /// </summary>
-            bool ExportBindPose(SkinnedMeshRenderer skinnedMesh, FbxNode fbxMeshNode,
-                                   FbxScene fbxScene, Dictionary<SkinnedMeshRenderer, Transform[]> skinnedMeshToBonesMap)
+            bool ExportBindPose(SkinnedMeshRenderer skinnedMesh, FbxNode fbxMeshNode, FbxScene fbxScene, Dictionary<SkinnedMeshRenderer, Transform[]> skinnedMeshToBonesMap)
             {
                 if (fbxMeshNode == null || skinnedMeshToBonesMap == null || fbxScene == null)
                 {
@@ -1356,32 +1339,424 @@ namespace UnityEditor
 
                 return true;
             }
+            #endregion
+
+            #region 未分类
+
+
+            /// <summary>
+            /// Export animation curve key frames with key tangents 
+            /// NOTE : This is a work in progress (WIP). We only export the key time and value on
+            /// a Cubic curve using the default tangents.
+            /// </summary>
+            void ExportAnimationKeys(AnimationCurve uniAnimCurve, FbxAnimCurve fbxAnimCurve, UnityToMayaConvertSceneHelper convertSceneHelper)
+            {
+                // Copy Unity AnimCurve to FBX AnimCurve.
+                // NOTE: only cubic keys are supported by the FbxImporter
+                using (new FbxAnimCurveModifyHelper(new List<FbxAnimCurve> { fbxAnimCurve }))
+                {
+                    for (int keyIndex = 0; keyIndex < uniAnimCurve.length; ++keyIndex)
+                    {
+                        var uniKeyFrame = uniAnimCurve[keyIndex];
+                        var fbxTime = FbxTime.FromSecondDouble(uniKeyFrame.time);
+
+                        int fbxKeyIndex = fbxAnimCurve.KeyAdd(fbxTime);
+
+
+                        // configure tangents
+                        var lTangent = AnimationUtility.GetKeyLeftTangentMode(uniAnimCurve, keyIndex);
+                        var rTangent = AnimationUtility.GetKeyRightTangentMode(uniAnimCurve, keyIndex);
+
+                        // Always set tangent mode to eTangentBreak, as other modes are not handled the same in FBX as in
+                        // Unity, thus leading to discrepancies in animation curves.
+                        FbxAnimCurveDef.ETangentMode tanMode = FbxAnimCurveDef.ETangentMode.eTangentBreak;
+
+                        // Default to cubic interpolation, which is the default for KeySet
+                        FbxAnimCurveDef.EInterpolationType interpMode = FbxAnimCurveDef.EInterpolationType.eInterpolationCubic;
+                        switch (rTangent)
+                        {
+                            case AnimationUtility.TangentMode.Linear:
+                                interpMode = FbxAnimCurveDef.EInterpolationType.eInterpolationLinear;
+                                break;
+                            case AnimationUtility.TangentMode.Constant:
+                                interpMode = FbxAnimCurveDef.EInterpolationType.eInterpolationConstant;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        fbxAnimCurve.KeySet(fbxKeyIndex,
+                            fbxTime,
+                            convertSceneHelper.Convert(uniKeyFrame.value),
+                            interpMode,
+                            tanMode,
+                            // value of right slope
+                            convertSceneHelper.Convert(uniKeyFrame.outTangent),
+                            // value of next left slope
+                            keyIndex < uniAnimCurve.length - 1 ? convertSceneHelper.Convert(uniAnimCurve[keyIndex + 1].inTangent) : 0,
+                            FbxAnimCurveDef.EWeightedMode.eWeightedAll,
+                            // weight for right slope
+                            uniKeyFrame.outWeight,
+                            // weight for next left slope
+                            keyIndex < uniAnimCurve.length - 1 ? uniAnimCurve[keyIndex + 1].inWeight : 0
+                        );
+                    }
+                }
+            }
+
 
 
 
             /// <summary>
-            /// Euler (roll/pitch/yaw (ZXY rotation order) to quaternion.
+            /// Get the FbxBlendshape with the given name associated with the FbxNode.
             /// </summary>
-            /// <returns>a quaternion.</returns>
-            /// <param name="euler">ZXY Euler.</param>
-            FbxQuaternion EulerToQuaternionZXY(Vector3 euler)
+            /// <param name="blendshapeNode"></param>
+            /// <param name="uniPropertyName"></param>
+            /// <returns></returns>
+            FbxBlendShapeChannel GetFbxBlendShape(FbxNode blendshapeNode, string uniPropertyName)
             {
-                var unityQuat = Quaternion.Euler(euler);
-                return new FbxQuaternion(unityQuat.x, unityQuat.y, unityQuat.z, unityQuat.w);
+                List<FbxBlendShapeChannel> blendshapeChannels;
+                if (MapUnityObjectToBlendShapes.TryGetValue(blendshapeNode, out blendshapeChannels))
+                {
+                    var match = System.Text.RegularExpressions.Regex.Match(uniPropertyName, @"blendShape\.(\S+)");
+                    if (match.Success && match.Groups.Count > 0)
+                    {
+                        string blendshapeName = match.Groups[1].Value;
+
+                        var targetChannel = blendshapeChannels.FirstOrDefault(channel => (channel.GetName() == blendshapeName));
+                        if (targetChannel != null)
+                        {
+                            return targetChannel;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            FbxProperty GetFbxProperty(FbxNode fbxNode, string fbxPropertyName, System.Type uniPropertyType, string uniPropertyName)
+            {
+                if (fbxNode == null)
+                {
+                    return null;
+                }
+
+                // check if property maps to a constraint
+                // check this first because both constraints and FbxNodes can contain a RotationOffset property,
+                // but only the constraint one is animatable.
+                var fbxConstraint = GetFbxConstraint(fbxNode, uniPropertyType);
+                if (fbxConstraint != null)
+                {
+                    var prop = fbxConstraint.FindProperty(fbxPropertyName, false);
+                    if (prop.IsValid())
+                    {
+                        return prop;
+                    }
+                }
+
+                // check if the property maps to a blendshape
+                var fbxBlendShape = GetFbxBlendShape(fbxNode, uniPropertyName);
+                if (fbxBlendShape != null)
+                {
+                    var prop = fbxBlendShape.FindProperty(fbxPropertyName, false);
+                    if (prop.IsValid())
+                    {
+                        return prop;
+                    }
+                }
+
+                // map unity property name to fbx property
+                var fbxProperty = fbxNode.FindProperty(fbxPropertyName, false);
+                if (fbxProperty.IsValid())
+                {
+                    return fbxProperty;
+                }
+
+                var fbxNodeAttribute = fbxNode.GetNodeAttribute();
+                if (fbxNodeAttribute != null)
+                {
+                    fbxProperty = fbxNodeAttribute.FindProperty(fbxPropertyName, false);
+                }
+                return fbxProperty;
             }
 
             /// <summary>
-            /// Euler X/Y/Z rotation order to quaternion.
+            /// Transfers transform animation from source to dest. Replaces dest's Unity Animation Curves with updated animations.
+            /// NOTE: Source must be the parent of dest.
             /// </summary>
-            /// <param name="euler">XYZ Euler.</param>
-            /// <returns>a quaternion</returns>
-            FbxQuaternion EulerToQuaternionXYZ(FbxVector4 euler)
+            /// <param name="source">Source animated object.</param>
+            /// <param name="dest">Destination, child of the source.</param>
+            /// <param name="sampleRate">Sample rate.</param>
+            /// <param name="unityCurves">Unity curves.</param> 
+            void TransferMotion(Transform source, Transform dest, float sampleRate, ref Dictionary<GameObject, List<UnityCurve>> unityCurves)
             {
-                FbxAMatrix m = new FbxAMatrix();
-                m.SetR(euler);
-                return m.GetQ();
+                // get sample times for curves in dest + source
+                // at each sample time, evaluate all 18 transfom anim curves, creating 2 transform matrices
+                // combine the matrices, get the new values, apply to the 9 new anim curves for dest
+                if (dest.parent != source)
+                {
+                    Debug.LogError("dest must be a child of source");
+                    return;
+                }
+
+                List<UnityCurve> sourceUnityCurves;
+                if (!unityCurves.TryGetValue(source.gameObject, out sourceUnityCurves))
+                {
+                    return; // nothing to do, source has no animation
+                }
+
+                List<UnityCurve> destUnityCurves;
+                if (!unityCurves.TryGetValue(dest.gameObject, out destUnityCurves))
+                {
+                    destUnityCurves = new List<UnityCurve>();
+                }
+
+                List<AnimationCurve> animCurves = new List<AnimationCurve>();
+                foreach (var curve in sourceUnityCurves)
+                {
+                    // TODO: check if curve is anim related
+                    animCurves.Add(curve.uniAnimCurve);
+                }
+                foreach (var curve in destUnityCurves)
+                {
+                    animCurves.Add(curve.uniAnimCurve);
+                }
+
+                var sampleTimes = MeshInfo.GetSampleTimes(animCurves.ToArray(), sampleRate);
+                // need to create 9 new UnityCurves, one for each property
+                var posKeyFrames = new Keyframe[3][];
+                var rotKeyFrames = new Keyframe[3][];
+                var scaleKeyFrames = new Keyframe[3][];
+
+                for (int k = 0; k < posKeyFrames.Length; k++)
+                {
+                    posKeyFrames[k] = new Keyframe[sampleTimes.Count];
+                    rotKeyFrames[k] = new Keyframe[sampleTimes.Count];
+                    scaleKeyFrames[k] = new Keyframe[sampleTimes.Count];
+                }
+
+                // If we have a point in local coords represented as a column-vector x, the equation of x in coordinates relative to source's parent is:
+                //   x_grandparent = source * dest * x
+                // Now we're going to change dest to dest' which has the animation from source. And we're going to change
+                // source to source' which has no animation. The equation of x will become:
+                //   x_grandparent = source' * dest' * x
+                // We're not changing x_grandparent and x, so we need that:
+                //   source * dest = source' * dest'
+                // We know dest and source (both animated) and source' (static). Solve for dest':
+                //   dest' = (source')^-1 * source * dest
+                int keyIndex = 0;
+                var sourceStaticMatrixInverse = Matrix4x4.TRS(source.localPosition, source.localRotation, source.localScale).inverse;
+                foreach (var currSampleTime in sampleTimes)
+                {
+                    var sourceLocalMatrix = GetTransformMatrix(currSampleTime, source, sourceUnityCurves);
+                    var destLocalMatrix = GetTransformMatrix(currSampleTime, dest, destUnityCurves);
+
+                    var newLocalMatrix = sourceStaticMatrixInverse * sourceLocalMatrix * destLocalMatrix;
+
+                    FbxVector4 translation, rotation, scale;
+                    GetTRSFromMatrix(newLocalMatrix, out translation, out rotation, out scale);
+
+                    // get rotation directly from matrix, as otherwise causes issues
+                    // with negative rotations.
+                    var rot = newLocalMatrix.rotation.eulerAngles;
+
+                    for (int k = 0; k < 3; k++)
+                    {
+                        posKeyFrames[k][keyIndex] = new Keyframe(currSampleTime, (float)translation[k]);
+                        rotKeyFrames[k][keyIndex] = new Keyframe(currSampleTime, rot[k]);
+                        scaleKeyFrames[k][keyIndex] = new Keyframe(currSampleTime, (float)scale[k]);
+                    }
+                    keyIndex++;
+                }
+
+                // create the new list of unity curves, and add it to dest's curves
+                var newUnityCurves = new List<UnityCurve>();
+                string posPropName = "m_LocalPosition.";
+                string rotPropName = "localEulerAnglesRaw.";
+                string scalePropName = "m_LocalScale.";
+                var xyz = "xyz";
+                for (int k = 0; k < 3; k++)
+                {
+                    var posUniCurve = new UnityCurve(posPropName + xyz[k], new AnimationCurve(posKeyFrames[k]), typeof(Transform));
+                    newUnityCurves.Add(posUniCurve);
+
+                    var rotUniCurve = new UnityCurve(rotPropName + xyz[k], new AnimationCurve(rotKeyFrames[k]), typeof(Transform));
+                    newUnityCurves.Add(rotUniCurve);
+
+                    var scaleUniCurve = new UnityCurve(scalePropName + xyz[k], new AnimationCurve(scaleKeyFrames[k]), typeof(Transform));
+                    newUnityCurves.Add(scaleUniCurve);
+                }
+
+                // remove old transform curves
+                RemoveTransformCurves(ref sourceUnityCurves);
+                RemoveTransformCurves(ref destUnityCurves);
+
+                unityCurves[source.gameObject] = sourceUnityCurves;
+                if (!unityCurves.ContainsKey(dest.gameObject))
+                {
+                    unityCurves.Add(dest.gameObject, newUnityCurves);
+                    return;
+                }
+                unityCurves[dest.gameObject].AddRange(newUnityCurves);
+
             }
 
+
+            void RemoveTransformCurves(ref List<UnityCurve> curves)
+            {
+                var transformCurves = new List<UnityCurve>();
+                var transformPropNames = new string[] { "m_LocalPosition.", "m_LocalRotation", "localEulerAnglesRaw.", "m_LocalScale." };
+                foreach (var curve in curves)
+                {
+                    foreach (var prop in transformPropNames)
+                    {
+                        if (curve.propertyName.StartsWith(prop))
+                        {
+                            transformCurves.Add(curve);
+                            break;
+                        }
+                    }
+                }
+                foreach (var curve in transformCurves)
+                {
+                    curves.Remove(curve);
+                }
+            }
+
+            Matrix4x4 GetTransformMatrix(float currSampleTime, Transform orig, List<UnityCurve> unityCurves)
+            {
+                var sourcePos = orig.localPosition;
+                var sourceRot = orig.localRotation;
+                var sourceScale = orig.localScale;
+
+                foreach (var uniCurve in unityCurves)
+                {
+                    float currSampleValue = uniCurve.uniAnimCurve.Evaluate(currSampleTime);
+                    string propName = uniCurve.propertyName;
+                    // try position, scale, quat then euler
+                    int temp = QuaternionCurve.GetQuaternionIndex(propName);
+                    if (temp >= 0)
+                    {
+                        sourceRot[temp] = currSampleValue;
+                        continue;
+                    }
+                    temp = EulerCurve.GetEulerIndex(propName);
+                    if (temp >= 0)
+                    {
+                        var euler = sourceRot.eulerAngles;
+                        euler[temp] = currSampleValue;
+                        sourceRot.eulerAngles = euler;
+                        continue;
+                    }
+                    temp = GetPositionIndex(propName);
+                    if (temp >= 0)
+                    {
+                        sourcePos[temp] = currSampleValue;
+                        continue;
+                    }
+                    temp = GetScaleIndex(propName);
+                    if (temp >= 0)
+                    {
+                        sourceScale[temp] = currSampleValue;
+                    }
+                }
+
+                sourceRot = Quaternion.Euler(sourceRot.eulerAngles.x, sourceRot.eulerAngles.y, sourceRot.eulerAngles.z);
+                return Matrix4x4.TRS(sourcePos, sourceRot, sourceScale);
+            }
+
+
+
+            int GetPositionIndex(string uniPropertyName)
+            {
+                System.StringComparison ct = System.StringComparison.CurrentCulture;
+                bool isPositionComponent = uniPropertyName.StartsWith("m_LocalPosition.", ct);
+
+                if (!isPositionComponent) { return -1; }
+
+                switch (uniPropertyName[uniPropertyName.Length - 1])
+                {
+                    case 'x':
+                        return 0;
+                    case 'y':
+                        return 1;
+                    case 'z':
+                        return 2;
+                    default:
+                        return -1;
+                }
+            }
+
+            int GetScaleIndex(string uniPropertyName)
+            {
+                System.StringComparison ct = System.StringComparison.CurrentCulture;
+                bool isScaleComponent = uniPropertyName.StartsWith("m_LocalScale.", ct);
+
+                if (!isScaleComponent) { return -1; }
+
+                switch (uniPropertyName[uniPropertyName.Length - 1])
+                {
+                    case 'x':
+                        return 0;
+                    case 'y':
+                        return 1;
+                    case 'z':
+                        return 2;
+                    default:
+                        return -1;
+                }
+            }
+
+            /// <summary>
+            /// Gets or creates the rotation curve for GameObject uniGO.
+            /// </summary>
+            /// <returns>The rotation curve.</returns>
+            /// <param name="uniGO">Unity GameObject.</param>
+            /// <param name="frameRate">Frame rate.</param>
+            /// <param name="rotations">Rotations.</param>
+            /// <typeparam name="T"> RotationCurve is abstract so specify type of RotationCurve to create.</typeparam>
+            RotationCurve GetRotationCurve<T>(GameObject uniGO, float frameRate, ref Dictionary<GameObject, RotationCurve> rotations) where T : RotationCurve, new()
+            {
+                RotationCurve rotCurve;
+                if (!rotations.TryGetValue(uniGO, out rotCurve))
+                {
+                    rotCurve = new T { SampleRate = frameRate };
+                    rotations.Add(uniGO, rotCurve);
+                }
+                return rotCurve;
+            }
+
+
+
+            #endregion
+
+            #region Constraint
+
+            /// <summary>
+            /// Get the FbxConstraint associated with the constrained node.
+            /// </summary>
+            /// <param name="constrainedNode"></param>
+            /// <param name="uniConstraintType"></param>
+            /// <returns></returns>
+            FbxConstraint GetFbxConstraint(FbxNode constrainedNode, System.Type uniConstraintType)
+            {
+                if (uniConstraintType == null || !uniConstraintType.GetInterfaces().Contains(typeof(IConstraint)))
+                {
+                    // not actually a constraint
+                    return null;
+                }
+
+                Dictionary<FbxConstraint, System.Type> constraints;
+                if (MapConstrainedObjectToConstraints.TryGetValue(constrainedNode, out constraints))
+                {
+                    var targetConstraint = constraints.FirstOrDefault(constraint => (constraint.Value == uniConstraintType));
+                    if (!targetConstraint.Equals(default(KeyValuePair<FbxConstraint, System.Type>)))
+                    {
+                        return targetConstraint.Key;
+                    }
+                }
+
+                return null;
+            }
 
             bool ExportCommonConstraintProperties<TUnityConstraint, TFbxConstraint>(TUnityConstraint uniConstraint, TFbxConstraint fbxConstraint, FbxNode fbxNode)
                where TUnityConstraint : IConstraint where TFbxConstraint : FbxConstraint
@@ -1393,8 +1768,6 @@ namespace UnityEditor
                 AddFbxNodeToConstraintsMapping(fbxNode, fbxConstraint, typeof(TUnityConstraint));
                 return true;
             }
-
-
 
             List<ExpConstraintSource> GetConstraintSources(IConstraint unityConstraint)
             {
@@ -1645,590 +2018,12 @@ namespace UnityEditor
                 fbxNode.LclRotation.Set(fbxRestRotation);
                 return true;
             }
+            #endregion
 
-
-
-
-
-            /// <summary>
-            /// Export animation curve key frames with key tangents 
-            /// NOTE : This is a work in progress (WIP). We only export the key time and value on
-            /// a Cubic curve using the default tangents.
-            /// </summary>
-            void ExportAnimationKeys(AnimationCurve uniAnimCurve, FbxAnimCurve fbxAnimCurve, UnityToMayaConvertSceneHelper convertSceneHelper)
-            {
-                // Copy Unity AnimCurve to FBX AnimCurve.
-                // NOTE: only cubic keys are supported by the FbxImporter
-                using (new FbxAnimCurveModifyHelper(new List<FbxAnimCurve> { fbxAnimCurve }))
-                {
-                    for (int keyIndex = 0; keyIndex < uniAnimCurve.length; ++keyIndex)
-                    {
-                        var uniKeyFrame = uniAnimCurve[keyIndex];
-                        var fbxTime = FbxTime.FromSecondDouble(uniKeyFrame.time);
-
-                        int fbxKeyIndex = fbxAnimCurve.KeyAdd(fbxTime);
-
-
-                        // configure tangents
-                        var lTangent = AnimationUtility.GetKeyLeftTangentMode(uniAnimCurve, keyIndex);
-                        var rTangent = AnimationUtility.GetKeyRightTangentMode(uniAnimCurve, keyIndex);
-
-                        // Always set tangent mode to eTangentBreak, as other modes are not handled the same in FBX as in
-                        // Unity, thus leading to discrepancies in animation curves.
-                        FbxAnimCurveDef.ETangentMode tanMode = FbxAnimCurveDef.ETangentMode.eTangentBreak;
-
-                        // Default to cubic interpolation, which is the default for KeySet
-                        FbxAnimCurveDef.EInterpolationType interpMode = FbxAnimCurveDef.EInterpolationType.eInterpolationCubic;
-                        switch (rTangent)
-                        {
-                            case AnimationUtility.TangentMode.Linear:
-                                interpMode = FbxAnimCurveDef.EInterpolationType.eInterpolationLinear;
-                                break;
-                            case AnimationUtility.TangentMode.Constant:
-                                interpMode = FbxAnimCurveDef.EInterpolationType.eInterpolationConstant;
-                                break;
-                            default:
-                                break;
-                        }
-
-                        fbxAnimCurve.KeySet(fbxKeyIndex,
-                            fbxTime,
-                            convertSceneHelper.Convert(uniKeyFrame.value),
-                            interpMode,
-                            tanMode,
-                            // value of right slope
-                            convertSceneHelper.Convert(uniKeyFrame.outTangent),
-                            // value of next left slope
-                            keyIndex < uniAnimCurve.length - 1 ? convertSceneHelper.Convert(uniAnimCurve[keyIndex + 1].inTangent) : 0,
-                            FbxAnimCurveDef.EWeightedMode.eWeightedAll,
-                            // weight for right slope
-                            uniKeyFrame.outWeight,
-                            // weight for next left slope
-                            keyIndex < uniAnimCurve.length - 1 ? uniAnimCurve[keyIndex + 1].inWeight : 0
-                        );
-                    }
-                }
-            }
-
-
+            #region Helper帮助
 
             /// <summary>
-            /// Get the FbxConstraint associated with the constrained node.
-            /// </summary>
-            /// <param name="constrainedNode"></param>
-            /// <param name="uniConstraintType"></param>
-            /// <returns></returns>
-            FbxConstraint GetFbxConstraint(FbxNode constrainedNode, System.Type uniConstraintType)
-            {
-                if (uniConstraintType == null || !uniConstraintType.GetInterfaces().Contains(typeof(IConstraint)))
-                {
-                    // not actually a constraint
-                    return null;
-                }
-
-                Dictionary<FbxConstraint, System.Type> constraints;
-                if (MapConstrainedObjectToConstraints.TryGetValue(constrainedNode, out constraints))
-                {
-                    var targetConstraint = constraints.FirstOrDefault(constraint => (constraint.Value == uniConstraintType));
-                    if (!targetConstraint.Equals(default(KeyValuePair<FbxConstraint, System.Type>)))
-                    {
-                        return targetConstraint.Key;
-                    }
-                }
-
-                return null;
-            }
-
-            /// <summary>
-            /// Get the FbxBlendshape with the given name associated with the FbxNode.
-            /// </summary>
-            /// <param name="blendshapeNode"></param>
-            /// <param name="uniPropertyName"></param>
-            /// <returns></returns>
-            FbxBlendShapeChannel GetFbxBlendShape(FbxNode blendshapeNode, string uniPropertyName)
-            {
-                List<FbxBlendShapeChannel> blendshapeChannels;
-                if (MapUnityObjectToBlendShapes.TryGetValue(blendshapeNode, out blendshapeChannels))
-                {
-                    var match = System.Text.RegularExpressions.Regex.Match(uniPropertyName, @"blendShape\.(\S+)");
-                    if (match.Success && match.Groups.Count > 0)
-                    {
-                        string blendshapeName = match.Groups[1].Value;
-
-                        var targetChannel = blendshapeChannels.FirstOrDefault(channel => (channel.GetName() == blendshapeName));
-                        if (targetChannel != null)
-                        {
-                            return targetChannel;
-                        }
-                    }
-                }
-                return null;
-            }
-
-            FbxProperty GetFbxProperty(FbxNode fbxNode, string fbxPropertyName, System.Type uniPropertyType, string uniPropertyName)
-            {
-                if (fbxNode == null)
-                {
-                    return null;
-                }
-
-                // check if property maps to a constraint
-                // check this first because both constraints and FbxNodes can contain a RotationOffset property,
-                // but only the constraint one is animatable.
-                var fbxConstraint = GetFbxConstraint(fbxNode, uniPropertyType);
-                if (fbxConstraint != null)
-                {
-                    var prop = fbxConstraint.FindProperty(fbxPropertyName, false);
-                    if (prop.IsValid())
-                    {
-                        return prop;
-                    }
-                }
-
-                // check if the property maps to a blendshape
-                var fbxBlendShape = GetFbxBlendShape(fbxNode, uniPropertyName);
-                if (fbxBlendShape != null)
-                {
-                    var prop = fbxBlendShape.FindProperty(fbxPropertyName, false);
-                    if (prop.IsValid())
-                    {
-                        return prop;
-                    }
-                }
-
-                // map unity property name to fbx property
-                var fbxProperty = fbxNode.FindProperty(fbxPropertyName, false);
-                if (fbxProperty.IsValid())
-                {
-                    return fbxProperty;
-                }
-
-                var fbxNodeAttribute = fbxNode.GetNodeAttribute();
-                if (fbxNodeAttribute != null)
-                {
-                    fbxProperty = fbxNodeAttribute.FindProperty(fbxPropertyName, false);
-                }
-                return fbxProperty;
-            }
-
-
-
-
-
-
-
-            /// <summary>
-            /// Transfers transform animation from source to dest. Replaces dest's Unity Animation Curves with updated animations.
-            /// NOTE: Source must be the parent of dest.
-            /// </summary>
-            /// <param name="source">Source animated object.</param>
-            /// <param name="dest">Destination, child of the source.</param>
-            /// <param name="sampleRate">Sample rate.</param>
-            /// <param name="unityCurves">Unity curves.</param> 
-            void TransferMotion(Transform source, Transform dest, float sampleRate, ref Dictionary<GameObject, List<UnityCurve>> unityCurves)
-            {
-                // get sample times for curves in dest + source
-                // at each sample time, evaluate all 18 transfom anim curves, creating 2 transform matrices
-                // combine the matrices, get the new values, apply to the 9 new anim curves for dest
-                if (dest.parent != source)
-                {
-                    Debug.LogError("dest must be a child of source");
-                    return;
-                }
-
-                List<UnityCurve> sourceUnityCurves;
-                if (!unityCurves.TryGetValue(source.gameObject, out sourceUnityCurves))
-                {
-                    return; // nothing to do, source has no animation
-                }
-
-                List<UnityCurve> destUnityCurves;
-                if (!unityCurves.TryGetValue(dest.gameObject, out destUnityCurves))
-                {
-                    destUnityCurves = new List<UnityCurve>();
-                }
-
-                List<AnimationCurve> animCurves = new List<AnimationCurve>();
-                foreach (var curve in sourceUnityCurves)
-                {
-                    // TODO: check if curve is anim related
-                    animCurves.Add(curve.uniAnimCurve);
-                }
-                foreach (var curve in destUnityCurves)
-                {
-                    animCurves.Add(curve.uniAnimCurve);
-                }
-
-                var sampleTimes = MeshInfo.GetSampleTimes(animCurves.ToArray(), sampleRate);
-                // need to create 9 new UnityCurves, one for each property
-                var posKeyFrames = new Keyframe[3][];
-                var rotKeyFrames = new Keyframe[3][];
-                var scaleKeyFrames = new Keyframe[3][];
-
-                for (int k = 0; k < posKeyFrames.Length; k++)
-                {
-                    posKeyFrames[k] = new Keyframe[sampleTimes.Count];
-                    rotKeyFrames[k] = new Keyframe[sampleTimes.Count];
-                    scaleKeyFrames[k] = new Keyframe[sampleTimes.Count];
-                }
-
-                // If we have a point in local coords represented as a column-vector x, the equation of x in coordinates relative to source's parent is:
-                //   x_grandparent = source * dest * x
-                // Now we're going to change dest to dest' which has the animation from source. And we're going to change
-                // source to source' which has no animation. The equation of x will become:
-                //   x_grandparent = source' * dest' * x
-                // We're not changing x_grandparent and x, so we need that:
-                //   source * dest = source' * dest'
-                // We know dest and source (both animated) and source' (static). Solve for dest':
-                //   dest' = (source')^-1 * source * dest
-                int keyIndex = 0;
-                var sourceStaticMatrixInverse = Matrix4x4.TRS(source.localPosition, source.localRotation, source.localScale).inverse;
-                foreach (var currSampleTime in sampleTimes)
-                {
-                    var sourceLocalMatrix = GetTransformMatrix(currSampleTime, source, sourceUnityCurves);
-                    var destLocalMatrix = GetTransformMatrix(currSampleTime, dest, destUnityCurves);
-
-                    var newLocalMatrix = sourceStaticMatrixInverse * sourceLocalMatrix * destLocalMatrix;
-
-                    FbxVector4 translation, rotation, scale;
-                    GetTRSFromMatrix(newLocalMatrix, out translation, out rotation, out scale);
-
-                    // get rotation directly from matrix, as otherwise causes issues
-                    // with negative rotations.
-                    var rot = newLocalMatrix.rotation.eulerAngles;
-
-                    for (int k = 0; k < 3; k++)
-                    {
-                        posKeyFrames[k][keyIndex] = new Keyframe(currSampleTime, (float)translation[k]);
-                        rotKeyFrames[k][keyIndex] = new Keyframe(currSampleTime, rot[k]);
-                        scaleKeyFrames[k][keyIndex] = new Keyframe(currSampleTime, (float)scale[k]);
-                    }
-                    keyIndex++;
-                }
-
-                // create the new list of unity curves, and add it to dest's curves
-                var newUnityCurves = new List<UnityCurve>();
-                string posPropName = "m_LocalPosition.";
-                string rotPropName = "localEulerAnglesRaw.";
-                string scalePropName = "m_LocalScale.";
-                var xyz = "xyz";
-                for (int k = 0; k < 3; k++)
-                {
-                    var posUniCurve = new UnityCurve(posPropName + xyz[k], new AnimationCurve(posKeyFrames[k]), typeof(Transform));
-                    newUnityCurves.Add(posUniCurve);
-
-                    var rotUniCurve = new UnityCurve(rotPropName + xyz[k], new AnimationCurve(rotKeyFrames[k]), typeof(Transform));
-                    newUnityCurves.Add(rotUniCurve);
-
-                    var scaleUniCurve = new UnityCurve(scalePropName + xyz[k], new AnimationCurve(scaleKeyFrames[k]), typeof(Transform));
-                    newUnityCurves.Add(scaleUniCurve);
-                }
-
-                // remove old transform curves
-                RemoveTransformCurves(ref sourceUnityCurves);
-                RemoveTransformCurves(ref destUnityCurves);
-
-                unityCurves[source.gameObject] = sourceUnityCurves;
-                if (!unityCurves.ContainsKey(dest.gameObject))
-                {
-                    unityCurves.Add(dest.gameObject, newUnityCurves);
-                    return;
-                }
-                unityCurves[dest.gameObject].AddRange(newUnityCurves);
-
-            }
-
-
-            void RemoveTransformCurves(ref List<UnityCurve> curves)
-            {
-                var transformCurves = new List<UnityCurve>();
-                var transformPropNames = new string[] { "m_LocalPosition.", "m_LocalRotation", "localEulerAnglesRaw.", "m_LocalScale." };
-                foreach (var curve in curves)
-                {
-                    foreach (var prop in transformPropNames)
-                    {
-                        if (curve.propertyName.StartsWith(prop))
-                        {
-                            transformCurves.Add(curve);
-                            break;
-                        }
-                    }
-                }
-                foreach (var curve in transformCurves)
-                {
-                    curves.Remove(curve);
-                }
-            }
-
-            Matrix4x4 GetTransformMatrix(float currSampleTime, Transform orig, List<UnityCurve> unityCurves)
-            {
-                var sourcePos = orig.localPosition;
-                var sourceRot = orig.localRotation;
-                var sourceScale = orig.localScale;
-
-                foreach (var uniCurve in unityCurves)
-                {
-                    float currSampleValue = uniCurve.uniAnimCurve.Evaluate(currSampleTime);
-                    string propName = uniCurve.propertyName;
-                    // try position, scale, quat then euler
-                    int temp = QuaternionCurve.GetQuaternionIndex(propName);
-                    if (temp >= 0)
-                    {
-                        sourceRot[temp] = currSampleValue;
-                        continue;
-                    }
-                    temp = EulerCurve.GetEulerIndex(propName);
-                    if (temp >= 0)
-                    {
-                        var euler = sourceRot.eulerAngles;
-                        euler[temp] = currSampleValue;
-                        sourceRot.eulerAngles = euler;
-                        continue;
-                    }
-                    temp = GetPositionIndex(propName);
-                    if (temp >= 0)
-                    {
-                        sourcePos[temp] = currSampleValue;
-                        continue;
-                    }
-                    temp = GetScaleIndex(propName);
-                    if (temp >= 0)
-                    {
-                        sourceScale[temp] = currSampleValue;
-                    }
-                }
-
-                sourceRot = Quaternion.Euler(sourceRot.eulerAngles.x, sourceRot.eulerAngles.y, sourceRot.eulerAngles.z);
-                return Matrix4x4.TRS(sourcePos, sourceRot, sourceScale);
-            }
-
-
-
-            int GetPositionIndex(string uniPropertyName)
-            {
-                System.StringComparison ct = System.StringComparison.CurrentCulture;
-                bool isPositionComponent = uniPropertyName.StartsWith("m_LocalPosition.", ct);
-
-                if (!isPositionComponent) { return -1; }
-
-                switch (uniPropertyName[uniPropertyName.Length - 1])
-                {
-                    case 'x':
-                        return 0;
-                    case 'y':
-                        return 1;
-                    case 'z':
-                        return 2;
-                    default:
-                        return -1;
-                }
-            }
-
-            int GetScaleIndex(string uniPropertyName)
-            {
-                System.StringComparison ct = System.StringComparison.CurrentCulture;
-                bool isScaleComponent = uniPropertyName.StartsWith("m_LocalScale.", ct);
-
-                if (!isScaleComponent) { return -1; }
-
-                switch (uniPropertyName[uniPropertyName.Length - 1])
-                {
-                    case 'x':
-                        return 0;
-                    case 'y':
-                        return 1;
-                    case 'z':
-                        return 2;
-                    default:
-                        return -1;
-                }
-            }
-
-            /// <summary>
-            /// Gets or creates the rotation curve for GameObject uniGO.
-            /// </summary>
-            /// <returns>The rotation curve.</returns>
-            /// <param name="uniGO">Unity GameObject.</param>
-            /// <param name="frameRate">Frame rate.</param>
-            /// <param name="rotations">Rotations.</param>
-            /// <typeparam name="T"> RotationCurve is abstract so specify type of RotationCurve to create.</typeparam>
-            RotationCurve GetRotationCurve<T>(
-              GameObject uniGO, float frameRate,
-              ref Dictionary<GameObject, RotationCurve> rotations
-              ) where T : RotationCurve, new()
-            {
-                RotationCurve rotCurve;
-                if (!rotations.TryGetValue(uniGO, out rotCurve))
-                {
-                    rotCurve = new T { SampleRate = frameRate };
-                    rotations.Add(uniGO, rotCurve);
-                }
-                return rotCurve;
-            }
-
-            /// <summary>
-            /// configures default camera for the scene
-            /// </summary>
-            void SetDefaultCamera(FbxScene fbxScene)
-            {
-                if (fbxScene == null) { return; }
-
-                if (string.IsNullOrEmpty(DefaultCamera))
-                    DefaultCamera = Globals.FBXSDK_CAMERA_PERSPECTIVE;
-
-                fbxScene.GetGlobalSettings().SetDefaultCamera(DefaultCamera);
-            }
-
-
-
-            bool exportCancelled = false;
-
-
-
-
-            /// <summary>
-            /// Exports the bone transform.
-            /// </summary>
-            /// <returns><c>true</c>, if bone transform was exported, <c>false</c> otherwise.</returns>
-            /// <param name="fbxNode">Fbx node.</param>
-            /// <param name="fbxScene">Fbx scene.</param>
-            /// <param name="unityBone">Unity bone.</param>
-            /// <param name="boneInfo">Bone info.</param>
-            bool ExportBoneTransform(FbxNode fbxNode, FbxScene fbxScene, Transform unityBone, SkinnedMeshBoneInfo boneInfo)
-            {
-                if (boneInfo == null || boneInfo.skinnedMesh == null || boneInfo.boneDict == null || unityBone == null)
-                {
-                    return false;
-                }
-
-                var skinnedMesh = boneInfo.skinnedMesh;
-                var boneDict = boneInfo.boneDict;
-                var rootBone = skinnedMesh.rootBone;
-
-                // setup the skeleton
-                var fbxSkeleton = fbxNode.GetSkeleton();
-                if (fbxSkeleton == null)
-                {
-                    fbxSkeleton = FbxSkeleton.Create(fbxScene, unityBone.name + SkeletonPrefix);
-
-                    fbxSkeleton.Size.Set(1.0f * UnitScaleFactor);
-                    fbxNode.SetNodeAttribute(fbxSkeleton);
-                }
-                var fbxSkeletonType = FbxSkeleton.EType.eLimbNode;
-
-                // Only set the rootbone's skeleton type to FbxSkeleton.EType.eRoot
-                // if it has at least one child that is also a bone.
-                // Otherwise if it is marked as Root but has no bones underneath,
-                // Maya will import it as a Null object instead of a bone.
-                if (rootBone == unityBone && rootBone.childCount > 0)
-                {
-                    var hasChildBone = false;
-                    foreach (Transform child in unityBone)
-                    {
-                        if (boneDict.ContainsKey(child))
-                        {
-                            hasChildBone = true;
-                            break;
-                        }
-                    }
-                    if (hasChildBone)
-                    {
-                        fbxSkeletonType = FbxSkeleton.EType.eRoot;
-                    }
-                }
-                fbxSkeleton.SetSkeletonType(fbxSkeletonType);
-
-                var bindPoses = skinnedMesh.sharedMesh.bindposes;
-
-                // get bind pose
-                Matrix4x4 bindPose = GetBindPose(unityBone, bindPoses, ref boneInfo);
-
-                Matrix4x4 pose;
-                // get parent's bind pose
-                Matrix4x4 parentBindPose = GetBindPose(unityBone.parent, bindPoses, ref boneInfo);
-                pose = parentBindPose * bindPose.inverse;
-
-                FbxVector4 translation, rotation, scale;
-                GetTRSFromMatrix(pose, out translation, out rotation, out scale);
-
-                // Export bones with zero rotation, using a pivot instead to set the rotation
-                // so that the bones are easier to animate and the rotation shows up as the "joint orientation" in Maya.
-                fbxNode.LclTranslation.Set(new FbxDouble3(translation.X * UnitScaleFactor, translation.Y * UnitScaleFactor, translation.Z * UnitScaleFactor));
-                fbxNode.LclRotation.Set(new FbxDouble3(0, 0, 0));
-                fbxNode.LclScaling.Set(new FbxDouble3(scale.X, scale.Y, scale.Z));
-
-                // TODO (UNI-34294): add detailed comment about why we export rotation as pre-rotation
-                fbxNode.SetRotationActive(true);
-                fbxNode.SetPivotState(FbxNode.EPivotSet.eSourcePivot, FbxNode.EPivotState.ePivotReference);
-                fbxNode.SetPreRotation(FbxNode.EPivotSet.eSourcePivot, new FbxVector4(rotation.X, rotation.Y, rotation.Z));
-
-                return true;
-            }
-
-            void GetTRSFromMatrix(Matrix4x4 unityMatrix, out FbxVector4 translation, out FbxVector4 rotation, out FbxVector4 scale)
-            {
-                // FBX is transposed relative to Unity: transpose as we convert.
-                FbxMatrix matrix = new FbxMatrix();
-                matrix.SetColumn(0, new FbxVector4(unityMatrix.GetRow(0).x, unityMatrix.GetRow(0).y, unityMatrix.GetRow(0).z, unityMatrix.GetRow(0).w));
-                matrix.SetColumn(1, new FbxVector4(unityMatrix.GetRow(1).x, unityMatrix.GetRow(1).y, unityMatrix.GetRow(1).z, unityMatrix.GetRow(1).w));
-                matrix.SetColumn(2, new FbxVector4(unityMatrix.GetRow(2).x, unityMatrix.GetRow(2).y, unityMatrix.GetRow(2).z, unityMatrix.GetRow(2).w));
-                matrix.SetColumn(3, new FbxVector4(unityMatrix.GetRow(3).x, unityMatrix.GetRow(3).y, unityMatrix.GetRow(3).z, unityMatrix.GetRow(3).w));
-
-                // FBX wants translation, rotation (in euler angles) and scale.
-                // We assume there's no real shear, just rounding error.
-                FbxVector4 shear;
-                double sign;
-                matrix.GetElements(out translation, out rotation, out shear, out scale, out sign);
-            }
-
-            /// <summary>
-            /// Recursively go through the hierarchy, unioning the bounding box centers
-            /// of all the children, to find the combined bounds.
-            /// </summary>
-            /// <param name="t">Transform.</param>
-            /// <param name="boundsUnion">The Bounds that is the Union of all the bounds on this transform's hierarchy.</param>
-            static void EncapsulateBounds(Transform t, ref Bounds boundsUnion)
-            {
-                var bounds = GetBounds(t);
-                boundsUnion.Encapsulate(bounds);
-
-                foreach (Transform child in t)
-                {
-                    EncapsulateBounds(child, ref boundsUnion);
-                }
-            }
-
-            /// <summary>
-            /// Gets the bounds of a transform. 
-            /// Looks first at the Renderer, then Mesh, then Collider.
-            /// Default to a bounds with center transform.position and size zero.
-            /// </summary>
-            /// <returns>The bounds.</returns>
-            /// <param name="t">Transform.</param>
-            static Bounds GetBounds(Transform t)
-            {
-                var renderer = t.GetComponent<Renderer>();
-                if (renderer)
-                {
-                    return renderer.bounds;
-                }
-                var mesh = t.GetComponent<Mesh>();
-                if (mesh)
-                {
-                    return mesh.bounds;
-                }
-                var collider = t.GetComponent<Collider>();
-                if (collider)
-                {
-                    return collider.bounds;
-                }
-                return new Bounds(t.position, Vector3.zero);
-            }
-
-
-
-
-            /// <summary>
+            /// 去除音调符号
             /// Removes the diacritics (i.e. accents) from letters.
             /// e.g. é becomes e
             /// </summary>
@@ -2282,13 +2077,220 @@ namespace UnityEditor
                 return newName;
             }
 
+            /// <summary>
+            /// Euler (roll/pitch/yaw (ZXY rotation order) to quaternion.
+            /// </summary>
+            /// <returns>a quaternion.</returns>
+            /// <param name="euler">ZXY Euler.</param>
+            FbxQuaternion EulerToQuaternionZXY(Vector3 euler)
+            {
+                var unityQuat = Quaternion.Euler(euler);
+                return new FbxQuaternion(unityQuat.x, unityQuat.y, unityQuat.z, unityQuat.w);
+            }
+
+            /// <summary>
+            /// Euler X/Y/Z rotation order to quaternion.
+            /// </summary>
+            /// <param name="euler">XYZ Euler.</param>
+            /// <returns>a quaternion</returns>
+            FbxQuaternion EulerToQuaternionXYZ(FbxVector4 euler)
+            {
+                FbxAMatrix m = new FbxAMatrix();
+                m.SetR(euler);
+                return m.GetQ();
+            }
+
+            FbxDouble3 Vector3ToFbxDouble3(Vector3 v)
+            {
+                return new FbxDouble3(v.x, v.y, v.z);
+            }
+
+            FbxDouble3 Vector4ToFbxDouble3(FbxVector4 v)
+            {
+                return new FbxDouble3(v.X, v.Y, v.Z);
+            }
+
+            //计算物体与根节点root之间的物体数量 不包括本体和root
+            int GetObjectToRootDepth(Transform startObject, Transform root)
+            {
+                if (startObject == null)
+                {
+                    return 0;
+                }
+
+                int count = 0;
+                var parent = startObject.parent;
+                while (parent != null && parent != root)
+                {
+                    count++;
+                    parent = parent.parent;
+                }
+                return count;
+            }
+
+            //统计全部节点数量
+            int GetAnimOnlyHierarchyCount(IExportData data)
+            {
+                var completeExpSet = new HashSet<GameObject>();
+
+                {
+                    if (data == null || data.Objects == null || data.Objects.Count <= 0)
+                    {
+                        return 0;
+                    }
+                    foreach (var go in data.Objects)
+                    {
+                        completeExpSet.Add(go); //添加Animator的所有父级节点
+
+                        var parent = go.transform.parent;
+                        while (parent != null && completeExpSet.Add(parent.gameObject))
+                        {
+                            parent = parent.parent;
+                        }
+                    }
+                }
+
+                return completeExpSet.Count;
+            }
+
+            //统计全部节点数量
+            int GetHierarchyCount(GameObject root)
+            {
+                int count = 0;
+                Queue<GameObject> queue = new Queue<GameObject>();
+                queue.Enqueue(root);
+                while (queue.Count > 0)
+                {
+                    var obj = queue.Dequeue();
+                    var objTransform = obj.transform; //添加所有节点
+                    foreach (Transform child in objTransform)
+                    {
+                        queue.Enqueue(child.gameObject);
+                    }
+                    count++;
+                }
+                return count;
+            }
+
+            void ReplaceFile()
+            {
+                if (tempFilePath.Equals(filePath) || !File.Exists(tempFilePath))
+                {
+                    return;
+                }
+
+                // delete old file
+                try
+                {
+                    File.Delete(filePath);
+                    // delete meta file also
+                    File.Delete(filePath + ".meta");
+                }
+                catch (IOException)
+                {
+                }
+
+                if (File.Exists(filePath))
+                {
+                    Debug.LogWarning("Failed to delete file: " + filePath);
+                }
+
+                // rename the new file
+                try
+                {
+                    File.Move(tempFilePath, filePath);
+                }
+                catch (IOException)
+                {
+                    Debug.LogWarning(string.Format("Failed to move file {0} to {1}", tempFilePath, filePath));
+                }
+            }
+
+            string SaveMetafile()
+            {
+                var tempMetafilePath = Path.GetTempFileName();
+
+                if (AssetDatabase.LoadAssetAtPath(filePath, typeof(Object)) == null)
+                {
+                    Debug.LogWarning(string.Format("Failed to find a valid asset at {0}. Import settings will be reset to default values.", filePath));
+                    return "";
+                }
+
+                // get metafile for original fbx file
+                var metafile = filePath + ".meta";
+
+#if UNITY_2019_1_OR_NEWER
+                metafile = VersionControl.Provider.GetAssetByPath(filePath).metaPath;
+#endif
+
+                // save it to a temp file
+                try
+                {
+                    File.Copy(metafile, tempMetafilePath, true);
+                }
+                catch (IOException)
+                {
+                    Debug.LogWarning(string.Format("Failed to copy file {0} to {1}. Import settings will be reset to default values.", metafile, tempMetafilePath));
+                    return "";
+                }
+
+                return tempMetafilePath;
+            }
+
+            void ReplaceMetafile(string metafilePath)
+            {
+                if (AssetDatabase.LoadAssetAtPath(filePath, typeof(Object)) == null)
+                {
+                    Debug.LogWarning(string.Format("Failed to find a valid asset at {0}. Import settings will be reset to default values.", filePath));
+                    return;
+                }
+
+                // get metafile for new fbx file
+                var metafile = filePath + ".meta";
+
+#if UNITY_2019_1_OR_NEWER
+                metafile = VersionControl.Provider.GetAssetByPath(filePath).metaPath;
+#endif
+
+                // replace metafile with original one in temp file
+                try
+                {
+                    File.Copy(metafilePath, metafile, true);
+                }
+                catch (IOException)
+                {
+                    Debug.LogWarning(string.Format("Failed to copy file {0} to {1}. Import settings will be reset to default values.", metafilePath, filePath));
+                }
+            }
+
+            void DeleteTempFile()
+            {
+                if (!File.Exists(tempFilePath))
+                {
+                    return;
+                }
+
+                try
+                {
+                    File.Delete(tempFilePath);
+                }
+                catch (IOException)
+                {
+                }
+
+                if (File.Exists(tempFilePath))
+                {
+                    Debug.LogWarning("Failed to delete file: " + tempFilePath);
+                }
+            }
+            #endregion
+
+            #region AnimationClip导出动作
 
             /// <summary>
             /// Export animation curve key samples
             /// </summary> 
-            void ExportAnimationSamples(AnimationCurve uniAnimCurve, FbxAnimCurve fbxAnimCurve,
-              double sampleRate,
-              UnityToMayaConvertSceneHelper convertSceneHelper)
+            void ExportAnimationSamples(AnimationCurve uniAnimCurve, FbxAnimCurve fbxAnimCurve, double sampleRate, UnityToMayaConvertSceneHelper convertSceneHelper)
             {
 
                 using (new FbxAnimCurveModifyHelper(new List<FbxAnimCurve> { fbxAnimCurve }))
@@ -2499,12 +2501,7 @@ namespace UnityEditor
             /// NOTE: This is not used for rotations, because we need to convert from
             /// quaternion to euler and various other stuff.
             /// </summary> 
-            void ExportAnimationCurve(FbxNode fbxNode,
-                                                  AnimationCurve uniAnimCurve,
-                                                  float frameRate,
-                                                  string uniPropertyName,
-                                                  System.Type uniPropertyType,
-                                                  FbxAnimLayer fbxAnimLayer)
+            void ExportAnimationCurve(FbxNode fbxNode, AnimationCurve uniAnimCurve, float frameRate, string uniPropertyName, System.Type uniPropertyType, FbxAnimLayer fbxAnimLayer)
             {
                 if (fbxNode == null)
                 {
@@ -2560,195 +2557,9 @@ namespace UnityEditor
                     }
                 }
             }
-
-
-            #region Helper帮助
-            FbxDouble3 Vector3ToFbxDouble3(Vector3 v)
-            {
-                return new FbxDouble3(v.x, v.y, v.z);
-            }
-
-            FbxDouble3 Vector4ToFbxDouble3(FbxVector4 v)
-            {
-                return new FbxDouble3(v.X, v.Y, v.Z);
-            }
-
-            //计算物体与根节点root之间的物体数量 不包括本体和root
-            int GetObjectToRootDepth(Transform startObject, Transform root)
-            {
-                if (startObject == null)
-                {
-                    return 0;
-                }
-
-                int count = 0;
-                var parent = startObject.parent;
-                while (parent != null && parent != root)
-                {
-                    count++;
-                    parent = parent.parent;
-                }
-                return count;
-            }
-
-            //统计全部节点数量
-            int GetAnimOnlyHierarchyCount(IExportData data)
-            {
-                var completeExpSet = new HashSet<GameObject>();
-
-                {
-                    if (data == null || data.Objects == null || data.Objects.Count <= 0)
-                    {
-                        return 0;
-                    }
-                    foreach (var go in data.Objects)
-                    {
-                        completeExpSet.Add(go); //添加Animator的所有父级节点
-
-                        var parent = go.transform.parent;
-                        while (parent != null && completeExpSet.Add(parent.gameObject))
-                        {
-                            parent = parent.parent;
-                        }
-                    }
-                }
-
-                return completeExpSet.Count;
-            }
-
-            //统计全部节点数量
-            int GetHierarchyCount(GameObject root)
-            {
-                int count = 0;
-                Queue<GameObject> queue = new Queue<GameObject>();
-                queue.Enqueue(root);
-                while (queue.Count > 0)
-                {
-                    var obj = queue.Dequeue();
-                    var objTransform = obj.transform; //添加所有节点
-                    foreach (Transform child in objTransform)
-                    {
-                        queue.Enqueue(child.gameObject);
-                    }
-                    count++;
-                }
-                return count;
-            }
-
-            void ReplaceFile()
-            {
-                if (tempFilePath.Equals(filePath) || !File.Exists(tempFilePath))
-                {
-                    return;
-                }
-
-                // delete old file
-                try
-                {
-                    File.Delete(filePath);
-                    // delete meta file also
-                    File.Delete(filePath + ".meta");
-                }
-                catch (IOException)
-                {
-                }
-
-                if (File.Exists(filePath))
-                {
-                    Debug.LogWarning("Failed to delete file: " + filePath);
-                }
-
-                // rename the new file
-                try
-                {
-                    File.Move(tempFilePath, filePath);
-                }
-                catch (IOException)
-                {
-                    Debug.LogWarning(string.Format("Failed to move file {0} to {1}", tempFilePath, filePath));
-                }
-            }
-
-            string SaveMetafile()
-            {
-                var tempMetafilePath = Path.GetTempFileName();
-
-                if (AssetDatabase.LoadAssetAtPath(filePath, typeof(Object)) == null)
-                {
-                    Debug.LogWarning(string.Format("Failed to find a valid asset at {0}. Import settings will be reset to default values.", filePath));
-                    return "";
-                }
-
-                // get metafile for original fbx file
-                var metafile = filePath + ".meta";
-
-#if UNITY_2019_1_OR_NEWER
-                metafile = VersionControl.Provider.GetAssetByPath(filePath).metaPath;
-#endif
-
-                // save it to a temp file
-                try
-                {
-                    File.Copy(metafile, tempMetafilePath, true);
-                }
-                catch (IOException)
-                {
-                    Debug.LogWarning(string.Format("Failed to copy file {0} to {1}. Import settings will be reset to default values.", metafile, tempMetafilePath));
-                    return "";
-                }
-
-                return tempMetafilePath;
-            }
-
-            void ReplaceMetafile(string metafilePath)
-            {
-                if (AssetDatabase.LoadAssetAtPath(filePath, typeof(Object)) == null)
-                {
-                    Debug.LogWarning(string.Format("Failed to find a valid asset at {0}. Import settings will be reset to default values.", filePath));
-                    return;
-                }
-
-                // get metafile for new fbx file
-                var metafile = filePath + ".meta";
-
-#if UNITY_2019_1_OR_NEWER
-                metafile = VersionControl.Provider.GetAssetByPath(filePath).metaPath;
-#endif
-
-                // replace metafile with original one in temp file
-                try
-                {
-                    File.Copy(metafilePath, metafile, true);
-                }
-                catch (IOException)
-                {
-                    Debug.LogWarning(string.Format("Failed to copy file {0} to {1}. Import settings will be reset to default values.", metafilePath, filePath));
-                }
-            }
-
-            void DeleteTempFile()
-            {
-                if (!File.Exists(tempFilePath))
-                {
-                    return;
-                }
-
-                try
-                {
-                    File.Delete(tempFilePath);
-                }
-                catch (IOException)
-                {
-                }
-
-                if (File.Exists(tempFilePath))
-                {
-                    Debug.LogWarning("Failed to delete file: " + tempFilePath);
-                }
-            }
             #endregion
 
-            #region 动作
+            #region 收集动作数据
             //返回物体(被动画驱动)挂载的节点
             GameObject GetGameObject(Object obj)
             {
@@ -3180,63 +2991,6 @@ namespace UnityEditor
                 return fbxBlendShape;
             }
 
-            //将硬盘上的贴图保存到FBX
-            bool ExportTexture(Material unityMaterial, string unityPropName, FbxSurfaceMaterial fbxMaterial, string fbxPropName)
-            {
-                if (!unityMaterial)
-                {
-                    return false;
-                }
-
-                // Get the texture on this property, if any.
-                if (!unityMaterial.HasProperty(unityPropName))
-                {
-                    return false;
-                }
-                var unityTexture = unityMaterial.GetTexture(unityPropName);
-                if (!unityTexture)
-                {
-                    return false;
-                }
-
-                // Find its filename
-                var textureSourceFullPath = AssetDatabase.GetAssetPath(unityTexture);
-                if (string.IsNullOrEmpty(textureSourceFullPath))
-                {
-                    return false;
-                }
-
-                // get absolute filepath to texture
-                textureSourceFullPath = Path.GetFullPath(textureSourceFullPath);
-
-                if (exportSettings.showDebugInfo)
-                {
-                    Debug.Log(string.Format("{2}.{1} setting texture path {0}", textureSourceFullPath, fbxPropName, fbxMaterial.GetName()));
-                }
-
-                // Find the corresponding property on the fbx material.
-                var fbxMaterialProperty = fbxMaterial.FindProperty(fbxPropName);
-                if (fbxMaterialProperty == null || !fbxMaterialProperty.IsValid())
-                {
-                    Debug.Log("property not found");
-                    return false;
-                }
-
-                // Find or create an fbx texture and link it up to the fbx material.
-                if (!TextureMap.ContainsKey(textureSourceFullPath))
-                {
-                    var textureName = GetUniqueTextureName(fbxPropName + "_Texture");
-                    var fbxTexture = FbxFileTexture.Create(fbxMaterial, textureName);
-                    fbxTexture.SetFileName(textureSourceFullPath);
-                    fbxTexture.SetTextureUse(FbxTexture.ETextureUse.eStandard);
-                    fbxTexture.SetMappingType(FbxTexture.EMappingType.eUV);
-                    TextureMap.Add(textureSourceFullPath, fbxTexture);
-                }
-                TextureMap[textureSourceFullPath].ConnectDstProperty(fbxMaterialProperty);
-
-                return true;
-            }
-
             //获取材质颜色 
             FbxDouble3 GetMaterialColor(Material unityMaterial, string unityPropName, float defaultValue = 1)
             {
@@ -3382,19 +3136,241 @@ namespace UnityEditor
                     (fbxMaterial as FbxSurfacePhong).Specular.Set(GetMaterialColor(unityMaterial, "_SpecColor"));
                 }
 
-                // Export the textures from Unity standard materials to FBX.
-                ExportTexture(unityMaterial, "_MainTex", fbxMaterial, FbxSurfaceMaterial.sDiffuse);
-                ExportTexture(unityMaterial, "_EmissionMap", fbxMaterial, FbxSurfaceMaterial.sEmissive);
-                ExportTexture(unityMaterial, "_BumpMap", fbxMaterial, FbxSurfaceMaterial.sNormalMap);
-                if (specular)
-                {
-                    ExportTexture(unityMaterial, "_SpecGlossMap", fbxMaterial, FbxSurfaceMaterial.sSpecular);
-                }
 
                 MaterialMap.Add(unityID, fbxMaterial);
                 fbxNode.AddMaterial(fbxMaterial);
                 return true;
             }
+
+            bool ExportSkinnedMesh(GameObject unityGo, FbxScene fbxScene, FbxNode fbxNode)
+            {
+                if (!unityGo || fbxNode == null)
+                {
+                    return false;
+                }
+
+                SkinnedMeshRenderer unitySkin
+                = unityGo.GetComponent<SkinnedMeshRenderer>();
+
+                if (unitySkin == null)
+                {
+                    return false;
+                }
+
+                var mesh = unitySkin.sharedMesh;
+                if (!mesh)
+                {
+                    return false;
+                }
+
+                if (exportSettings.showDebugInfo)
+                    Debug.Log(string.Format("exporting {0} {1}", "Skin", fbxNode.GetName()));
+
+
+                var meshInfo = new MeshInfo(unitySkin.sharedMesh, unitySkin.sharedMaterials);
+
+                FbxMesh fbxMesh = null;
+                if (ExportMeshData(meshInfo, fbxNode))
+                {
+                    fbxMesh = fbxNode.GetMesh();
+                }
+                if (fbxMesh == null)
+                {
+                    Debug.LogError("Could not find mesh");
+                    return false;
+                }
+
+                Dictionary<SkinnedMeshRenderer, Transform[]> skinnedMeshToBonesMap;
+                // export skeleton
+                if (ExportSkeleton(unitySkin, fbxScene, out skinnedMeshToBonesMap))
+                {
+                    // bind mesh to skeleton
+                    ExportSkin(unitySkin, meshInfo, fbxScene, fbxMesh, fbxNode);
+
+                    // add bind pose
+                    ExportBindPose(unitySkin, fbxNode, fbxScene, skinnedMeshToBonesMap);
+
+                    // now that the skin and bindpose are set, make sure that each of the bones
+                    // is set to its original position
+                    var bones = unitySkin.bones;
+                    foreach (var bone in bones)
+                    {
+                        // ignore null bones
+                        if (bone != null)
+                        {
+                            var fbxBone = MapUnityObjectToFbxNode[bone.gameObject];
+                            ExportTransform(bone, fbxBone, newCenter: Vector3.zero, TransformExportType.Local);
+
+                            // Cancel out the pre-rotation from the exported rotation
+
+                            // Get prerotation
+                            var fbxPreRotationEuler = fbxBone.GetPreRotation(FbxNode.EPivotSet.eSourcePivot);
+                            // Convert the prerotation to a Quaternion
+                            var fbxPreRotationQuaternion = EulerToQuaternionXYZ(fbxPreRotationEuler);
+                            // Inverse of the prerotation
+                            fbxPreRotationQuaternion.Inverse();
+
+                            // Multiply LclRotation by pre-rotation inverse to get the LclRotation without pre-rotation applied
+                            var finalLclRotationQuat = fbxPreRotationQuaternion * EulerToQuaternionZXY(bone.localEulerAngles);
+
+                            // Convert to Euler with Unity axis system and update LclRotation
+                            var finalUnityQuat = new Quaternion((float)finalLclRotationQuat.X, (float)finalLclRotationQuat.Y, (float)finalLclRotationQuat.Z, (float)finalLclRotationQuat.W);
+                            fbxBone.LclRotation.Set(Vector3ToFbxDouble3(finalUnityQuat.eulerAngles));
+                        }
+                        else
+                        {
+                            Debug.Log("Warning: One or more bones are null. Skeleton may not export correctly.");
+                        }
+                    }
+                }
+
+                return true;
+            }
+            #endregion
+
+            #region 命名
+            Dictionary<string, int> NameToIndexMap = new Dictionary<string, int>();
+            Dictionary<string, int> MaterialNameToIndexMap = new Dictionary<string, int>();
+            string UniqueNameFormat = "{0}_{1}";
+
+            string GetUniqueName(string name, Dictionary<string, int> nameToCountMap)
+            {
+                var uniqueName = name;
+                int count;
+                if (nameToCountMap.TryGetValue(name, out count))
+                {
+                    uniqueName = string.Format(UniqueNameFormat, name, count);
+                }
+                else
+                {
+                    count = 0;
+                }
+                nameToCountMap[name] = count + 1;
+                return uniqueName;
+            }
+
+            string GetUniqueFbxNodeName(string name)
+            {
+                return GetUniqueName(name, NameToIndexMap);
+            }
+
+            string GetUniqueMaterialName(string name)
+            {
+                return GetUniqueName(name, MaterialNameToIndexMap);
+            }
+
+            #endregion
+
+            #region Hierarchy层级
+
+            /// <summary>
+            /// configures default camera for the scene
+            /// </summary>
+            void SetDefaultCamera(FbxScene fbxScene)
+            {
+                if (fbxScene == null) { return; }
+
+                if (string.IsNullOrEmpty(DefaultCamera))
+                    DefaultCamera = Globals.FBXSDK_CAMERA_PERSPECTIVE;
+
+                fbxScene.GetGlobalSettings().SetDefaultCamera(DefaultCamera);
+            }
+
+            /// <summary>
+            /// Exports the bone transform.
+            /// </summary>
+            /// <returns><c>true</c>, if bone transform was exported, <c>false</c> otherwise.</returns>
+            /// <param name="fbxNode">Fbx node.</param>
+            /// <param name="fbxScene">Fbx scene.</param>
+            /// <param name="unityBone">Unity bone.</param>
+            /// <param name="boneInfo">Bone info.</param>
+            bool ExportBoneTransform(FbxNode fbxNode, FbxScene fbxScene, Transform unityBone, SkinnedMeshBoneInfo boneInfo)
+            {
+                if (boneInfo == null || boneInfo.skinnedMesh == null || boneInfo.boneDict == null || unityBone == null)
+                {
+                    return false;
+                }
+
+                var skinnedMesh = boneInfo.skinnedMesh;
+                var boneDict = boneInfo.boneDict;
+                var rootBone = skinnedMesh.rootBone;
+
+                // setup the skeleton
+                var fbxSkeleton = fbxNode.GetSkeleton();
+                if (fbxSkeleton == null)
+                {
+                    fbxSkeleton = FbxSkeleton.Create(fbxScene, unityBone.name + SkeletonPrefix);
+
+                    fbxSkeleton.Size.Set(1.0f * UnitScaleFactor);
+                    fbxNode.SetNodeAttribute(fbxSkeleton);
+                }
+                var fbxSkeletonType = FbxSkeleton.EType.eLimbNode;
+
+                // Only set the rootbone's skeleton type to FbxSkeleton.EType.eRoot
+                // if it has at least one child that is also a bone.
+                // Otherwise if it is marked as Root but has no bones underneath,
+                // Maya will import it as a Null object instead of a bone.
+                if (rootBone == unityBone && rootBone.childCount > 0)
+                {
+                    var hasChildBone = false;
+                    foreach (Transform child in unityBone)
+                    {
+                        if (boneDict.ContainsKey(child))
+                        {
+                            hasChildBone = true;
+                            break;
+                        }
+                    }
+                    if (hasChildBone)
+                    {
+                        fbxSkeletonType = FbxSkeleton.EType.eRoot;
+                    }
+                }
+                fbxSkeleton.SetSkeletonType(fbxSkeletonType);
+
+                var bindPoses = skinnedMesh.sharedMesh.bindposes;
+
+                // get bind pose
+                Matrix4x4 bindPose = GetBindPose(unityBone, bindPoses, ref boneInfo);
+
+                Matrix4x4 pose;
+                // get parent's bind pose
+                Matrix4x4 parentBindPose = GetBindPose(unityBone.parent, bindPoses, ref boneInfo);
+                pose = parentBindPose * bindPose.inverse;
+
+                FbxVector4 translation, rotation, scale;
+                GetTRSFromMatrix(pose, out translation, out rotation, out scale);
+
+                // Export bones with zero rotation, using a pivot instead to set the rotation
+                // so that the bones are easier to animate and the rotation shows up as the "joint orientation" in Maya.
+                fbxNode.LclTranslation.Set(new FbxDouble3(translation.X * UnitScaleFactor, translation.Y * UnitScaleFactor, translation.Z * UnitScaleFactor));
+                fbxNode.LclRotation.Set(new FbxDouble3(0, 0, 0));
+                fbxNode.LclScaling.Set(new FbxDouble3(scale.X, scale.Y, scale.Z));
+
+                // TODO (UNI-34294): add detailed comment about why we export rotation as pre-rotation
+                fbxNode.SetRotationActive(true);
+                fbxNode.SetPivotState(FbxNode.EPivotSet.eSourcePivot, FbxNode.EPivotState.ePivotReference);
+                fbxNode.SetPreRotation(FbxNode.EPivotSet.eSourcePivot, new FbxVector4(rotation.X, rotation.Y, rotation.Z));
+
+                return true;
+            }
+
+            void GetTRSFromMatrix(Matrix4x4 unityMatrix, out FbxVector4 translation, out FbxVector4 rotation, out FbxVector4 scale)
+            {
+                // FBX is transposed relative to Unity: transpose as we convert.
+                FbxMatrix matrix = new FbxMatrix();
+                matrix.SetColumn(0, new FbxVector4(unityMatrix.GetRow(0).x, unityMatrix.GetRow(0).y, unityMatrix.GetRow(0).z, unityMatrix.GetRow(0).w));
+                matrix.SetColumn(1, new FbxVector4(unityMatrix.GetRow(1).x, unityMatrix.GetRow(1).y, unityMatrix.GetRow(1).z, unityMatrix.GetRow(1).w));
+                matrix.SetColumn(2, new FbxVector4(unityMatrix.GetRow(2).x, unityMatrix.GetRow(2).y, unityMatrix.GetRow(2).z, unityMatrix.GetRow(2).w));
+                matrix.SetColumn(3, new FbxVector4(unityMatrix.GetRow(3).x, unityMatrix.GetRow(3).y, unityMatrix.GetRow(3).z, unityMatrix.GetRow(3).w));
+
+                // FBX wants translation, rotation (in euler angles) and scale.
+                // We assume there's no real shear, just rounding error.
+                FbxVector4 shear;
+                double sign;
+                matrix.GetElements(out translation, out rotation, out shear, out scale, out sign);
+            }
+
 
             //导出Mesh到节点
             bool ExportMeshData(MeshInfo meshInfo, FbxNode fbxNode)
@@ -3524,128 +3500,6 @@ namespace UnityEditor
                 return true;
             }
 
-            bool ExportSkinnedMesh(GameObject unityGo, FbxScene fbxScene, FbxNode fbxNode)
-            {
-                if (!unityGo || fbxNode == null)
-                {
-                    return false;
-                }
-
-                SkinnedMeshRenderer unitySkin
-                = unityGo.GetComponent<SkinnedMeshRenderer>();
-
-                if (unitySkin == null)
-                {
-                    return false;
-                }
-
-                var mesh = unitySkin.sharedMesh;
-                if (!mesh)
-                {
-                    return false;
-                }
-
-                if (exportSettings.showDebugInfo)
-                    Debug.Log(string.Format("exporting {0} {1}", "Skin", fbxNode.GetName()));
-
-
-                var meshInfo = new MeshInfo(unitySkin.sharedMesh, unitySkin.sharedMaterials);
-
-                FbxMesh fbxMesh = null;
-                if (ExportMeshData(meshInfo, fbxNode))
-                {
-                    fbxMesh = fbxNode.GetMesh();
-                }
-                if (fbxMesh == null)
-                {
-                    Debug.LogError("Could not find mesh");
-                    return false;
-                }
-
-                Dictionary<SkinnedMeshRenderer, Transform[]> skinnedMeshToBonesMap;
-                // export skeleton
-                if (ExportSkeleton(unitySkin, fbxScene, out skinnedMeshToBonesMap))
-                {
-                    // bind mesh to skeleton
-                    ExportSkin(unitySkin, meshInfo, fbxScene, fbxMesh, fbxNode);
-
-                    // add bind pose
-                    ExportBindPose(unitySkin, fbxNode, fbxScene, skinnedMeshToBonesMap);
-
-                    // now that the skin and bindpose are set, make sure that each of the bones
-                    // is set to its original position
-                    var bones = unitySkin.bones;
-                    foreach (var bone in bones)
-                    {
-                        // ignore null bones
-                        if (bone != null)
-                        {
-                            var fbxBone = MapUnityObjectToFbxNode[bone.gameObject];
-                            ExportTransform(bone, fbxBone, newCenter: Vector3.zero, TransformExportType.Local);
-
-                            // Cancel out the pre-rotation from the exported rotation
-
-                            // Get prerotation
-                            var fbxPreRotationEuler = fbxBone.GetPreRotation(FbxNode.EPivotSet.eSourcePivot);
-                            // Convert the prerotation to a Quaternion
-                            var fbxPreRotationQuaternion = EulerToQuaternionXYZ(fbxPreRotationEuler);
-                            // Inverse of the prerotation
-                            fbxPreRotationQuaternion.Inverse();
-
-                            // Multiply LclRotation by pre-rotation inverse to get the LclRotation without pre-rotation applied
-                            var finalLclRotationQuat = fbxPreRotationQuaternion * EulerToQuaternionZXY(bone.localEulerAngles);
-
-                            // Convert to Euler with Unity axis system and update LclRotation
-                            var finalUnityQuat = new Quaternion((float)finalLclRotationQuat.X, (float)finalLclRotationQuat.Y, (float)finalLclRotationQuat.Z, (float)finalLclRotationQuat.W);
-                            fbxBone.LclRotation.Set(Vector3ToFbxDouble3(finalUnityQuat.eulerAngles));
-                        }
-                        else
-                        {
-                            Debug.Log("Warning: One or more bones are null. Skeleton may not export correctly.");
-                        }
-                    }
-                }
-
-                return true;
-            }
-            #endregion
-
-            #region 命名
-            Dictionary<string, int> NameToIndexMap = new Dictionary<string, int>();
-            Dictionary<string, int> MaterialNameToIndexMap = new Dictionary<string, int>();
-            Dictionary<string, int> TextureNameToIndexMap = new Dictionary<string, int>();
-            string UniqueNameFormat = "{0}_{1}";
-
-            string GetUniqueName(string name, Dictionary<string, int> nameToCountMap)
-            {
-                var uniqueName = name;
-                int count;
-                if (nameToCountMap.TryGetValue(name, out count))
-                {
-                    uniqueName = string.Format(UniqueNameFormat, name, count);
-                }
-                else
-                {
-                    count = 0;
-                }
-                nameToCountMap[name] = count + 1;
-                return uniqueName;
-            }
-
-            string GetUniqueFbxNodeName(string name)
-            {
-                return GetUniqueName(name, NameToIndexMap);
-            }
-
-            string GetUniqueMaterialName(string name)
-            {
-                return GetUniqueName(name, MaterialNameToIndexMap);
-            }
-
-            string GetUniqueTextureName(string name)
-            {
-                return GetUniqueName(name, TextureNameToIndexMap);
-            }
             #endregion
 
             #region Hierarchy层级_模型
