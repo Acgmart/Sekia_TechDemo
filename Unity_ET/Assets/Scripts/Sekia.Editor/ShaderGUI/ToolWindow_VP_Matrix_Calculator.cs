@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿//#define _DEBUG_MODE
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -80,10 +81,10 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                                                "-", "-", "-", "-",
                                                "-", "-", "-", "-",};
 
-    static Vector4 back_vp_Line1 = new Vector4(0.84375f, 0, -0.4871393f, 0.6176679f);
-    static Vector4 back_vp_Line2 = new Vector4(-0.43330127f, -1.5f, -0.75f, 5.683013f);
-    static Vector4 back_vp_Line3 = new Vector4(-0.04811252f, 0.05555555f, -0.08333333f, 111.2981f);
-    static Vector4 back_vp_Line4 = new Vector4(0.4330127f, -0.5f, 0.75f, -1.683013f);
+    static Vector4 back_vp_Line1 = new Vector4(1.358f, 0f, 0f, 2609.99756f);
+    static Vector4 back_vp_Line2 = new Vector4(0f, 1.70711f, 1.70711f, -5663.74707f);
+    static Vector4 back_vp_Line3 = new Vector4(0f, -0.73519f, 0.73519f, -1454.34229f);
+    static Vector4 back_vp_Line4 = new Vector4(0f, -0.70711f, 0.70711f, -1246.00208f);
     static string[] back_vp_cameraPosition = new string[3] { "-", "-", "-" };
     static string[] back_vp_cameraRotation = new string[3] { "-", "-", "-" };
     static string back_vp_aspect = "-";
@@ -107,7 +108,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
     static string back_p_Far = "-";
     static string back_p_Near = "-";
 
-    static bool _isDx = true;
+    static bool _isDx = false;
     static bool _isCameraRotateZisZero = true;
     static bool _showSimpleVersion = true;
 
@@ -267,34 +268,31 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
         return result;
     }
 
-    private void DebugMatrix(string[] input, string prefix = "", bool perMetaOneLine = false)
+    private static void DebugMatrix(string[] formula, string prefix = "", float[] value = null)
     {
-        if (perMetaOneLine)
+#if _DEBUG_MODE
+        if (value == null)
         {
-            string result = $"{input[0]}\n{input[1]}\n{input[2]}\n{input[3]}\n" +
-            $"{input[4]}\n{input[5]}\n{input[6]}\n{input[7]}\n" +
-            $"{input[8]}\n{input[9]}\n{input[10]}\n{input[11]}\n" +
-            $"{input[12]}\n{input[13]}\n{input[14]}\n{input[15]}";
-            if (input.Length > 16)
-            {
-                for (int i = 16; i < input.Length; i++)
-                    result = result + "\n" + input[i];
-            }
-            Debug.LogError(prefix + "\n" + result);
+            string result = prefix;
+            for (int i = 0; i < formula.Length; i++)
+                result = result + "\n" + formula[i];
+            Debug.LogError(result);
         }
         else
         {
-            string result = $"{input[0]}  {input[1]}  {input[2]}  {input[3]}\n" +
-                        $"{input[4]}  {input[5]}  {input[6]}  {input[7]}\n" +
-                        $"{input[8]}  {input[9]}  {input[10]}  {input[11]}\n" +
-                        $"{input[12]}  {input[13]}  {input[14]}  {input[15]}";
-            if (input.Length > 16)
-            {
-                for (int i = 16; i < input.Length; i++)
-                    result = result + "\n" + input[i];
-            }
-            Debug.LogError(prefix + "\n" + result);
+            string result = prefix;
+            for (int i = 0; i < formula.Length; i++)
+                result = result + "\n" + value[i].ToString() + " = " + formula[i];
+            Debug.LogError(result);
         }
+#endif
+    }
+
+    public static void DebugString(string input)
+    {
+#if _DEBUG_MODE
+        Debug.LogError(input);
+#endif
     }
     #endregion
 
@@ -1173,6 +1171,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
         public List<int> _types = new List<int>(); //每个child的类型
                                                    //1：数字      2：基础变量     3：+      4：*     5：(     6：)
         public static Dictionary<string, float> _history = new Dictionary<string, float>();
+        public static Dictionary<string, float> _historyFloat = new Dictionary<string, float>();
         private static Dictionary<string, string> _historyCache = new Dictionary<string, string>();
         private static StringBuilder sb = new StringBuilder();
 
@@ -1239,6 +1238,15 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
             string cache = _history[input].ToString("0.########");
             _historyCache[input] = cache;
             return cache;
+        }
+
+        public static float GetHistoryFloatValue(string input)
+        {
+            if (_historyFloat.ContainsKey(input))
+                return _historyFloat[input];
+            float result = float.Parse(input);
+            _historyFloat[input] = result;
+            return result;
         }
 
         private void Parse(string input, bool checkHistory)
@@ -1326,7 +1334,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                     if (_types[i] == 1)
                     {
                         hasAnyMulInOneCof = true;
-                        input = input / float.Parse(_childs[i]);
+                        input = input / GetHistoryFloatValue(_childs[i]);
                         _childs.RemoveAt(i);
                         _types.RemoveAt(i);
                         break;
@@ -1367,25 +1375,25 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
 
                         if (k != _childs.Count && leftMulCount == 1)
                         {
-                            //Debug.LogError("简化加法前：" + FormulaStringExpressForShowOnly());
+                            DebugString("简化加法前：" + FormulaStringExpressForShowOnly());
                             hasAnyFloatAdd = true;
-                            input = input - float.Parse(_childs[k - 1]);
+                            input = input - GetHistoryFloatValue(_childs[k - 1]);
                             _childs.RemoveAt(k);
                             _types.RemoveAt(k);
                             _childs.RemoveAt(k - 1);
                             _types.RemoveAt(k - 1);
-                            //Debug.LogError("简化加法后：" + FormulaStringExpressForShowOnly());
+                            DebugString("简化加法后：" + FormulaStringExpressForShowOnly());
                         }
                         else if (rightMulCount == 1)
                         {
-                            //Debug.LogError("简化加法前：" + FormulaStringExpressForShowOnly());
+                            DebugString("简化加法前：" + FormulaStringExpressForShowOnly());
                             hasAnyFloatAdd = true;
-                            input = input - float.Parse(_childs[k + 1]);
+                            input = input - GetHistoryFloatValue(_childs[k + 1]);
                             _childs.RemoveAt(k + 1);
                             _types.RemoveAt(k + 1);
                             _childs.RemoveAt(k);
                             _types.RemoveAt(k);
-                            //Debug.LogError("简化加法后：" + FormulaStringExpressForShowOnly());
+                            DebugString("简化加法后：" + FormulaStringExpressForShowOnly());
                         }
 
                         if (hasAnyFloatAdd)
@@ -1404,7 +1412,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
         //将两个公式混合运算减少变量数量 得到新的公式
         public static void CalculateMultiCofFormula(List<string> variableList,
             Formula input1, Formula input2, float result1, float result2,
-            ref List<Formula> formulas, ref List<float> results, ref Vector3 rotation)
+            ref List<Formula> formulas, ref List<float> results, ref Vector3 rotation, ref bool hasGetRotationZ)
         {
             //判断有没有变量乘法 根据公式复杂度来消除变量
             bool hasAnyVariableMulVariable = false;
@@ -1454,318 +1462,276 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
 
             if (hasAnyVariableMulVariable)
             {
-                bool isSinzCoszFov = false;
+                /*
+                 a = 0.8660251*sinZ*cot(Fov/2)+-0.2500003*cosZ*cot(Fov/2)
+                 b = -0.5000006*sinZ*cot(Fov/2)+-0.4330125*cosZ*cot(Fov/2)
+                 求Z
+                 */
+
+                float SinzFov, CoszFov;
+
+                //求SinzFov
                 {
-                    bool hasSinZ1 = false;
-                    bool hasCosZ1 = false;
-                    bool hasFov1 = false;
-                    bool hasSinZ2 = false;
-                    bool hasCosZ2 = false;
-                    bool hasFov2 = false;
-                    for (int k = 0; k < input1._childs.Count; k++)
+                    Formula input1_Copy = new Formula(input1);
+                    Formula input2_Copy = new Formula(input2);
+                    float result1_Copy = result1;
+                    float result2_Copy = result2;
+
+                    float mulCofBesideCoszFov1 = -9999;
+                    float mulCofBesideCoszFov2 = -9999;
+
+                    for (int k = 3; k < input1._childs.Count + 1; k++)
                     {
-                        if (input1._childs[k] == sinZ)
-                            hasSinZ1 = true;
-                        if (input1._childs[k] == cosZ)
-                            hasCosZ1 = true;
-                        if (input1._childs[k] == k3)
-                            hasFov1 = true;
-                    }
-                    for (int k = 0; k < input2._childs.Count; k++)
-                    {
-                        if (input2._childs[k] == sinZ)
-                            hasSinZ2 = true;
-                        if (input2._childs[k] == cosZ)
-                            hasCosZ2 = true;
-                        if (input2._childs[k] == k3)
-                            hasFov2 = true;
-                    }
-                    if (hasSinZ1 && hasCosZ1 && hasFov1 && hasSinZ2 && hasCosZ2 && hasFov2)
-                        isSinzCoszFov = true;
-                }
-
-                if (isSinzCoszFov)
-                {
-                    //Debug.LogError("开始求解Z和Fov");
-                    /*
-                     a = 0.8660251*sinZ*cot(Fov/2)+-0.2500003*cosZ*cot(Fov/2)
-                     b = -0.5000006*sinZ*cot(Fov/2)+-0.4330125*cosZ*cot(Fov/2)
-                     求Z和Fov
-                     */
-
-                    float SinzFov = -9999;
-                    float CoszFov = -9999;
-
-                    //求SinzFov
-                    {
-                        Formula input1_Copy = new Formula(input1);
-                        Formula input2_Copy = new Formula(input2);
-                        float result1_Copy = result1;
-                        float result2_Copy = result2;
-
-                        float mulCofBesideCoszFov1 = -9999;
-                        float mulCofBesideCoszFov2 = -9999;
-
-                        for (int k = 3; k < input1._childs.Count + 1; k++)
+                        if (k == input1._childs.Count || input1._types[k] == 3)
                         {
-                            if (k == input1._childs.Count || input1._types[k] == 3)
+                            int variableLength = 0;
+                            for (int i = k - 1; i >= 0; i--)
                             {
-                                int variableLength = 0;
-                                for (int i = k - 1; i >= 0; i--)
-                                {
-                                    if (input1._types[i] == 2)
-                                        variableLength++;
-                                    else
-                                        break;
-                                }
-
-                                bool hasCosz = false;
-                                bool hasFov = false;
-                                if (variableLength == 2)
-                                {
-                                    if (input1._childs[k - 1] == k3)
-                                        hasFov = true;
-                                    if (input1._childs[k - 2] == k3)
-                                        hasFov = true;
-                                    if (input1._childs[k - 1] == cosZ)
-                                        hasCosz = true;
-                                    if (input1._childs[k - 2] == cosZ)
-                                        hasCosz = true;
-                                }
-
-                                if (hasCosz && hasFov && input1._types[k - 3] == 1)
-                                    mulCofBesideCoszFov1 = float.Parse(input1._childs[k - 3]);
+                                if (input1._types[i] == 2)
+                                    variableLength++;
+                                else
+                                    break;
                             }
-                        }
 
-                        for (int k = 3; k < input2._childs.Count + 1; k++)
-                        {
-                            if (k == input2._childs.Count || input2._types[k] == 3)
+                            bool hasCosz = false;
+                            bool hasFov = false;
+                            if (variableLength == 2)
                             {
-                                int variableLength = 0;
-                                for (int i = k - 1; i >= 0; i--)
-                                {
-                                    if (input2._types[i] == 2)
-                                        variableLength++;
-                                    else
-                                        break;
-                                }
-
-                                bool hasCosz = false;
-                                bool hasFov = false;
-                                if (variableLength == 2)
-                                {
-                                    if (input2._childs[k - 1] == k3)
-                                        hasFov = true;
-                                    if (input2._childs[k - 2] == k3)
-                                        hasFov = true;
-                                    if (input2._childs[k - 1] == cosZ)
-                                        hasCosz = true;
-                                    if (input2._childs[k - 2] == cosZ)
-                                        hasCosz = true;
-                                }
-
-                                if (hasCosz && hasFov && input2._types[k - 3] == 1)
-                                    mulCofBesideCoszFov2 = float.Parse(input2._childs[k - 3]);
+                                if (input1._childs[k - 1] == k3)
+                                    hasFov = true;
+                                if (input1._childs[k - 2] == k3)
+                                    hasFov = true;
+                                if (input1._childs[k - 1] == cosZ)
+                                    hasCosz = true;
+                                if (input1._childs[k - 2] == cosZ)
+                                    hasCosz = true;
                             }
-                        }
 
-                        if (mulCofBesideCoszFov1 == -9999 || mulCofBesideCoszFov2 == -999)
-                        {
-                            Debug.LogError("没有找到两个公式中SinzFov旁边的系数");
-                            return;
+                            if (hasCosz && hasFov && input1._types[k - 3] == 1)
+                                mulCofBesideCoszFov1 = GetHistoryFloatValue(input1._childs[k - 3]);
                         }
-                        else
-                        {
-                            //Debug.LogError("找到了系数" + mulCofBesideCoszFov1 + "    " + mulCofBesideCoszFov2); 
-                        }
-
-                        result1_Copy = result1_Copy / mulCofBesideCoszFov1;
-                        for (int k = 0; k < input1_Copy._childs.Count; k++)
-                        {
-                            if (input1_Copy._types[k] == 1)
-                            {
-                                float floatDivideValue = float.Parse(input1_Copy._childs[k]) / mulCofBesideCoszFov1;
-                                input1_Copy._childs[k] = floatDivideValue.ToString("0.########");
-                            }
-                        }
-
-                        mulCofBesideCoszFov2 = mulCofBesideCoszFov2 * -1f;
-                        result2_Copy = result2_Copy / mulCofBesideCoszFov2;
-                        for (int k = 0; k < input2_Copy._childs.Count; k++)
-                        {
-                            if (input2_Copy._types[k] == 1)
-                            {
-                                float floatDivideValue = float.Parse(input2_Copy._childs[k]) / mulCofBesideCoszFov2;
-                                input2_Copy._childs[k] = floatDivideValue.ToString("0.########");
-                            }
-                        }
-
-                        float newResult = result1_Copy + result2_Copy;
-                        Formula newFormula = new Formula(input1_Copy, input2_Copy);
-                        //Debug.LogError("测试1：" + result1_Copy + "=" + input1_Copy.FormulaStringExpressForShowOnly());
-                        //Debug.LogError("测试2：" + result2_Copy + "=" + input2_Copy.FormulaStringExpressForShowOnly());
-                        //Debug.LogError("得到新公式：" + newResult + "=" + newFormula.FormulaStringExpressForShowOnly());
-
-                        int newFormulaAddCount = newFormula.CalculateStringAddCount();
-                        if (newFormulaAddCount != 1)
-                        {
-                            //Debug.LogError("新公式必须只有1元 为a*sinZ*Fov");
-                            return;
-                        }
-
-                        SinzFov = newResult / float.Parse(newFormula._childs[0]);
-                        //Debug.LogError("sinZ*Fov=" + SinzFov);
                     }
 
-                    //求CoszFov
+                    for (int k = 3; k < input2._childs.Count + 1; k++)
                     {
-                        Formula input1_Copy = new Formula(input1);
-                        Formula input2_Copy = new Formula(input2);
-                        float result1_Copy = result1;
-                        float result2_Copy = result2;
-
-                        float mulCofBesideSinzFov1 = -9999;
-                        float mulCofBesideSinzFov2 = -9999;
-
-                        for (int k = 3; k < input1._childs.Count + 1; k++)
+                        if (k == input2._childs.Count || input2._types[k] == 3)
                         {
-                            if (k == input1._childs.Count || input1._types[k] == 3)
+                            int variableLength = 0;
+                            for (int i = k - 1; i >= 0; i--)
                             {
-                                int variableLength = 0;
-                                for (int i = k - 1; i >= 0; i--)
-                                {
-                                    if (input1._types[i] == 2)
-                                        variableLength++;
-                                    else
-                                        break;
-                                }
-
-                                bool hasSinz = false;
-                                bool hasFov = false;
-                                if (variableLength == 2)
-                                {
-                                    if (input1._childs[k - 1] == k3)
-                                        hasFov = true;
-                                    if (input1._childs[k - 2] == k3)
-                                        hasFov = true;
-                                    if (input1._childs[k - 1] == sinZ)
-                                        hasSinz = true;
-                                    if (input1._childs[k - 2] == sinZ)
-                                        hasSinz = true;
-                                }
-
-                                if (hasSinz && hasFov && input1._types[k - 3] == 1)
-                                    mulCofBesideSinzFov1 = float.Parse(input1._childs[k - 3]);
+                                if (input2._types[i] == 2)
+                                    variableLength++;
+                                else
+                                    break;
                             }
-                        }
 
-                        for (int k = 3; k < input2._childs.Count + 1; k++)
-                        {
-                            if (k == input2._childs.Count || input2._types[k] == 3)
+                            bool hasCosz = false;
+                            bool hasFov = false;
+                            if (variableLength == 2)
                             {
-                                int variableLength = 0;
-                                for (int i = k - 1; i >= 0; i--)
-                                {
-                                    if (input2._types[i] == 2)
-                                        variableLength++;
-                                    else
-                                        break;
-                                }
-
-                                bool hasSinz = false;
-                                bool hasFov = false;
-                                if (variableLength == 2)
-                                {
-                                    if (input2._childs[k - 1] == k3)
-                                        hasFov = true;
-                                    if (input2._childs[k - 2] == k3)
-                                        hasFov = true;
-                                    if (input2._childs[k - 1] == sinZ)
-                                        hasSinz = true;
-                                    if (input2._childs[k - 2] == sinZ)
-                                        hasSinz = true;
-                                }
-
-                                if (hasSinz && hasFov && input2._types[k - 3] == 1)
-                                    mulCofBesideSinzFov2 = float.Parse(input2._childs[k - 3]);
+                                if (input2._childs[k - 1] == k3)
+                                    hasFov = true;
+                                if (input2._childs[k - 2] == k3)
+                                    hasFov = true;
+                                if (input2._childs[k - 1] == cosZ)
+                                    hasCosz = true;
+                                if (input2._childs[k - 2] == cosZ)
+                                    hasCosz = true;
                             }
-                        }
 
-                        if (mulCofBesideSinzFov1 == -9999 || mulCofBesideSinzFov2 == -999)
-                        {
-                            Debug.LogError("没有找到两个公式中SinzFov旁边的系数");
-                            return;
+                            if (hasCosz && hasFov && input2._types[k - 3] == 1)
+                                mulCofBesideCoszFov2 = GetHistoryFloatValue(input2._childs[k - 3]);
                         }
-                        else
-                        {
-                            //Debug.LogError("找到了系数" + mulCofBesideSinzFov1 + "    " + mulCofBesideSinzFov2);
-                        }
-
-                        result1_Copy = result1_Copy / mulCofBesideSinzFov1;
-                        for (int k = 0; k < input1_Copy._childs.Count; k++)
-                        {
-                            if (input1_Copy._types[k] == 1)
-                            {
-                                float floatDivideValue = float.Parse(input1_Copy._childs[k]) / mulCofBesideSinzFov1;
-                                input1_Copy._childs[k] = floatDivideValue.ToString("0.########");
-                            }
-                        }
-
-                        mulCofBesideSinzFov2 = mulCofBesideSinzFov2 * -1f;
-                        result2_Copy = result2_Copy / mulCofBesideSinzFov2;
-                        for (int k = 0; k < input2_Copy._childs.Count; k++)
-                        {
-                            if (input2_Copy._types[k] == 1)
-                            {
-                                float floatDivideValue = float.Parse(input2_Copy._childs[k]) / mulCofBesideSinzFov2;
-                                input2_Copy._childs[k] = floatDivideValue.ToString("0.########");
-                            }
-                        }
-
-                        float newResult = result1_Copy + result2_Copy;
-                        Formula newFormula = new Formula(input1_Copy, input2_Copy);
-                        //Debug.LogError("测试1：" + result1_Copy + "=" + input1_Copy.FormulaStringExpressForShowOnly());
-                        //Debug.LogError("测试2：" + result2_Copy + "=" + input2_Copy.FormulaStringExpressForShowOnly());
-                        //Debug.LogError("得到新公式：" + newResult + "=" + newFormula.FormulaStringExpressForShowOnly());
-
-                        int newFormulaAddCount = newFormula.CalculateStringAddCount();
-                        if (newFormulaAddCount != 1)
-                        {
-                            //Debug.LogError("新公式必须只有1元 为a*socZ*Fov");
-                            return;
-                        }
-
-                        CoszFov = newResult / float.Parse(newFormula._childs[0]);
-                        //Debug.LogError("CoszFov=" + CoszFov);
                     }
 
-                    if (SinzFov == -9999 || CoszFov == -9999)
+                    if (mulCofBesideCoszFov1 == -9999 || mulCofBesideCoszFov2 == -999)
                     {
-                        Debug.LogError("求关键系数失败");
+                        Debug.LogError("没有找到两个公式中SinzFov旁边的系数");
+                        return;
+                    }
+                    else
+                    {
+                        DebugString("找到了系数" + mulCofBesideCoszFov1 + "    " + mulCofBesideCoszFov2);
+                    }
+
+                    result1_Copy = result1_Copy / mulCofBesideCoszFov1;
+                    for (int k = 0; k < input1_Copy._childs.Count; k++)
+                    {
+                        if (input1_Copy._types[k] == 1)
+                        {
+                            float floatDivideValue = GetHistoryFloatValue(input1_Copy._childs[k]) / mulCofBesideCoszFov1;
+                            input1_Copy._childs[k] = floatDivideValue.ToString("0.########");
+                        }
+                    }
+
+                    mulCofBesideCoszFov2 = mulCofBesideCoszFov2 * -1f;
+                    result2_Copy = result2_Copy / mulCofBesideCoszFov2;
+                    for (int k = 0; k < input2_Copy._childs.Count; k++)
+                    {
+                        if (input2_Copy._types[k] == 1)
+                        {
+                            float floatDivideValue = GetHistoryFloatValue(input2_Copy._childs[k]) / mulCofBesideCoszFov2;
+                            input2_Copy._childs[k] = floatDivideValue.ToString("0.########");
+                        }
+                    }
+
+                    float newResult = result1_Copy + result2_Copy;
+                    Formula newFormula = new Formula(input1_Copy, input2_Copy);
+                    DebugString("测试1：" + result1_Copy + "=" + input1_Copy.FormulaStringExpressForShowOnly());
+                    DebugString("测试2：" + result2_Copy + "=" + input2_Copy.FormulaStringExpressForShowOnly());
+                    DebugString("得到新公式：" + newResult + "=" + newFormula.FormulaStringExpressForShowOnly());
+
+                    int newFormulaAddCount = newFormula.CalculateStringAddCount();
+                    if (newFormulaAddCount != 1)
+                    {
+                        DebugString("新公式必须只有1元 为a*sinZ*Fov");
                         return;
                     }
 
-                    {
-                        //tanZ = sinZ/ cosZ = SinzFov / CoszFov
-
-                        float tanValue = SinzFov / CoszFov;
-                        float radian = Mathf.Atan(tanValue);
-                        float degrees = Mathf.Round(radian * Mathf.Rad2Deg);
-                        rotation.z = degrees;
-                        float sinValue = Mathf.Sin(degrees * Mathf.Deg2Rad);
-                        float cosValue = Mathf.Cos(degrees * Mathf.Deg2Rad);
-                        Formula._history[sinZ] = sinValue;
-                        Formula._history[cosZ] = cosValue;
-                        //Debug.LogError($"旋转角度Z为{rotation.z}");
-                    }
+                    SinzFov = newResult / GetHistoryFloatValue(newFormula._childs[0]);
+                    DebugString("sinZ*Fov=" + SinzFov);
                 }
-                else
-                    Debug.LogError("多元非线性公式 暂未求解：" + result1 + "=" + input1.FormulaStringExpressForShowOnly() + "   " + result2 + "=" + input2.FormulaStringExpressForShowOnly());
+
+                //求CoszFov
+                {
+                    Formula input1_Copy = new Formula(input1);
+                    Formula input2_Copy = new Formula(input2);
+                    float result1_Copy = result1;
+                    float result2_Copy = result2;
+
+                    float mulCofBesideSinzFov1 = -9999;
+                    float mulCofBesideSinzFov2 = -9999;
+
+                    for (int k = 3; k < input1._childs.Count + 1; k++)
+                    {
+                        if (k == input1._childs.Count || input1._types[k] == 3)
+                        {
+                            int variableLength = 0;
+                            for (int i = k - 1; i >= 0; i--)
+                            {
+                                if (input1._types[i] == 2)
+                                    variableLength++;
+                                else
+                                    break;
+                            }
+
+                            bool hasSinz = false;
+                            bool hasFov = false;
+                            if (variableLength == 2)
+                            {
+                                if (input1._childs[k - 1] == k3)
+                                    hasFov = true;
+                                if (input1._childs[k - 2] == k3)
+                                    hasFov = true;
+                                if (input1._childs[k - 1] == sinZ)
+                                    hasSinz = true;
+                                if (input1._childs[k - 2] == sinZ)
+                                    hasSinz = true;
+                            }
+
+                            if (hasSinz && hasFov && input1._types[k - 3] == 1)
+                                mulCofBesideSinzFov1 = GetHistoryFloatValue(input1._childs[k - 3]);
+                        }
+                    }
+
+                    for (int k = 3; k < input2._childs.Count + 1; k++)
+                    {
+                        if (k == input2._childs.Count || input2._types[k] == 3)
+                        {
+                            int variableLength = 0;
+                            for (int i = k - 1; i >= 0; i--)
+                            {
+                                if (input2._types[i] == 2)
+                                    variableLength++;
+                                else
+                                    break;
+                            }
+
+                            bool hasSinz = false;
+                            bool hasFov = false;
+                            if (variableLength == 2)
+                            {
+                                if (input2._childs[k - 1] == k3)
+                                    hasFov = true;
+                                if (input2._childs[k - 2] == k3)
+                                    hasFov = true;
+                                if (input2._childs[k - 1] == sinZ)
+                                    hasSinz = true;
+                                if (input2._childs[k - 2] == sinZ)
+                                    hasSinz = true;
+                            }
+
+                            if (hasSinz && hasFov && input2._types[k - 3] == 1)
+                                mulCofBesideSinzFov2 = GetHistoryFloatValue(input2._childs[k - 3]);
+                        }
+                    }
+
+                    if (mulCofBesideSinzFov1 == -9999 || mulCofBesideSinzFov2 == -999)
+                    {
+                        Debug.LogError("没有找到两个公式中SinzFov旁边的系数");
+                        return;
+                    }
+                    else
+                    {
+                        DebugString("找到了系数" + mulCofBesideSinzFov1 + "    " + mulCofBesideSinzFov2);
+                    }
+
+                    result1_Copy = result1_Copy / mulCofBesideSinzFov1;
+                    for (int k = 0; k < input1_Copy._childs.Count; k++)
+                    {
+                        if (input1_Copy._types[k] == 1)
+                        {
+                            float floatDivideValue = GetHistoryFloatValue(input1_Copy._childs[k]) / mulCofBesideSinzFov1;
+                            input1_Copy._childs[k] = floatDivideValue.ToString("0.########");
+                        }
+                    }
+
+                    mulCofBesideSinzFov2 = mulCofBesideSinzFov2 * -1f;
+                    result2_Copy = result2_Copy / mulCofBesideSinzFov2;
+                    for (int k = 0; k < input2_Copy._childs.Count; k++)
+                    {
+                        if (input2_Copy._types[k] == 1)
+                        {
+                            float floatDivideValue = GetHistoryFloatValue(input2_Copy._childs[k]) / mulCofBesideSinzFov2;
+                            input2_Copy._childs[k] = floatDivideValue.ToString("0.########");
+                        }
+                    }
+
+                    float newResult = result1_Copy + result2_Copy;
+                    Formula newFormula = new Formula(input1_Copy, input2_Copy);
+                    DebugString("测试1：" + result1_Copy + "=" + input1_Copy.FormulaStringExpressForShowOnly());
+                    DebugString("测试2：" + result2_Copy + "=" + input2_Copy.FormulaStringExpressForShowOnly());
+                    DebugString("得到新公式：" + newResult + "=" + newFormula.FormulaStringExpressForShowOnly());
+
+                    int newFormulaAddCount = newFormula.CalculateStringAddCount();
+                    if (newFormulaAddCount != 1)
+                    {
+                        DebugString("新公式必须只有1元 为a*socZ*Fov");
+                        return;
+                    }
+
+                    CoszFov = newResult / GetHistoryFloatValue(newFormula._childs[0]);
+                    DebugString("CoszFov=" + CoszFov);
+                }
+
+                {
+                    //tanZ = sinZ/cosZ = SinzFov / CoszFov
+
+                    float tanValue = SinzFov / CoszFov;
+                    float radian = Mathf.Atan(tanValue);
+                    float degrees = Mathf.Round(radian * Mathf.Rad2Deg);
+                    rotation.z = degrees;
+                    float sinValue = Mathf.Sin(degrees * Mathf.Deg2Rad);
+                    float cosValue = Mathf.Cos(degrees * Mathf.Deg2Rad);
+                    Formula._history[sinZ] = sinValue;
+                    Formula._history[cosZ] = cosValue;
+                    DebugString($"旋转角度Z为{rotation.z}");
+                    hasGetRotationZ = true;
+                }
             }
             else
             {
-                //Debug.LogError("开始求解：" + result1 + "=" + input1.FormulaStringExpressForShowOnly() + "   " + result2 + "=" + input2.FormulaStringExpressForShowOnly());
+                DebugString("开始求解：" + result1 + "=" + input1.FormulaStringExpressForShowOnly() + "   " + result2 + "=" + input2.FormulaStringExpressForShowOnly());
                 foreach (var variable in variableList)
                 {
                     Formula input1_Copy = new Formula(input1);
@@ -1781,7 +1747,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                             if (input1_Copy._childs[k] == variable) //定位变量位置
                             {
                                 if (k > 0 && input1_Copy._types[k - 1] == 1) //如果k前面有浮点数
-                                    targetVariabeMulCof1 = float.Parse(input1_Copy._childs[k - 1]);
+                                    targetVariabeMulCof1 = GetHistoryFloatValue(input1_Copy._childs[k - 1]);
                                 break;
                             }
                         }
@@ -1790,7 +1756,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                         {
                             if (input1_Copy._types[k] == 1)
                             {
-                                float floatDivideValue = float.Parse(input1_Copy._childs[k]) / targetVariabeMulCof1;
+                                float floatDivideValue = GetHistoryFloatValue(input1_Copy._childs[k]) / targetVariabeMulCof1;
                                 input1_Copy._childs[k] = floatDivideValue.ToString("0.########");
                             }
                         }
@@ -1802,7 +1768,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                             if (input2_Copy._childs[k] == variable)
                             {
                                 if (k > 0 && input2_Copy._types[k - 1] == 1)
-                                    targetVariabeMulCof2 = targetVariabeMulCof2 * float.Parse(input2_Copy._childs[k - 1]);
+                                    targetVariabeMulCof2 = targetVariabeMulCof2 * GetHistoryFloatValue(input2_Copy._childs[k - 1]);
                                 break;
                             }
                         }
@@ -1811,18 +1777,18 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                         {
                             if (input2_Copy._types[k] == 1)
                             {
-                                float floatDivideValue = float.Parse(input2_Copy._childs[k]) / targetVariabeMulCof2;
+                                float floatDivideValue = GetHistoryFloatValue(input2_Copy._childs[k]) / targetVariabeMulCof2;
                                 input2_Copy._childs[k] = floatDivideValue.ToString("0.########");
                             }
                         }
                     }
-                    //Debug.LogError("公式除以系数后：" + result1_Copy + "=" + input1_Copy.FormulaStringExpressForShowOnly() + "   " + result2_Copy + "=" + input2_Copy.FormulaStringExpressForShowOnly());
+                    DebugString("公式除以系数后：" + result1_Copy + "=" + input1_Copy.FormulaStringExpressForShowOnly() + "   " + result2_Copy + "=" + input2_Copy.FormulaStringExpressForShowOnly());
 
                     float newResult = result1_Copy + result2_Copy;
                     results.Add(newResult);
                     Formula newFormula = new Formula(input1_Copy, input2_Copy);
                     formulas.Add(newFormula);
-                    //Debug.LogError("得到新公式：" + newResult + "=" + newFormula.FormulaStringExpressForShowOnly());
+                    DebugString("得到新公式：" + newResult + "=" + newFormula.FormulaStringExpressForShowOnly());
                 }
             }
         }
@@ -1878,7 +1844,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                     string _cofString = input.Substring(lastCofStartFloatMul, k - lastCofStartFloatMul);
                     if (_cofString.StartsWith("-1*"))
                     {
-                        //Debug.LogError("修改符号前：" + input);
+                        DebugString("修改符号前：" + input);
                         hasAnyChange = true;
                         if (lastCofStartFloatMul == 0) //-1在开头位置 变成-
                         {
@@ -1891,7 +1857,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                             string _targetBack = input.Substring(lastCofStartFloatMul + 3);
                             input = _targetFore + "-" + _targetBack;
                         }
-                        //Debug.LogError("修改符号后：" + input);
+                        DebugString("修改符号后：" + input);
                     }
                     else if (lastCofStartFloatMul != 0 && GetStringAheadNumber(_cofString).StartsWith("-"))
                     {
@@ -2018,10 +1984,10 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                     _kuohaoForeChilds.AddRange(_kuohaoChilds);
                     _kuohaoForeTypes.AddRange(_kuohaoTypes);
 
-                    //Debug.LogError("删除括号前：" + FormulaStringExpressForShowOnly());
+                    DebugString("删除括号前：" + FormulaStringExpressForShowOnly());
                     _childs = _kuohaoForeChilds;
                     _types = _kuohaoForeTypes;
-                    //Debug.LogError("删除括号后：" + FormulaStringExpressForShowOnly());
+                    DebugString("删除括号后：" + FormulaStringExpressForShowOnly());
                     ClearFloatCalculate();
                     return;
                 }
@@ -2049,12 +2015,12 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                                 hasAnyChangePosition = true; //调换两个变量的位置
                                 string _targetVarialbleString = _childs[firstVariableIndex];
                                 int _targetVariableType = _types[firstVariableIndex];
-                                //Debug.LogError("交换前：" + FormulaStringExpressForShowOnly());
+                                DebugString("交换前：" + FormulaStringExpressForShowOnly());
                                 _childs[firstVariableIndex] = _childs[currentValueIndex];
                                 _types[firstVariableIndex] = _types[currentValueIndex];
                                 _childs[currentValueIndex] = _targetVarialbleString;
                                 _types[currentValueIndex] = _targetVariableType;
-                                //Debug.LogError("交换后：" + FormulaStringExpressForShowOnly());
+                                DebugString("交换后：" + FormulaStringExpressForShowOnly());
                                 break;
                             }
                         }
@@ -2084,8 +2050,8 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                             if (_types[i] == 1 && _types[i - 1] == 1)
                             {
                                 hasAnyFloatMul = true;
-                                float _targeValueFloat = float.Parse(_childs[i - 1]) * float.Parse(_childs[i]);
-                                //Debug.LogError("计算前：" + FormulaStringExpressForShowOnly());
+                                float _targeValueFloat = GetHistoryFloatValue(_childs[i - 1]) * GetHistoryFloatValue(_childs[i]);
+                                DebugString("计算前：" + FormulaStringExpressForShowOnly());
                                 _childs[i - 1] = _targeValueFloat.ToString("0.########");
                                 _childs.RemoveAt(i);
                                 _types.RemoveAt(i);
@@ -2094,7 +2060,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                                     _childs.RemoveAt(i - 1);
                                     _types.RemoveAt(i - 1);
                                 }
-                                //Debug.LogError("计算后：" + FormulaStringExpressForShowOnly());
+                                DebugString("计算后：" + FormulaStringExpressForShowOnly());
                                 break;
                             }
                         }
@@ -2126,15 +2092,15 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                             if ((i == _childs.Count || _types[i] == 3) &&
                                 _types[i - 1] == 1) //由侧找到的第一个+
                             {
-                                //Debug.LogError("去掉加法前：" + FormulaStringExpressForShowOnly());
+                                DebugString("去掉加法前：" + FormulaStringExpressForShowOnly());
                                 hasAnyFloatAdd = true;
-                                float _targeValueFloat = float.Parse(_childs[k - 1]) + float.Parse(_childs[i - 1]);
+                                float _targeValueFloat = GetHistoryFloatValue(_childs[k - 1]) + GetHistoryFloatValue(_childs[i - 1]);
                                 _childs[k - 1] = _targeValueFloat.ToString("0.########");
                                 _childs.RemoveAt(i - 1);
                                 _types.RemoveAt(i - 1);
                                 _childs.RemoveAt(i - 2);
                                 _types.RemoveAt(i - 2);
-                                //Debug.LogError("去掉加法后：" + FormulaStringExpressForShowOnly());
+                                DebugString("去掉加法后：" + FormulaStringExpressForShowOnly());
                                 break;
                             }
                         }
@@ -2230,16 +2196,16 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                                             hasAnyTheSanmeVariablePart = true;
                                             float leftMulCof = 1f;
                                             if (leftMulCofIndex != -1)
-                                                leftMulCof = leftMulCof * float.Parse(_childs[leftMulCofIndex]);
+                                                leftMulCof = leftMulCof * GetHistoryFloatValue(_childs[leftMulCofIndex]);
                                             if (rightMulCofIndex != -1)
                                             {
-                                                leftMulCof = leftMulCof + float.Parse(_childs[rightMulCofIndex]);
+                                                leftMulCof = leftMulCof + GetHistoryFloatValue(_childs[rightMulCofIndex]);
                                                 if (Mathf.Abs(leftMulCof) < 0.0001f) //避免因为因子太小导致除以因子后误差放大
                                                     leftMulCof = 0;
                                             }
                                             string leftMulCosString = leftMulCof.ToString("0.########");
 
-                                            //Debug.LogError("合并元素前：" + FormulaStringExpressForShowOnly());
+                                            DebugString("合并元素前：" + FormulaStringExpressForShowOnly());
                                             for (int p = i - 1; p > addCofStartIndex - 1; p--) //移除右边整个元素
                                             {
                                                 _childs.RemoveAt(p);
@@ -2253,7 +2219,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                                                 _childs.Insert(k - leftVariableCount, leftMulCosString);
                                                 _types.Insert(k - leftVariableCount, 1);
                                             }
-                                            //Debug.LogError("合并元素后：" + FormulaStringExpressForShowOnly());
+                                            DebugString("合并元素后：" + FormulaStringExpressForShowOnly());
                                         }
                                     }
                                 }
@@ -2286,22 +2252,24 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                 {
                     if (k == _childs.Count || _types[k] == 3)
                     {
-                        if (_types[lastCofStartFloatAdd] == 1)
+                        if (_types[lastCofStartFloatAdd] == 1 &&
+                            lastCofStartFloatAdd + 1 < _childs.Count &&
+                            (_types[lastCofStartFloatAdd + 1] == 1 || _types[lastCofStartFloatAdd + 1] == 2))
                         {
-                            float floatValue = float.Parse(_childs[lastCofStartFloatAdd]);
-                            if (floatValue == 1)
+                            float floatValue = GetHistoryFloatValue(_childs[lastCofStartFloatAdd]);
+                            if (floatValue == 1) //1*a+b = a+b
                             {
-                                //Debug.LogError("简化前：" + FormulaStringExpressForShowOnly());
+                                DebugString("简化前：" + FormulaStringExpressForShowOnly());
                                 hasAnyFloatIsZeroOrOne = true;
                                 _childs.RemoveAt(lastCofStartFloatAdd);
                                 _types.RemoveAt(lastCofStartFloatAdd);
-                                //Debug.LogError("简化后：" + FormulaStringExpressForShowOnly());
+                                DebugString("简化后：" + FormulaStringExpressForShowOnly());
                             }
                             else if (floatValue == 0 && lastCofStartFloatAdd == 0) //0*a + b => b 或者0*a => 0
                             {
                                 if (CalculateStringAddCount() == 1)
                                 {
-                                    //Debug.LogError("简化前：" + FormulaStringExpressForShowOnly());
+                                    DebugString("简化前：" + FormulaStringExpressForShowOnly());
                                     hasAnyFloatIsZeroOrOne = true;
                                     for (int i = k - 1; i > -1; i--) //添加0
                                     {
@@ -2310,18 +2278,18 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                                     }
                                     _childs.Add("0");
                                     _types.Add(1);
-                                    //Debug.LogError("简化后：" + FormulaStringExpressForShowOnly());
+                                    DebugString("简化后：" + FormulaStringExpressForShowOnly());
                                 }
                                 else
                                 {
-                                    //Debug.LogError("简化前：" + FormulaStringExpressForShowOnly());
+                                    DebugString("简化前：" + FormulaStringExpressForShowOnly());
                                     hasAnyFloatIsZeroOrOne = true;
                                     for (int i = k; i > -1; i--) //去除加号
                                     {
                                         _childs.RemoveAt(i);
                                         _types.RemoveAt(i);
                                     }
-                                    //Debug.LogError("简化后：" + FormulaStringExpressForShowOnly());
+                                    DebugString("简化后：" + FormulaStringExpressForShowOnly());
                                 }
                             }
                             else if (floatValue == 0 && lastCofStartFloatAdd != 0)
@@ -2338,18 +2306,18 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
 
                                 if (addCofStartIndex == -1)
                                 {
-                                    Debug.LogError("没有找到相邻的+");
+                                    DebugString("没有找到相邻的+");
                                     return;
                                 }
 
-                                //Debug.LogError("简化前：" + FormulaStringExpressForShowOnly());
+                                DebugString("简化前：" + FormulaStringExpressForShowOnly());
                                 hasAnyFloatIsZeroOrOne = true;
                                 for (int i = k - 1; i > addCofStartIndex - 1; i--)
                                 {
                                     _childs.RemoveAt(i);
                                     _types.RemoveAt(i);
                                 }
-                                //Debug.LogError("简化后：" + FormulaStringExpressForShowOnly());
+                                DebugString("简化后：" + FormulaStringExpressForShowOnly());
                             }
 
                             if (hasAnyFloatIsZeroOrOne)
@@ -2458,11 +2426,12 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
         bool anyResult = false;
         int historyLength = Formula._history.Count;
         int formulaLength = formula.Length;
-        int fistOneVariableIndex = -1;
-        int fisrAnyVariableIndex = -1;
+        int firstOneVariableIndex = -1;
+        int firstZeroVariableIndex = -1;
         int[] formulaVariableCount = new int[formulaLength];
         string[] formulaVariableCountString = new string[formulaLength];
         //这里的formula和input不一定长度为16 随着添加扩展公式长度会增加
+        //如果公式里变量数目为0 则删除这个公式
         //将input中的数值和formula中的公式建立等式 也就是开局有16个等式和0个扩展公式
         //判断等式中的变量数量 只计算变量数量为1的等式 变量数量大于1的等式在多轮计算后降低变量数量
 
@@ -2481,23 +2450,23 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
             {
                 if (formulaVariableCount[i] == 1)
                 {
-                    fistOneVariableIndex = i;
+                    firstOneVariableIndex = i;
                     break;
                 }
             }
             for (int i = 0; i < formulaLength; i++)
             {
-                if (formulaVariableCount[i] != 0)
+                if (formulaVariableCount[i] == 0)
                 {
-                    fisrAnyVariableIndex = i;
+                    firstZeroVariableIndex = i;
                     break;
                 }
             }
         }
 
-        try
+        //try
         {
-            if (fisrAnyVariableIndex == -1)
+            if (formula.Length == 0)
             {
                 anyResult = true;
                 if (Formula._history.ContainsKey(k1) && Formula._history.ContainsKey(k2) &&
@@ -2524,18 +2493,40 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                     //float nearValue2 = farValue / (farValue / k2Value + 1f);
                     Formula._history[Far] = farValue;
                     Formula._history[Near] = nearValue1;
-                    //Debug.LogError($"判断两个值是否相等1：{nearValue1}     2：{nearValue2}");
                     far = farValue;
                     near = nearValue1;
+                    DebugString("求证Far和Near成功 计算结束");
+                    return;
                 }
             }
-            else if (fistOneVariableIndex == -1)
+            else if (firstZeroVariableIndex != -1)
             {
-                //Debug.LogError("没有找到变量数量为1的公式 考虑使用多等式求解");
-                //DebugMatrix(formula, $"替代矩阵中的已知变量 替代前↓");
-                for (int i = 0; i < 16; i++)
-                    formula[i] = new Formula(formula[i]).FormulaStringExpressForShowOnly(false, true);
-                //DebugMatrix(formula, $"替代矩阵中的已知变量 替代后↓");
+                List<int> zeroVariableFormulaIndexList = new List<int>();
+
+                for (int i = formulaLength - 1; i >= 0; i--)
+                {
+                    if (formulaVariableCount[i] == 0)
+                    {
+                        zeroVariableFormulaIndexList.Add(i);
+                    }
+                }
+
+                List<string> formulaList = formula.ToList();
+                List<float> resultList = result.ToList();
+                foreach (var index in zeroVariableFormulaIndexList)
+                {
+                    formulaList.RemoveAt(index);
+                    resultList.RemoveAt(index);
+                }
+                formula = formulaList.ToArray();
+                result = resultList.ToArray();
+
+                anyResult = true;
+                DebugMatrix(formula, $"删除{zeroVariableFormulaIndexList.Count}个无变量公式↓", result);
+            }
+            else if (firstOneVariableIndex == -1)
+            {
+                //DebugMatrix(formula, $"没有找到变量数量为1的公式 考虑使用多等式求解↓");
 
                 //寻找出任意一对变量组合完全相同的公式 变量数为N
                 //通过匹配出的2个公式进行抵消变量运算 得到额外的N个公式 2个参与匹配的公式应该不再继续一起匹配了
@@ -2580,7 +2571,7 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                                     {
                                         extension1.Add(formula_Copy[leftIndex]);
                                         extension2.Add(formula_Copy[rightIndex]);
-                                        //Debug.LogError($"匹配变量长度成功 count{count}：{formula[leftIndex]}     {formula[rightIndex]}");
+                                        DebugString($"匹配变量长度成功 count{count}：{formula_Copy[leftIndex]}     {formula_Copy[rightIndex]}");
                                         return true;
                                     }
                                 }
@@ -2612,7 +2603,8 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                             CheckAndGetTheSameVariableCountFormula(5, ref leftFormulaIndex, ref rightFormulaIndex, ref formula, ref extensionNameMatch1, ref extensionNameMatch2);
                 if (leftFormulaIndex == -1 || rightFormulaIndex == -1)
                 {
-                    Debug.LogError($"匹配变量长度失败");
+                    DebugMatrix(formula, "匹配变量长度失败↓", result);
+                    DebugMatrix(formulaVariableCountString, $"第{turn}轮 formula长度为{formulaLength}↓");
                     return;
                 }
 
@@ -2622,28 +2614,27 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                 List<float> results = new List<float>();
                 List<string> variableList = new List<string>();
                 CheckVariableToList(CalculateFormulaVariableCount(formula[leftFormulaIndex]), ref variableList, formula[leftFormulaIndex]);
-                {
 
-                    string variableListDebugString = "";
-                    foreach (var variable in variableList)
-                    {
-                        if (variableListDebugString != "")
-                            variableListDebugString = variableListDebugString + "   ";
-                        variableListDebugString = variableListDebugString + variable;
-                    }
-                    //Debug.LogError("多变量：" + variableListDebugString);
-                }
+                bool hasGetRotationZ = false;
                 Formula.CalculateMultiCofFormula(variableList, input1, input2, result[leftFormulaIndex], result[rightFormulaIndex],
-                    ref outputs, ref results, ref rotation);
+                    ref outputs, ref results, ref rotation, ref hasGetRotationZ);
 
                 if (outputs.Count == 0 && Formula._history.Count == historyLength)
                 {
-                    DebugMatrix(formula, "扩展公式扩充失败↓", true);
+                    DebugMatrix(formula, "扩展公式扩充失败↓", result);
                     DebugMatrix(formulaVariableCountString, $"第{turn}轮 formula长度为{formulaLength}↓");
-                    return;
+                    CalculateMatrixValue(ref formula, ref result, ref position, ref rotation, ref fov, ref aspect, ref far, ref near,
+                        ref turn, ref extensionNameMatch1, ref extensionNameMatch2);
                 }
 
-                if (outputs.Count > 0)
+                if (hasGetRotationZ == true)
+                {
+                    for (int i = 0; i < formula.Length; i++)
+                        formula[i] = new Formula(formula[i]).FormulaStringExpressForShowOnly(false, true);
+
+                    DebugMatrix(formula, $"求得旋转角度Z 角度：{rotation.z}", result);
+                }
+                else if (outputs.Count > 0)
                 {
                     //DebugMatrix(formula, $"添加额外公式前↓");
                     var newFormulaList = formula.ToList();
@@ -2654,27 +2645,26 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                         newResultList.Add(data);
                     formula = newFormulaList.ToArray();
                     result = newResultList.ToArray();
-                    //DebugMatrix(formula, $"添加额外公式后↓");
+                    DebugMatrix(formula, $"添加额外公式后", result);
                 }
 
                 anyResult = true;
             }
             else //仅一个变量的情况 可轻松计算出结果
             {
-                //Debug.LogError("开始计算单个变量");
-                string targetFormulaString = formula[fistOneVariableIndex];
+                //DebugString("开始计算单个变量");
+                string targetFormulaString = formula[firstOneVariableIndex];
                 string targetVariableName = CalculateFirstFormulaVariableName(targetFormulaString);
                 Formula parser = new Formula(targetFormulaString);
                 float targetVariableValue = -9999;
                 string targetVariableNameString = parser.FormulaStringExpressForShowOnly(true, true);
-                parser.CalculateOneValue(result[fistOneVariableIndex], ref targetVariableValue);
+                parser.CalculateOneValue(result[firstOneVariableIndex], ref targetVariableValue);
                 if (parser._childs.Count > 1)
-                    Debug.LogError("没有计算出结果：" + targetVariableNameString);
+                    DebugString("没有计算出结果 需要检查问题：" + targetVariableNameString);
                 else
                     anyResult = true;
-                targetVariableValue = float.Parse(targetVariableValue.ToString("0.########"));
-                //Debug.LogError($"字符串解析：{result[fistOneVariableIndex]} = {targetVariableNameString}    目标变量名：{targetVariableName} = {targetVariableValue}");
 
+                //解析变量
                 {
                     if (targetVariableName == sinX)
                     {
@@ -2687,6 +2677,8 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
 
                         Formula._history[sinX] = sinValue;
                         Formula._history[cosX] = cosValue;
+
+                        Debug.LogError($"解锁新变量 旋转角度X度数：{degress}");
                     }
                     else if (targetVariableName == sinY)
                     {
@@ -2699,6 +2691,8 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
 
                         Formula._history[sinY] = sinValue;
                         Formula._history[cosY] = cosValue;
+
+                        Debug.LogError($"解锁新变量 旋转角度Y度数：{degress}");
                     }
                     else if (targetVariableName == sinZ)
                     {
@@ -2711,6 +2705,8 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
 
                         Formula._history[sinZ] = sinValue;
                         Formula._history[cosZ] = cosValue;
+
+                        Debug.LogError($"解锁新变量 旋转角度Z度数：{degress}");
                     }
                     else if (targetVariableName == cosY)
                     {
@@ -2723,31 +2719,44 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
 
                         Formula._history[sinY] = sinValue;
                         Formula._history[cosY] = cosValue;
+
+                        Debug.LogError($"解锁新变量 旋转角度Y度数：{degress}");
                     }
                     else if (targetVariableName == x)
                     {
                         position.x = targetVariableValue;
                         Formula._history[x] = targetVariableValue;
+
+                        Debug.LogError($"解锁新变量 坐标X：{targetVariableValue}");
                     }
                     else if (targetVariableName == y)
                     {
                         position.y = targetVariableValue;
                         Formula._history[y] = targetVariableValue;
+
+                        Debug.LogError($"解锁新变量 坐标Y：{targetVariableValue}");
                     }
                     else if (targetVariableName == z)
                     {
                         position.z = targetVariableValue;
                         Formula._history[z] = targetVariableValue;
+
+                        Debug.LogError($"解锁新变量 坐标Z：{targetVariableValue}");
                     }
                     else if (targetVariableName == k3)
                     {
                         fov = Mathf.Atan(1f / targetVariableValue) * 2f * Mathf.Rad2Deg;
-                        Formula._history[k3] = targetVariableValue;
+                        fov = Mathf.Round(fov * 10) * 0.1f;
+                        Formula._history[k3] = 1f / Mathf.Tan(fov * Mathf.Deg2Rad * 0.5f);
+
+                        Debug.LogError($"解锁新变量 FOV：{fov}");
                     }
                     else if (targetVariableName == k4)
                     {
                         aspect = 1f / targetVariableValue;
                         Formula._history[k4] = targetVariableValue;
+
+                        Debug.LogError($"解锁新变量 Aspect：{aspect}");
                     }
                     else if (targetVariableName == k1)
                     {
@@ -2759,35 +2768,41 @@ class ToolWindow_VP_Matrix_CalCulator : EditorWindow
                     }
                     else
                     {
-                        Debug.LogError("未解析的变量：" + targetVariableName);
+                        DebugString("未解析的变量 需要检查：" + targetVariableName);
                         return;
                     }
                 }
+
+
+                for (int i = 0; i < formula.Length; i++)
+                    formula[i] = new Formula(formula[i]).FormulaStringExpressForShowOnly(false, true);
+
+                DebugMatrix(formula, $"字符串解析：{result[firstOneVariableIndex]} = {targetVariableNameString}    目标变量名：{targetVariableName} = {targetVariableValue}", result);
             }
 
             if (anyResult)
             {
                 bool anyDifferent = Formula._history.Count != historyLength || formulaLength != formula.Length;
 
-                if (fisrAnyVariableIndex == -1)
-                {
-                    //Debug.LogError("计算完毕");
-                }
-                else if (anyDifferent)
+                if (anyDifferent)
                 {
                     CalculateMatrixValue(ref formula, ref result, ref position, ref rotation, ref fov, ref aspect, ref far, ref near,
                         ref turn, ref extensionNameMatch1, ref extensionNameMatch2);
                 }
                 else
-                    Debug.LogError("没有实际变化 退出循环");
+                {
+                    DebugString("没有实际变化 退出循环");
+                }
             }
             else
-                Debug.LogError("无法计算出结果");
+            {
+                DebugString("无法计算出结果");
+            }
         }
-        catch (System.Exception ex)
+        //catch (System.Exception ex)
         {
-            Debug.LogError("报错：" + ex.Message);
+            //DebugString("报错：" + ex.Message);
         }
     }
-    #endregion 
+    #endregion
 }
