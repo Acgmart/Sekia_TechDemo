@@ -63,7 +63,6 @@ Kernel声明：Kernel方法都是void的 主要用途是向ComputeBuffer里写�
     rt.Create(); 
     computeShader.SetTexture(kernelId, "textureBuffer", rt);
     
-    
 获取Buffer中的数据： 
     int[] result = new int[4]; 
     intComputeBuffer.GetData(result);

@@ -5,7 +5,6 @@ namespace Render
     public class RenderEffect : MonoBehaviour
     {
         public TextureEvent OnCreateTex;
-        public RenderTexture Output { get; private set; }
 
         [SerializeField] string propName = "_PropName";
         [SerializeField] Material[] effects;
@@ -14,6 +13,7 @@ namespace Render
         [SerializeField] TextureWrapMode wrapMode;
         [SerializeField] int downSample = 0;
 
+        public RenderTexture Output { get; private set; }
         RenderTexture[] rts = new RenderTexture[2];
 
         void Update()
@@ -65,11 +65,10 @@ namespace Render
         {
             foreach (var rt in rts)
                 RenderUtility.ReleaseRenderTexture(rt);
-                RenderUtility.ReleaseRenderTexture(Output);
+            RenderUtility.ReleaseRenderTexture(Output);
         }
 
         [System.Serializable]
         public class TextureEvent : UnityEngine.Events.UnityEvent<Texture> { }
     }
 }
-
