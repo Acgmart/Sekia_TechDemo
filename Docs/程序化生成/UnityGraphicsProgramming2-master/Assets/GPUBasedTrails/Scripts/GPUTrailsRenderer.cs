@@ -24,7 +24,7 @@ namespace GPUBasedTrails
 
             var nodeNum = _trails.nodeNum;
             var trailNum = _trails.trailNum;
-            Graphics.DrawProcedural(MeshTopology.Points, nodeNum, trailNum);
+            Graphics.DrawProceduralNow(MeshTopology.Points, nodeNum, trailNum);
         }
     }
 }

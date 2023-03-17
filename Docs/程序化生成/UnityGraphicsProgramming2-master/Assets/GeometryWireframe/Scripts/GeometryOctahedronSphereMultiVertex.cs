@@ -18,7 +18,7 @@ public class GeometryOctahedronSphereMultiVertex : MonoBehaviour {
         renderMaterial.SetInt("_Level", level);
         renderMaterial.SetPass(0);
         
-        Graphics.DrawProcedural(MeshTopology.Points, 8);
+        Graphics.DrawProceduralNow(MeshTopology.Points, 8);
     } 
 
 }

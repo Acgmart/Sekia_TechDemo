@@ -183,7 +183,7 @@ namespace CurlNoise
             instanceMaterial.SetPass(0);
             instanceMaterial.SetBuffer(fireBufferPropId, fireBuffer);
             instanceMaterial.SetMatrix(modelMatrixPropId, modelMatrix);
-            Graphics.DrawProcedural(MeshTopology.Points, instanceCount);
+            Graphics.DrawProceduralNow(MeshTopology.Points, instanceCount);
         }
 
         void UpdateBuffers()

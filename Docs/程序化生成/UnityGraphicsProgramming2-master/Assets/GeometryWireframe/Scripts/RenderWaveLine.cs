@@ -12,6 +12,6 @@ public class RenderWaveLine : MonoBehaviour {
     {
         material.SetInt("_VertexNum", vertexNum - 1);
         material.SetPass(0);
-        Graphics.DrawProcedural(MeshTopology.LineStrip, vertexNum);
+        Graphics.DrawProceduralNow(MeshTopology.LineStrip, vertexNum);
     }
 }

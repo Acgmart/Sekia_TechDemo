@@ -14,7 +14,7 @@ public class GeometryOctahedronSphere : MonoBehaviour {
         material.SetMatrix("_TRS", transform.localToWorldMatrix);
         material.SetPass(0);
         
-        Graphics.DrawProcedural(MeshTopology.Points, 1);
+        Graphics.DrawProceduralNow(MeshTopology.Points, 1);
     } 
 
 }

@@ -70,7 +70,7 @@ public class GeometryOctahedronSphereInstancing : MonoBehaviour {
         renderMaterial.SetBuffer("_particleBuffer", _particleBuffer);
         renderMaterial.SetPass(0);
 
-        Graphics.DrawProcedural(MeshTopology.Points, _particleNum);
+        Graphics.DrawProceduralNow(MeshTopology.Points, _particleNum);
     }
 
     private void OnDestroy()

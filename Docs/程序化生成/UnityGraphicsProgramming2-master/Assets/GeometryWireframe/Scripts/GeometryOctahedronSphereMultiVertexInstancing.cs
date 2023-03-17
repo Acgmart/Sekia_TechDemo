@@ -69,7 +69,7 @@ public class GeometryOctahedronSphereMultiVertexInstancing : MonoBehaviour {
         renderMaterial.SetBuffer("_particleBuffer", _particleBuffer);
         renderMaterial.SetPass(0);
 
-        Graphics.DrawProcedural(MeshTopology.Points, _particleNum * 8);
+        Graphics.DrawProceduralNow(MeshTopology.Points, _particleNum * 8);
     }
 
     private void OnDestroy()
