@@ -79,6 +79,7 @@ DrawMeshInstanced需要上传Transform和逐实例数据 DrawMeshInstancedIndire
 两者的区别主要体现在Transform和逐实例数据的更新方式上
     一个靠CPU算 一个靠GPU算
 如果实例的Transform不会发生变化 DrawMeshInstanced会略微消耗CPU时间和带宽 但是影响不大
+硬件兼容性不同：参考 其他问题 - ComputeShader的平台支持
     
 # 鱼群模拟实现
 通过对比API可以得出，通过DrawMeshInstancedIndirect动态更新Transform可以批量绘制鱼群。
@@ -108,7 +109,12 @@ Shader部分的看点主要在方法 ComputeObjectToWorldTransform
 # 其他问题
 ComputeShader的平台支持：GLES3.1, SystemInfo.supportsComputeShaders
     https://zhuanlan.zhihu.com/p/483482044
-    useStructuredBuffer(SSBO) or UniformBuffer(UBO)
+    useStructuredBuffer(SSBO) or ConstantBuffer(UBO)
+    SSBO是GLES3.1的新增功能
+    SM4.5支持：https://docs.unity3d.com/Manual/SL-ShaderCompileTargets.html
+    总结：iOS阵营全部设备支持 Android阵营盲猜有10%设备不支持
+        安卓：https://developer.android.com/about/dashboards
+        可能设备支持运行ComputeShader但是实际效率低于光栅Shader
 Unity定义的 unity_BaseInstanceID 是什么：
     参考：https://forum.unity.com/threads/instance-id-in-shader.501821
     假设场景中有100个Cube和100个Sphere，他们共享一个material。
