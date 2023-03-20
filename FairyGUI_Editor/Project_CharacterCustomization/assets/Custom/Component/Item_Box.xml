@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="450,580">
+  <displayList>
+    <text id="n0_8bcb" name="title" xy="72,25" pivot="0.5,0.5" anchor="true" size="65,34" fontSize="30" text="種類"/>
+    <list id="n4_vi97" name="item_list" xy="0,50" size="450,530" layout="flow_hz" overflow="scroll" lineItemCount="4" defaultItem="ui://fs4y9igh119do1g" align="center"/>
+    <text id="n5_zbho" name="item_name" xy="112,0" size="250,50" fontSize="30" align="center" vAlign="middle" autoSize="none" singleLine="true" text="">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+    <loader id="n6_zbho" name="item_icon" xy="412,0" pivot="1,0" anchor="true" size="50,50" align="center" vAlign="middle" fill="scale"/>
+  </displayList>
+</component>

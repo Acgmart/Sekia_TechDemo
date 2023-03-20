@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="200,23" extention="Slider">
+  <displayList>
+    <image id="n1" name="n1" src="yob3y" fileName="Sprites/background.png" xy="0,0" size="200,23">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n2" name="bar" src="yob3z" fileName="Sprites/full bar.png" xy="0,1" size="200,21"/>
+    <component id="n3" name="grip" src="yob310" fileName="B_for_slider.xml" xy="166,-13">
+      <relation target="n2" sidePair="right-right"/>
+    </component>
+  </displayList>
+  <Slider/>
+</component>

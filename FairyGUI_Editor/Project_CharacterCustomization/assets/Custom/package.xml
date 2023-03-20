@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="fs4y9igh" jpegQuality="80" compressPNG="true">
+  <resources>
+    <component id="w1za0" name="C_Main.xml" path="/" exported="true"/>
+    <image id="yob31" name="p_cf_head_00.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <image id="yob32" name="p_acs_butterfly.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <image id="yob33" name="bodypaint_layout_04.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <component id="yob35" name="B_Head.xml" path="/Button/"/>
+    <component id="yob36" name="B_Body.xml" path="/Button/"/>
+    <component id="yob37" name="B_Hair.xml" path="/Button/"/>
+    <image id="yob39" name="mm_exit.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <component id="yob3a" name="B_Exit.xml" path="/Button/"/>
+    <image id="yob3b" name="sp_32_00_01.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <image id="yob3d" name="sp_32_00_00.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <component id="yob3e" name="B_Random.xml" path="/Button/"/>
+    <component id="yob3f" name="B_Save.xml" path="/Button/"/>
+    <component id="yob3l" name="B_for_set.xml" path="/Button/"/>
+    <component id="yob3x" name="S_for_set.xml" path="/Slider/"/>
+    <image id="yob3y" name="background.png" path="/Sprite_UI/" scale="9grid" scale9grid="24,6,319,13"/>
+    <image id="yob3z" name="full bar.png" path="/Sprite_UI/" scale="9grid" scale9grid="15,6,109,12"/>
+    <component id="yob310" name="B_for_slider.xml" path="/Button/"/>
+    <image id="yob311" name="back btn.png" path="/Sprite_UI/"/>
+    <image id="it0412" name="bg_14.png" path="/Sprite_UI/"/>
+    <component id="8bcb13" name="Item_Box.xml" path="/Component/" exported="true"/>
+    <image id="htlj15" name="b7_png.png" path="/Sprite_UI/" scale="9grid" scale9grid="8,7,66,14"/>
+    <image id="htlj16" name="b5_png.png" path="/Sprite_UI/" scale="9grid" scale9grid="12,7,61,14"/>
+    <image id="htlj17" name="b6_png.png" path="/Sprite_UI/" scale="9grid" scale9grid="9,5,66,16"/>
+    <component id="119do1g" name="B_List_Item.xml" path="/Button/"/>
+    <image id="119do1h" name="k0.png" path="/Sprite_UI/"/>
+    <image id="119do1i" name="k2.png" path="/Sprite_UI/"/>
+    <image id="119do1j" name="k1.png" path="/Sprite_UI/" scale="9grid" scale9grid="17,16,74,73"/>
+    <image id="gnmxo1n" name="p_o_top_sexypareo.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1o" name="p_o_top_shilon.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1p" name="p_o_top_suspend_t08.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1q" name="p_o_top_swim_bunny.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1r" name="p_o_top_swim_leotard_high.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1s" name="p_o_top_swim_leotard_nor.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1t" name="p_o_top_swim_otona.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1u" name="p_o_top_swim_SC.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1v" name="p_o_top_swim02.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1w" name="p_o_top_swim04.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1x" name="p_o_top_swimcattube.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1y" name="p_o_top_tennis.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo1z" name="p_o_top_tsyatu01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo20" name="p_o_top_tsyatu02.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo21" name="p_o_top_tsyatu03.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo22" name="p_o_top_tubet.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo23" name="p_o_top_whiteonep.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo24" name="p_o_top_aku01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo25" name="p_o_top_army.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo26" name="p_o_top_babydoll01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo27" name="p_o_top_bathtowel.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo28" name="p_o_top_cami01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo29" name="p_o_top_cheer.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2a" name="p_o_top_cm01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2b" name="p_o_top_cm02.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2c" name="p_o_top_cm03.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2d" name="p_o_top_cm04.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2e" name="p_o_top_cm05.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2f" name="p_o_top_cm06.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2g" name="p_o_top_epronH.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2h" name="p_o_top_epronJ.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2i" name="p_o_top_flowerP.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2j" name="p_o_top_fwanpi.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2k" name="p_o_top_Gymteacher.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2l" name="p_o_top_Heteacher.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2n" name="p_o_top_idol01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2o" name="p_o_top_inner01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2p" name="p_o_top_inner01_2.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2q" name="p_o_top_inner02.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2r" name="p_o_top_inner03.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2s" name="p_o_top_inner04.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2t" name="p_o_top_inner05.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2u" name="p_o_top_inner06.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2v" name="p_o_top_inner07.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2w" name="p_o_top_inner08.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2x" name="p_o_top_jacket01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2y" name="p_o_top_jacket01_2.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo2z" name="p_o_top_jacket02.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo30" name="p_o_top_jacket03.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo31" name="p_o_top_jacket04.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo32" name="p_o_top_jacket05.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo33" name="p_o_top_jacket06.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo34" name="p_o_top_jacket06_2.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo35" name="p_o_top_jacket07.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo36" name="p_o_top_jacket08.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo37" name="p_o_top_jacket09_ponco.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo38" name="p_o_top_jacketdeco01.png" path="/Sprite_Item/Accessory_Tie/" exported="true"/>
+    <image id="gnmxo39" name="p_o_top_jacketdeco02.png" path="/Sprite_Item/Accessory_Tie/" exported="true"/>
+    <image id="gnmxo3a" name="p_o_top_jacketdeco03.png" path="/Sprite_Item/Accessory_Tie/" exported="true"/>
+    <image id="gnmxo3b" name="p_o_top_jacketdeco04.png" path="/Sprite_Item/Accessory_Tie/" exported="true"/>
+    <image id="gnmxo3c" name="p_o_top_jacketdeco05.png" path="/Sprite_Item/Accessory_Tie/" exported="true"/>
+    <image id="gnmxo3d" name="p_o_top_jaji01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3e" name="p_o_top_jtanktop.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3f" name="p_o_top_kimono.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3g" name="p_o_top_knight.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3h" name="p_o_top_kyuudou.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3i" name="p_o_top_kyuudou_MN.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3k" name="p_o_top_maid_01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3l" name="p_o_top_manken.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3m" name="p_o_top_mathteacher.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3n" name="p_o_top_mijiP.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3o" name="p_o_top_neglige01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3p" name="p_o_top_nursec.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3q" name="p_o_top_ofcard.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3r" name="p_o_top_oni.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3s" name="p_o_top_openparker.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3t" name="p_o_top_pajama01.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3u" name="p_o_top_pareo_suke.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3v" name="p_o_top_pareo1c.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3w" name="p_o_top_pareoS.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3x" name="p_o_top_parkeropm.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo3y" name="p_o_top_run.png" path="/Sprite_Item/Clothes_Top/" exported="true"/>
+    <image id="gnmxo4h" name="p_top.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <component id="gnmxo4i" name="B_Clothes.xml" path="/Button/"/>
+    <image id="c57po4j" name="thumb_cf_hair_01_gloss.png" path="/Sprite_UI/StaticButtonIcon/"/>
+    <image id="97s7o4k" name="p_o_bot_cheer.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4l" name="p_o_bot_culloteSK.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4m" name="p_o_bot_cutepants.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4n" name="p_o_bot_Gymteacher.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4o" name="p_o_bot_halfpants.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4p" name="p_o_bot_HeteacherSK.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4q" name="p_o_bot_knightSK.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4r" name="p_o_bot_kyuudou.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4s" name="p_o_bot_magic.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4t" name="p_o_bot_maid_01.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4u" name="p_o_bot_mankenSK.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4v" name="p_o_bot_mathteacher.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4w" name="p_o_bot_pajama01.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4x" name="p_o_bot_pants01.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4y" name="p_o_bot_pants02.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o4z" name="p_o_bot_pants03.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o50" name="p_o_bot_pants04_cargo.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o51" name="p_o_bot_pants05_jajim.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o52" name="p_o_bot_pants05_jajimsk.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o53" name="p_o_bot_pantshot.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o54" name="p_o_bot_pareo.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o55" name="p_o_bot_run.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o56" name="p_o_bot_skirt01.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o57" name="p_o_bot_skirt02.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o58" name="p_o_bot_skirt03.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o59" name="p_o_bot_skirt04.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5a" name="p_o_bot_skirt05.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5b" name="p_o_bot_skirt06.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5c" name="p_o_bot_skirt07.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5d" name="p_o_bot_skirt08.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5e" name="p_o_bot_skirt09.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5f" name="p_o_bot_spants.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5g" name="p_o_bot_swim02.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5h" name="p_o_bot_swim03.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5i" name="p_o_bot_swim04.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5j" name="p_o_bot_swimcattube.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5k" name="p_o_bot_tennis.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="97s7o5l" name="p_o_bot_tskmini.png" path="/Sprite_Item/Clothes_Bot/" exported="true"/>
+    <image id="mltyo5m" name="p_o_shoes_armyboots.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5n" name="p_o_shoes_benjosand.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5o" name="p_o_shoes_bootsbelt.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5p" name="p_o_shoes_bsand.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5q" name="p_o_shoes_cheersboots.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5r" name="p_o_shoes_cheershort.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5s" name="p_o_shoes_dance.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5t" name="p_o_shoes_flowersand.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5u" name="p_o_shoes_fsand2.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5v" name="p_o_shoes_idol01.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5w" name="p_o_shoes_knight.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5x" name="p_o_shoes_magic.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5y" name="p_o_shoes_maid_01.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo5z" name="p_o_shoes_manken.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo60" name="p_o_shoes_nursec.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo61" name="p_o_shoes_pumps01.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo62" name="p_o_shoes_pumpsR.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo63" name="p_o_shoes_reinapumps.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo64" name="p_o_shoes_ribonstrap.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo65" name="p_o_shoes_rinasandal.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo66" name="p_o_shoes_roafer01.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo67" name="p_o_shoes_run01.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo68" name="p_o_shoes_shell.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo69" name="p_o_shoes_summer.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo6a" name="p_o_shoes_tennis.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo6b" name="p_o_shoes_uwabaki01.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="mltyo6c" name="p_o_shoes_zouri.png" path="/Sprite_Item/Clothes_Shoes/" exported="true"/>
+    <image id="ffjfo6d" name="p_cf_hair_f_33_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6e" name="p_cf_hair_f_34.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6f" name="p_cf_hair_f_100.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6g" name="p_cf_hair_f_101.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6h" name="p_cf_hair_f_102.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6i" name="p_cf_hair_f_103.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6j" name="p_cf_hair_f_104.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6k" name="p_cf_hair_f_105.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6l" name="p_cf_hair_f_106.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6m" name="p_cf_hair_f_107.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6n" name="p_cf_hair_f_108.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6o" name="p_cf_hair_f_109.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6p" name="p_cf_hair_f_110.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6q" name="p_cf_hair_f_01.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6r" name="p_cf_hair_f_02.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6s" name="p_cf_hair_f_02_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6t" name="p_cf_hair_f_03.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6u" name="p_cf_hair_f_03_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6v" name="p_cf_hair_f_04.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6w" name="p_cf_hair_f_05.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6x" name="p_cf_hair_f_06.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6y" name="p_cf_hair_f_07.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo6z" name="p_cf_hair_f_08.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo70" name="p_cf_hair_f_09.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo71" name="p_cf_hair_f_10.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo72" name="p_cf_hair_f_11.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo73" name="p_cf_hair_f_11_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo74" name="p_cf_hair_f_12.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo75" name="p_cf_hair_f_12_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo76" name="p_cf_hair_f_13.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo77" name="p_cf_hair_f_14.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo78" name="p_cf_hair_f_14_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo79" name="p_cf_hair_f_15.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7a" name="p_cf_hair_f_15_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7b" name="p_cf_hair_f_16.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7c" name="p_cf_hair_f_17.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7d" name="p_cf_hair_f_18.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7e" name="p_cf_hair_f_19.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7f" name="p_cf_hair_f_20.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7g" name="p_cf_hair_f_20_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7h" name="p_cf_hair_f_21.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7i" name="p_cf_hair_f_21_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7j" name="p_cf_hair_f_22.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7k" name="p_cf_hair_f_23.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7l" name="p_cf_hair_f_24.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7m" name="p_cf_hair_f_25.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7n" name="p_cf_hair_f_25_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7o" name="p_cf_hair_f_26.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7p" name="p_cf_hair_f_30.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7q" name="p_cf_hair_f_31.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7r" name="p_cf_hair_f_32.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7s" name="p_cf_hair_f_32_i.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7t" name="p_cf_hair_f_33.png" path="/Sprite_Item/Hair_Front/" exported="true"/>
+    <image id="ffjfo7u" name="p_cf_hair_b_100.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo7v" name="p_cf_hair_b_101.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo7w" name="p_cf_hair_b_102.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo7x" name="p_cf_hair_b_103.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo7y" name="p_cf_hair_b_104.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo7z" name="p_cf_hair_b_105.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo80" name="p_cf_hair_b_106.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo81" name="p_cf_hair_b_107.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo82" name="p_cf_hair_b_108.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo83" name="p_cf_hair_b_109.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo84" name="p_cf_hair_b_110.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo85" name="p_cf_hair_b_111.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo86" name="p_cf_hair_b_112.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo87" name="p_cf_hair_b_113.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo88" name="p_cf_hair_b_114.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo89" name="p_cf_hair_b_115.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8a" name="p_cf_hair_b_116.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8b" name="p_cf_hair_b_117.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8c" name="p_cf_hair_b_118.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8d" name="p_cf_hair_b_119.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8e" name="p_cf_hair_b_01.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8f" name="p_cf_hair_b_02.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8g" name="p_cf_hair_b_02_a.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8h" name="p_cf_hair_b_02_i.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8i" name="p_cf_hair_b_02_i_a.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8j" name="p_cf_hair_b_03.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8k" name="p_cf_hair_b_04.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8l" name="p_cf_hair_b_05.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8m" name="p_cf_hair_b_06.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8n" name="p_cf_hair_b_06_a.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8o" name="p_cf_hair_b_07.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8q" name="p_cf_hair_b_09.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8r" name="p_cf_hair_b_10.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8s" name="p_cf_hair_b_10_a.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8t" name="p_cf_hair_b_11.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8u" name="p_cf_hair_b_11_i.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8v" name="p_cf_hair_b_12.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8w" name="p_cf_hair_b_13.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8x" name="p_cf_hair_b_14.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8y" name="p_cf_hair_b_15.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo8z" name="p_cf_hair_b_16.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo90" name="p_cf_hair_b_17.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo91" name="p_cf_hair_b_18.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo92" name="p_cf_hair_b_19.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo93" name="p_cf_hair_b_20.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo94" name="p_cf_hair_b_21.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo95" name="p_cf_hair_b_22.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo96" name="p_cf_hair_b_23.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo97" name="p_cf_hair_b_24.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo98" name="p_cf_hair_b_24_i.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo99" name="p_cf_hair_b_30.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo9a" name="p_cf_hair_b_31.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo9b" name="p_cf_hair_b_31_i.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo9c" name="p_cf_hair_b_33.png" path="/Sprite_Item/Hair_Back/" exported="true"/>
+    <image id="ffjfo9d" name="p_cf_hair_o_01.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <image id="ffjfo9e" name="p_cf_hair_o_02.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <image id="ffjfo9f" name="p_cf_hair_o_03.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <image id="ffjfo9g" name="p_cf_hair_o_04.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <image id="ffjfo9h" name="p_cf_hair_o_05.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <image id="ffjfo9i" name="p_cf_hair_o_06.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <image id="ffjfo9j" name="p_cf_hair_o_07.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <image id="ffjfo9k" name="p_cf_hair_o_08.png" path="/Sprite_Item/Hair_Ahoge/" exported="true"/>
+    <component id="n4uoo9l" name="B_Accessory.xml" path="/Button/"/>
+    <image id="sguao9m" name="thumb_none.png" path="/Sprite_UI/" exported="true"/>
+    <component id="e92fo9o" name="Item_Selecter.xml" path="/Component/" exported="true"/>
+    <component id="e92fo9p" name="B_for_function.xml" path="/Button/"/>
+  </resources>
+  <publish name="Custom"/>
+</packageDescription>

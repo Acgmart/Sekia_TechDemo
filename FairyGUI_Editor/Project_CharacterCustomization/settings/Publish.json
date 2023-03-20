@@ -1,0 +1,16 @@
+{
+	"binaryFormat":true,
+	"codeGeneration":{
+		"classNamePrefix":"",
+		"codePath":"",
+		"codeType":"",
+		"getMemberByName":false,
+		"ignoreNoname":true,
+		"memberNamePrefix":"",
+		"packageName":""
+	},
+	"compressDesc":true,
+	"fileExtension":"",
+	"packageCount":2,
+	"path":"D:\\Sekia\\Assets\\Custom\\Resources\\FairyGUI"
+}

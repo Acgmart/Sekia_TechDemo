@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1136,640">
+  <controller name="c1" alias="Step" pages="0,,1,,2,,3,,4," selected="0"/>
+  <controller name="c2" alias="Head" pages="0,,1,,2,,3,,4,,5,,6,,7," selected="0"/>
+  <controller name="c3" alias="Body" pages="0,,1,,2,,3,,4,,5," selected="0"/>
+  <controller name="c4" alias="Hair" pages="0,,1,,2," selected="0"/>
+  <controller name="c5" alias="Clothes" pages="0,,1,,2," selected="0"/>
+  <controller name="c6" alias="Makeup" pages="0,,1,,2," selected="0"/>
+  <displayList>
+    <image id="n9_it04" name="BG" src="it0412" fileName="Sprite_UI/bg_14.png" xy="0,0" size="1136,640"/>
+    <component id="n4_yob3" name="B_System_Back" src="yob3a" fileName="Button/B_Exit.xml" xy="9,569" group="n135_h7px"/>
+    <component id="n5_yob3" name="B_System_Random" src="yob3e" fileName="Button/B_Random.xml" xy="9,478" group="n135_h7px"/>
+    <component id="n6_yob3" name="B_System_Save" src="yob3f" fileName="Button/B_Save.xml" xy="8,405" group="n135_h7px"/>
+    <component id="n10_h7px" name="B_Custom_Head" src="yob35" fileName="Button/B_Head.xml" xy="20,30" group="n135_h7px" aspect="true">
+      <Button checked="true" controller="c1" page="0"/>
+    </component>
+    <component id="n11_h7px" name="B_Custom_Body" src="yob36" fileName="Button/B_Body.xml" xy="100,30" group="n135_h7px">
+      <Button controller="c1" page="1"/>
+    </component>
+    <component id="n12_h7px" name="B_Custom_Hair" src="yob37" fileName="Button/B_Hair.xml" xy="180,30" group="n135_h7px">
+      <Button controller="c1" page="2"/>
+    </component>
+    <component id="n266_gnmx" name="B_Custom_Clothes" src="gnmxo4i" fileName="Button/B_Clothes.xml" xy="260,30" group="n135_h7px">
+      <Button controller="c1" page="3"/>
+    </component>
+    <component id="n270_n4uo" name="B_Custom_Accessory" src="n4uoo9l" fileName="Button/B_Accessory.xml" xy="340,30" group="n135_h7px">
+      <Button controller="c1" page="4"/>
+    </component>
+    <group id="n135_h7px" name="Buttons" xy="8,30" size="396,603" collapsed="true"/>
+    <component id="n14_h7px" name="B_Head_0" src="yob3l" fileName="Button/B_for_set.xml" xy="600,40" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button checked="true" title="全体" titleFontSize="30" controller="c2" page="0"/>
+    </component>
+    <component id="n15_h7px" name="B_Head_1" src="yob3l" fileName="Button/B_for_set.xml" xy="600,100" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button title="顎" titleFontSize="30" controller="c2" page="1"/>
+    </component>
+    <component id="n16_h7px" name="B_Head_2" src="yob3l" fileName="Button/B_for_set.xml" xy="600,160" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button title="頬" titleFontSize="30" controller="c2" page="2"/>
+    </component>
+    <component id="n17_h7px" name="B_Head_3" src="yob3l" fileName="Button/B_for_set.xml" xy="600,220" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button title="眉" titleFontSize="30" controller="c2" page="3"/>
+    </component>
+    <component id="n18_h7px" name="B_Head_4" src="yob3l" fileName="Button/B_for_set.xml" xy="600,280" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button title="目" titleFontSize="30" controller="c2" page="4"/>
+    </component>
+    <component id="n19_h7px" name="B_Head_5" src="yob3l" fileName="Button/B_for_set.xml" xy="600,340" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button title="鼻" titleFontSize="30" controller="c2" page="5"/>
+    </component>
+    <component id="n20_h7px" name="B_Head_6" src="yob3l" fileName="Button/B_for_set.xml" xy="600,400" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button title="口" titleFontSize="30" controller="c2" page="6"/>
+    </component>
+    <component id="n21_h7px" name="B_Head_7" src="yob3l" fileName="Button/B_for_set.xml" xy="600,460" pivot="0.5,0.5" anchor="true" group="n126_h7px">
+      <Button title="耳" titleFontSize="30" controller="c2" page="7"/>
+    </component>
+    <text id="n24_h7px" name="T_Set_0" xy="770,40" pivot="0.5,0.5" anchor="true" size="185,34" group="n127_h7px" fontSize="30" text="顔の全体横幅"/>
+    <text id="n25_h7px" name="T_Set_1" xy="770,100" pivot="0.5,0.5" anchor="true" size="185,34" group="n127_h7px" fontSize="30" text="顔の上部前後"/>
+    <text id="n26_h7px" name="T_Set_2" xy="770,160" pivot="0.5,0.5" anchor="true" size="185,34" group="n127_h7px" fontSize="30" text="顔の上部上下"/>
+    <text id="n27_h7px" name="T_Set_3" xy="770,220" pivot="0.5,0.5" anchor="true" size="215,34" group="n127_h7px" fontSize="30" text="顔の上部サイズ"/>
+    <text id="n28_h7px" name="T_Set_4" xy="770,280" pivot="0.5,0.5" anchor="true" size="185,34" group="n127_h7px" fontSize="30" text="顔の下部前後"/>
+    <text id="n29_h7px" name="T_Set_5" xy="770,340" pivot="0.5,0.5" anchor="true" size="185,34" group="n127_h7px" fontSize="30" text="顔の下部横幅"/>
+    <component id="n22_h7px" name="S_Set_0" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n127_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n23_h7px" name="S_Set_1" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n127_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n30_h7px" name="S_Set_2" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n127_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n31_h7px" name="S_Set_3" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n127_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n32_h7px" name="S_Set_4" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n127_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n33_h7px" name="S_Set_5" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n127_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n127_h7px" name="full" xy="662,20" size="438,334" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="0"/>
+    </group>
+    <text id="n34_h7px" name="T_Set_6" xy="770,40" pivot="0.5,0.5" anchor="true" size="185,34" group="n128_h7px" fontSize="30" text="顎の下部上下"/>
+    <text id="n35_h7px" name="T_Set_7" xy="770,100" pivot="0.5,0.5" anchor="true" size="185,34" group="n128_h7px" fontSize="30" text="顎の下部奥行"/>
+    <text id="n36_h7px" name="T_Set_8" xy="770,160" pivot="0.5,0.5" anchor="true" size="125,34" group="n128_h7px" fontSize="30" text="顎の上下"/>
+    <text id="n37_h7px" name="T_Set_9" xy="770,220" pivot="0.5,0.5" anchor="true" size="95,34" group="n128_h7px" fontSize="30" text="顎の幅"/>
+    <text id="n38_h7px" name="T_Set_10" xy="770,280" pivot="0.5,0.5" anchor="true" size="125,34" group="n128_h7px" fontSize="30" text="顎の前後"/>
+    <text id="n39_h7px" name="T_Set_11" xy="770,340" pivot="0.5,0.5" anchor="true" size="155,34" group="n128_h7px" fontSize="30" text="顎先の上下"/>
+    <text id="n40_h7px" name="T_Set_12" xy="770,400" pivot="0.5,0.5" anchor="true" size="155,34" group="n128_h7px" fontSize="30" text="顎先の前後"/>
+    <text id="n41_h7px" name="T_Set_13" xy="770,460" pivot="0.5,0.5" anchor="true" size="125,34" group="n128_h7px" fontSize="30" text="顎先の幅"/>
+    <component id="n42_h7px" name="S_Set_6" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n43_h7px" name="S_Set_7" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n44_h7px" name="S_Set_8" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n45_h7px" name="S_Set_9" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n46_h7px" name="S_Set_10" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n47_h7px" name="S_Set_11" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n48_h7px" name="S_Set_12" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,400" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n49_h7px" name="S_Set_13" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,460" pivot="0.5,0.5" anchor="true" group="n128_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n128_h7px" name="chin" xy="677,23" size="423,454" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="1"/>
+    </group>
+    <text id="n50_h7px" name="T_Set_14" xy="770,40" pivot="0.5,0.5" anchor="true" size="125,34" group="n129_h7px" fontSize="30" text="頬骨の幅"/>
+    <text id="n51_h7px" name="T_Set_15" xy="770,100" pivot="0.5,0.5" anchor="true" size="155,34" group="n129_h7px" fontSize="30" text="頬骨の前後"/>
+    <text id="n52_h7px" name="T_Set_16" xy="770,160" pivot="0.5,0.5" anchor="true" size="95,34" group="n129_h7px" fontSize="30" text="頬の幅"/>
+    <text id="n53_h7px" name="T_Set_17" xy="770,220" pivot="0.5,0.5" anchor="true" size="125,34" group="n129_h7px" fontSize="30" text="頬の前後"/>
+    <text id="n54_h7px" name="T_Set_18" xy="770,280" pivot="0.5,0.5" anchor="true" size="125,34" group="n129_h7px" fontSize="30" text="頬の上下"/>
+    <component id="n55_h7px" name="S_Set_14" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n129_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n56_h7px" name="S_Set_15" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n129_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n57_h7px" name="S_Set_16" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n129_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n58_h7px" name="S_Set_17" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n129_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n59_h7px" name="S_Set_18" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n129_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n129_h7px" name="cheek" xy="692,23" size="408,274" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="2"/>
+    </group>
+    <text id="n60_h7px" name="T_Set_19" xy="770,40" pivot="0.5,0.5" anchor="true" size="125,34" group="n130_h7px" fontSize="30" text="眉の上下"/>
+    <text id="n61_h7px" name="T_Set_20" xy="770,100" pivot="0.5,0.5" anchor="true" size="155,34" group="n130_h7px" fontSize="30" text="眉の横位置"/>
+    <text id="n62_h7px" name="T_Set_21" xy="770,160" pivot="0.5,0.5" anchor="true" size="125,34" group="n130_h7px" fontSize="30" text="眉の角度"/>
+    <text id="n63_h7px" name="T_Set_22" xy="770,220" pivot="0.5,0.5" anchor="true" size="185,34" group="n130_h7px" fontSize="30" text="眉の内側形状"/>
+    <text id="n64_h7px" name="T_Set_23" xy="770,280" pivot="0.5,0.5" anchor="true" size="185,34" group="n130_h7px" fontSize="30" text="眉の外側形状"/>
+    <component id="n65_h7px" name="S_Set_19" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n130_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n66_h7px" name="S_Set_20" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n130_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n67_h7px" name="S_Set_21" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n130_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n68_h7px" name="S_Set_22" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n130_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n69_h7px" name="S_Set_23" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n130_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n130_h7px" name="mayu" xy="677,23" size="423,274" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="3"/>
+    </group>
+    <text id="n70_h7px" name="T_Set_24" xy="770,40" pivot="0.5,0.5" anchor="true" size="230,34" group="n131_h7px" fontSize="30" text="上まぶたの形状1"/>
+    <text id="n71_h7px" name="T_Set_25" xy="770,80" pivot="0.5,0.5" anchor="true" size="230,34" group="n131_h7px" fontSize="30" text="上まぶたの形状2"/>
+    <text id="n72_h7px" name="T_Set_26" xy="770,120" pivot="0.5,0.5" anchor="true" size="230,34" group="n131_h7px" fontSize="30" text="上まぶたの形状3"/>
+    <text id="n73_h7px" name="T_Set_27" xy="770,160" pivot="0.5,0.5" anchor="true" size="230,34" group="n131_h7px" fontSize="30" text="下まぶたの形状1"/>
+    <text id="n74_h7px" name="T_Set_28" xy="770,200" pivot="0.5,0.5" anchor="true" size="230,34" group="n131_h7px" fontSize="30" text="下まぶたの形状2"/>
+    <text id="n75_h7px" name="T_Set_29" xy="770,240" pivot="0.5,0.5" anchor="true" size="230,34" group="n131_h7px" fontSize="30" text="下まぶたの形状3"/>
+    <text id="n76_h7px" name="T_Set_30" xy="770,280" pivot="0.5,0.5" anchor="true" size="125,34" group="n131_h7px" fontSize="30" text="目の上下"/>
+    <text id="n77_h7px" name="T_Set_31" xy="770,320" pivot="0.5,0.5" anchor="true" size="155,34" group="n131_h7px" fontSize="30" text="目の横位置"/>
+    <text id="n78_h7px" name="T_Set_32" xy="770,360" pivot="0.5,0.5" anchor="true" size="125,34" group="n131_h7px" fontSize="30" text="目の前後"/>
+    <text id="n79_h7px" name="T_Set_33" xy="770,400" pivot="0.5,0.5" anchor="true" size="125,34" group="n131_h7px" fontSize="30" text="目の角度"/>
+    <text id="n80_h7px" name="T_Set_34" xy="770,440" pivot="0.5,0.5" anchor="true" size="125,34" group="n131_h7px" fontSize="30" text="目の縦幅"/>
+    <text id="n81_h7px" name="T_Set_35" xy="770,480" pivot="0.5,0.5" anchor="true" size="125,34" group="n131_h7px" fontSize="30" text="目の横幅"/>
+    <text id="n82_h7px" name="T_Set_36" xy="770,520" pivot="0.5,0.5" anchor="true" size="215,34" group="n131_h7px" fontSize="30" text="目頭の左右位置"/>
+    <text id="n83_h7px" name="T_Set_37" xy="770,560" pivot="0.5,0.5" anchor="true" size="215,34" group="n131_h7px" fontSize="30" text="目尻の上下位置"/>
+    <component id="n84_h7px" name="S_Set_24" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n85_h7px" name="S_Set_25" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,80" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n86_h7px" name="S_Set_26" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,120" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n87_h7px" name="S_Set_27" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n88_h7px" name="S_Set_28" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,200" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n89_h7px" name="S_Set_29" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,240" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n90_h7px" name="S_Set_30" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n91_h7px" name="S_Set_31" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,320" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n92_h7px" name="S_Set_32" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,360" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n93_h7px" name="S_Set_33" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,400" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n94_h7px" name="S_Set_34" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,440" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n95_h7px" name="S_Set_35" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,480" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n96_h7px" name="S_Set_36" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,520" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n97_h7px" name="S_Set_37" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,560" pivot="0.5,0.5" anchor="true" group="n131_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n131_h7px" name="me" xy="655,23" size="445,554" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="4"/>
+    </group>
+    <text id="n98_h7px" name="T_Set_38" xy="770,40" pivot="0.5,0.5" anchor="true" size="155,34" group="n132_h7px" fontSize="30" text="鼻先の高さ"/>
+    <text id="n100_h7px" name="T_Set_39" xy="770,100" pivot="0.5,0.5" anchor="true" size="125,34" group="n132_h7px" fontSize="30" text="鼻の上下"/>
+    <text id="n101_h7px" name="T_Set_40" xy="770,160" pivot="0.5,0.5" anchor="true" size="155,34" group="n132_h7px" fontSize="30" text="鼻筋の高さ"/>
+    <component id="n99_h7px" name="S_Set_38" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n132_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n102_h7px" name="S_Set_39" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n132_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n103_h7px" name="S_Set_40" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n132_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n132_h7px" name="hana" xy="692,23" size="408,154" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="5"/>
+    </group>
+    <text id="n104_h7px" name="T_Set_41" xy="770,40" pivot="0.5,0.5" anchor="true" size="125,34" group="n133_h7px" fontSize="30" text="口の上下"/>
+    <text id="n106_h7px" name="T_Set_42" xy="770,100" pivot="0.5,0.5" anchor="true" size="125,34" group="n133_h7px" fontSize="30" text="口の横幅"/>
+    <text id="n107_h7px" name="T_Set_43" xy="770,160" pivot="0.5,0.5" anchor="true" size="125,34" group="n133_h7px" fontSize="30" text="口の前後"/>
+    <text id="n108_h7px" name="T_Set_44" xy="770,220" pivot="0.5,0.5" anchor="true" size="155,34" group="n133_h7px" fontSize="30" text="口の形状上"/>
+    <text id="n109_h7px" name="T_Set_45" xy="770,280" pivot="0.5,0.5" anchor="true" size="155,34" group="n133_h7px" fontSize="30" text="口の形状下"/>
+    <text id="n110_h7px" name="T_Set_46" xy="770,340" pivot="0.5,0.5" anchor="true" size="185,34" group="n133_h7px" fontSize="30" text="口の形状口角"/>
+    <component id="n105_h7px" name="S_Set_41" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n133_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n111_h7px" name="S_Set_42" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n133_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n112_h7px" name="S_Set_43" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n133_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n113_h7px" name="S_Set_44" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n133_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n114_h7px" name="S_Set_45" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n133_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n115_h7px" name="S_Set_46" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n133_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n133_h7px" name="kuti" xy="677,23" size="423,334" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="6"/>
+    </group>
+    <text id="n116_h7px" name="T_Set_47" xy="770,40" pivot="0.5,0.5" anchor="true" size="155,34" group="n134_h7px" fontSize="30" text="耳のサイズ"/>
+    <text id="n118_h7px" name="T_Set_48" xy="770,100" pivot="0.5,0.5" anchor="true" size="170,34" group="n134_h7px" fontSize="30" text="耳の角度Y軸"/>
+    <text id="n119_h7px" name="T_Set_49" xy="770,160" pivot="0.5,0.5" anchor="true" size="170,34" group="n134_h7px" fontSize="30" text="耳の角度Z軸"/>
+    <text id="n120_h7px" name="T_Set_50" xy="770,220" pivot="0.5,0.5" anchor="true" size="185,34" group="n134_h7px" fontSize="30" text="耳の上部形状"/>
+    <text id="n121_h7px" name="T_Set_51" xy="770,280" pivot="0.5,0.5" anchor="true" size="185,34" group="n134_h7px" fontSize="30" text="耳の下部形状"/>
+    <component id="n117_h7px" name="S_Set_47" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n134_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n122_h7px" name="S_Set_48" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n134_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n123_h7px" name="S_Set_49" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n134_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n124_h7px" name="S_Set_50" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n134_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n125_h7px" name="S_Set_51" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n134_h7px">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n134_h7px" name="mimi" xy="677,23" size="423,274" group="n126_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c2" pages="7"/>
+    </group>
+    <group id="n126_h7px" name="G_Custom_Head" xy="560,20" size="540,557" advanced="true" collapsed="true">
+      <gearDisplay controller="c1" pages="0"/>
+    </group>
+    <component id="n136_h7px" name="B_Body_Full" src="yob3l" fileName="Button/B_for_set.xml" xy="600,40" pivot="0.5,0.5" anchor="true" group="n236_h7px">
+      <Button checked="true" title="全体" titleFontSize="30" controller="c3" page="0"/>
+    </component>
+    <component id="n137_h7px" name="B_Body_Mune" src="yob3l" fileName="Button/B_for_set.xml" xy="600,100" pivot="0.5,0.5" anchor="true" group="n236_h7px">
+      <Button title="胸" titleFontSize="30" controller="c3" page="1"/>
+    </component>
+    <component id="n138_h7px" name="B_Body_Top" src="yob3l" fileName="Button/B_for_set.xml" xy="600,160" pivot="0.5,0.5" anchor="true" group="n236_h7px">
+      <Button title="上半身" titleFontSize="24" controller="c3" page="2"/>
+    </component>
+    <component id="n139_h7px" name="B_Body_Low" src="yob3l" fileName="Button/B_for_set.xml" xy="600,220" pivot="0.5,0.5" anchor="true" group="n236_h7px">
+      <Button title="下半身" titleFontSize="24" controller="c3" page="3"/>
+    </component>
+    <component id="n140_h7px" name="B_Body_Ude" src="yob3l" fileName="Button/B_for_set.xml" xy="600,280" pivot="0.5,0.5" anchor="true" group="n236_h7px">
+      <Button title="腕" titleFontSize="30" controller="c3" page="4"/>
+    </component>
+    <component id="n141_h7px" name="B_Body_Asi" src="yob3l" fileName="Button/B_for_set.xml" xy="600,340" pivot="0.5,0.5" anchor="true" group="n236_h7px">
+      <Button title="脚" titleFontSize="30" controller="c3" page="5"/>
+    </component>
+    <text id="n142_h7px" name="T_Set_52" xy="770,40" pivot="0.5,0.5" anchor="true" size="65,34" group="n237_100nb" fontSize="30" text="身長"/>
+    <text id="n143_h7px" name="T_Set_53" xy="770,100" pivot="0.5,0.5" anchor="true" size="155,34" group="n237_100nb" fontSize="30" text="頭のサイズ"/>
+    <component id="n144_h7px" name="S_Set_52" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n237_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n145_h7px" name="S_Set_53" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n237_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n237_100nb" name="full" xy="732,128" size="290,87" group="n236_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c3" pages="0"/>
+    </group>
+    <text id="n146_h7px" name="T_Set_54" xy="770,40" pivot="0.5,0.5" anchor="true" size="155,34" group="n238_100nb" fontSize="30" text="胸のサイズ"/>
+    <text id="n148_h7px" name="T_Set_55" xy="770,100" pivot="0.5,0.5" anchor="true" size="185,34" group="n238_100nb" fontSize="30" text="胸の上下位置"/>
+    <text id="n150_h7px" name="T_Set_56" xy="770,160" pivot="0.5,0.5" anchor="true" size="185,34" group="n238_100nb" fontSize="30" text="胸の左右開き"/>
+    <text id="n152_h7px" name="T_Set_57" xy="770,220" pivot="0.5,0.5" anchor="true" size="185,34" group="n238_100nb" fontSize="30" text="胸の左右位置"/>
+    <text id="n154_h7px" name="T_Set_58" xy="770,280" pivot="0.5,0.5" anchor="true" size="185,34" group="n238_100nb" fontSize="30" text="胸の上下角度"/>
+    <text id="n156_h7px" name="T_Set_59" xy="770,340" pivot="0.5,0.5" anchor="true" size="125,34" group="n238_100nb" fontSize="30" text="胸の尖り"/>
+    <text id="n158_h7px" name="T_Set_60" xy="770,400" pivot="0.5,0.5" anchor="true" size="125,34" group="n238_100nb" fontSize="30" text="胸の形状"/>
+    <text id="n164_h7px" name="T_Set_61" xy="770,460" pivot="0.5,0.5" anchor="true" size="185,34" group="n238_100nb" fontSize="30" text="乳輪の膨らみ"/>
+    <text id="n166_h7px" name="T_Set_62" xy="770,520" pivot="0.5,0.5" anchor="true" size="155,34" group="n238_100nb" fontSize="30" text="乳首の太さ"/>
+    <text id="n168_h7px" name="T_Set_63" xy="770,580" pivot="0.5,0.5" anchor="true" size="125,34" group="n238_100nb" fontSize="30" text="乳首立ち"/>
+    <component id="n147_h7px" name="S_Set_54" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n149_h7px" name="S_Set_55" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n151_h7px" name="S_Set_56" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n153_h7px" name="S_Set_57" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n155_h7px" name="S_Set_58" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n157_h7px" name="S_Set_59" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n159_h7px" name="S_Set_60" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,400" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n165_h7px" name="S_Set_61" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,460" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n167_h7px" name="S_Set_62" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,520" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n169_h7px" name="S_Set_63" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,580" pivot="0.5,0.5" anchor="true" group="n238_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n238_100nb" name="mune" xy="677,23" size="423,574" group="n236_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c3" pages="1"/>
+    </group>
+    <text id="n172_h7px" name="T_Set_64" xy="770,40" pivot="0.5,0.5" anchor="true" size="155,34" group="n239_100nb" fontSize="30" text="首回りの幅"/>
+    <text id="n174_h7px" name="T_Set_65" xy="770,100" pivot="0.5,0.5" anchor="true" size="155,34" group="n239_100nb" fontSize="30" text="首周りの奥"/>
+    <text id="n176_h7px" name="T_Set_66" xy="770,160" pivot="0.5,0.5" anchor="true" size="215,34" group="n239_100nb" fontSize="30" text="胴体肩周りの幅"/>
+    <text id="n178_h7px" name="T_Set_67" xy="770,220" pivot="0.5,0.5" anchor="true" size="215,34" group="n239_100nb" fontSize="30" text="胴体肩周りの奥"/>
+    <text id="n180_h7px" name="T_Set_68" xy="770,280" pivot="0.5,0.5" anchor="true" size="155,34" group="n239_100nb" fontSize="30" text="胴体上の幅"/>
+    <text id="n182_h7px" name="T_Set_69" xy="770,340" pivot="0.5,0.5" anchor="true" size="155,34" group="n239_100nb" fontSize="30" text="胴体上の奥"/>
+    <text id="n184_h7px" name="T_Set_70" xy="770,400" pivot="0.5,0.5" anchor="true" size="155,34" group="n239_100nb" fontSize="30" text="胴体下の幅"/>
+    <text id="n186_h7px" name="T_Set_71" xy="770,460" pivot="0.5,0.5" anchor="true" size="155,34" group="n239_100nb" fontSize="30" text="胴体下の奥"/>
+    <component id="n173_h7px" name="S_Set_64" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n175_h7px" name="S_Set_65" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n177_h7px" name="S_Set_66" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n179_h7px" name="S_Set_67" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n181_h7px" name="S_Set_68" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n183_h7px" name="S_Set_69" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n185_h7px" name="S_Set_70" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,400" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n187_h7px" name="S_Set_71" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,460" pivot="0.5,0.5" anchor="true" group="n239_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n239_100nb" name="top" xy="662,23" size="438,454" group="n236_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c3" pages="2"/>
+    </group>
+    <text id="n188_h7px" name="T_Set_72" xy="770,40" pivot="0.5,0.5" anchor="true" size="215,34" group="n240_100nb" fontSize="30" text="ウエストの位置"/>
+    <text id="n190_h7px" name="T_Set_73" xy="770,100" pivot="0.5,0.5" anchor="true" size="65,34" group="n240_100nb" fontSize="30" text="腹部"/>
+    <text id="n192_h7px" name="T_Set_74" xy="770,160" pivot="0.5,0.5" anchor="true" size="125,34" group="n240_100nb" fontSize="30" text="腰上の幅"/>
+    <text id="n194_h7px" name="T_Set_75" xy="770,220" pivot="0.5,0.5" anchor="true" size="125,34" group="n240_100nb" fontSize="30" text="腰上の奥"/>
+    <text id="n196_h7px" name="T_Set_76" xy="770,280" pivot="0.5,0.5" anchor="true" size="125,34" group="n240_100nb" fontSize="30" text="腰下の幅"/>
+    <text id="n198_h7px" name="T_Set_77" xy="770,340" pivot="0.5,0.5" anchor="true" size="125,34" group="n240_100nb" fontSize="30" text="腰下の奥"/>
+    <text id="n200_h7px" name="T_Set_78" xy="770,400" pivot="0.5,0.5" anchor="true" size="155,34" group="n240_100nb" fontSize="30" text="尻のサイズ"/>
+    <text id="n202_h7px" name="T_Set_79" xy="770,460" pivot="0.5,0.5" anchor="true" size="125,34" group="n240_100nb" fontSize="30" text="尻の角度"/>
+    <component id="n189_h7px" name="S_Set_72" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n191_h7px" name="S_Set_73" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n193_h7px" name="S_Set_74" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n195_h7px" name="S_Set_75" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n197_h7px" name="S_Set_76" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n199_h7px" name="S_Set_77" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n201_h7px" name="S_Set_78" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,400" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n203_h7px" name="S_Set_79" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,460" pivot="0.5,0.5" anchor="true" group="n240_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n240_100nb" name="down" xy="662,23" size="438,454" group="n236_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c3" pages="3"/>
+    </group>
+    <text id="n204_h7px" name="T_Set_80" xy="770,40" pivot="0.5,0.5" anchor="true" size="65,34" group="n241_100nb" fontSize="30" text="肩幅"/>
+    <text id="n206_h7px" name="T_Set_81" xy="770,100" pivot="0.5,0.5" anchor="true" size="95,34" group="n241_100nb" fontSize="30" text="肩の奥"/>
+    <text id="n208_h7px" name="T_Set_82" xy="770,160" pivot="0.5,0.5" anchor="true" size="125,34" group="n241_100nb" fontSize="30" text="上腕の幅"/>
+    <text id="n210_h7px" name="T_Set_83" xy="770,220" pivot="0.5,0.5" anchor="true" size="125,34" group="n241_100nb" fontSize="30" text="上腕の奥"/>
+    <text id="n212_h7px" name="T_Set_84" xy="770,280" pivot="0.5,0.5" anchor="true" size="155,34" group="n241_100nb" fontSize="30" text="肘周りの幅"/>
+    <text id="n214_h7px" name="T_Set_85" xy="770,340" pivot="0.5,0.5" anchor="true" size="155,34" group="n241_100nb" fontSize="30" text="肘周りの奥"/>
+    <text id="n216_h7px" name="T_Set_86" xy="770,400" pivot="0.5,0.5" anchor="true" size="65,34" group="n241_100nb" fontSize="30" text="前腕"/>
+    <component id="n205_h7px" name="S_Set_80" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n241_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n207_h7px" name="S_Set_81" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n241_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n209_h7px" name="S_Set_82" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n241_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n211_h7px" name="S_Set_83" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n241_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n213_h7px" name="S_Set_84" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n241_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n215_h7px" name="S_Set_85" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n241_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n217_h7px" name="S_Set_86" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,400" pivot="0.5,0.5" anchor="true" group="n241_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n241_100nb" name="ude" xy="692,23" size="408,394" group="n236_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c3" pages="4"/>
+    </group>
+    <text id="n218_h7px" name="T_Set_87" xy="770,40" pivot="0.5,0.5" anchor="true" size="185,34" group="n242_100nb" fontSize="30" text="太もも上の幅"/>
+    <text id="n220_h7px" name="T_Set_88" xy="770,100" pivot="0.5,0.5" anchor="true" size="185,34" group="n242_100nb" fontSize="30" text="太もも上の奥"/>
+    <text id="n222_h7px" name="T_Set_89" xy="770,160" pivot="0.5,0.5" anchor="true" size="185,34" group="n242_100nb" fontSize="30" text="太もも下の幅"/>
+    <text id="n224_h7px" name="T_Set_90" xy="770,220" pivot="0.5,0.5" anchor="true" size="185,34" group="n242_100nb" fontSize="30" text="太もも下の奥"/>
+    <text id="n226_h7px" name="T_Set_91" xy="770,280" pivot="0.5,0.5" anchor="true" size="125,34" group="n242_100nb" fontSize="30" text="膝下の幅"/>
+    <text id="n228_h7px" name="T_Set_92" xy="770,340" pivot="0.5,0.5" anchor="true" size="125,34" group="n242_100nb" fontSize="30" text="膝下の奥"/>
+    <text id="n230_h7px" name="T_Set_93" xy="770,400" pivot="0.5,0.5" anchor="true" size="155,34" group="n242_100nb" fontSize="30" text="ふくらはぎ"/>
+    <text id="n232_h7px" name="T_Set_94" xy="770,460" pivot="0.5,0.5" anchor="true" size="125,34" group="n242_100nb" fontSize="30" text="足首の幅"/>
+    <text id="n234_h7px" name="T_Set_95" xy="770,520" pivot="0.5,0.5" anchor="true" size="125,34" group="n242_100nb" fontSize="30" text="足首の奥"/>
+    <component id="n219_h7px" name="S_Set_87" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,40" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n221_h7px" name="S_Set_88" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,100" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n223_h7px" name="S_Set_89" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,160" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n225_h7px" name="S_Set_90" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,220" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n227_h7px" name="S_Set_91" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,280" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n229_h7px" name="S_Set_92" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,340" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n231_h7px" name="S_Set_93" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,400" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n233_h7px" name="S_Set_94" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,460" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <component id="n235_h7px" name="S_Set_95" src="yob3x" fileName="Slider/S_for_set.xml" xy="1000,520" pivot="0.5,0.5" anchor="true" group="n242_100nb">
+      <Slider value="50" max="100"/>
+    </component>
+    <group id="n242_100nb" name="asi" xy="677,23" size="423,514" group="n236_h7px" advanced="true" collapsed="true">
+      <gearDisplay controller="c3" pages="5"/>
+    </group>
+    <group id="n236_h7px" name="G_Custom_Body" xy="560,20" size="540,577" advanced="true" collapsed="true">
+      <gearDisplay controller="c1" pages="1"/>
+    </group>
+    <component id="n252_8bcb" name="B_Hair_0" src="yob3l" fileName="Button/B_for_set.xml" xy="600,40" pivot="0.5,0.5" anchor="true" group="n257_8bcb">
+      <Button checked="true" title="前髪" titleFontSize="30" controller="c4" page="0"/>
+    </component>
+    <component id="n253_8bcb" name="B_Hair_1" src="yob3l" fileName="Button/B_for_set.xml" xy="600,100" pivot="0.5,0.5" anchor="true" group="n257_8bcb">
+      <Button title="後髪" titleFontSize="30" controller="c4" page="1"/>
+    </component>
+    <component id="n254_8bcb" name="B_Hair_2" src="yob3l" fileName="Button/B_for_set.xml" xy="600,160" pivot="0.5,0.5" anchor="true" group="n257_8bcb">
+      <Button title="アホ毛" titleFontSize="24" controller="c4" page="2"/>
+    </component>
+    <list id="n267_xdzb" name="L_Hair_0" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n257_8bcb">
+      <gearDisplay controller="c4" pages="0"/>
+    </list>
+    <list id="n268_xdzb" name="L_Hair_1" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n257_8bcb" overflow="scroll">
+      <gearDisplay controller="c4" pages="1"/>
+    </list>
+    <list id="n269_xdzb" name="L_Hair_2" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n257_8bcb" overflow="scroll">
+      <gearDisplay controller="c4" pages="2"/>
+    </list>
+    <group id="n257_8bcb" name="G_Custom_Hair" xy="560,20" size="510,580" advanced="true" collapsed="true">
+      <gearDisplay controller="c1" pages="2"/>
+    </group>
+    <component id="n243_8bcb" name="B_Clothes_0" src="yob3l" fileName="Button/B_for_set.xml" xy="600,40" pivot="0.5,0.5" anchor="true" group="n251_8bcb">
+      <Button checked="true" title="トップ" titleFontSize="24" controller="c5" page="0"/>
+    </component>
+    <component id="n244_8bcb" name="B_Clothes_1" src="yob3l" fileName="Button/B_for_set.xml" xy="600,100" pivot="0.5,0.5" anchor="true" group="n251_8bcb">
+      <Button title="ボトム" titleFontSize="24" controller="c5" page="1"/>
+    </component>
+    <component id="n250_8bcb" name="B_Clothes_2" src="yob3l" fileName="Button/B_for_set.xml" xy="600,160" pivot="0.5,0.5" anchor="true" group="n251_8bcb">
+      <Button title="靴" titleFontSize="30" controller="c5" page="2"/>
+    </component>
+    <list id="n258_8bcb" name="L_Clothes_0" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n251_8bcb">
+      <gearDisplay controller="c5" pages="0"/>
+    </list>
+    <list id="n259_8bcb" name="L_Clothes_1" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n251_8bcb" overflow="scroll">
+      <gearDisplay controller="c5" pages="1"/>
+    </list>
+    <list id="n265_8bcb" name="L_Clothes_2" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n251_8bcb" overflow="scroll">
+      <gearDisplay controller="c5" pages="2"/>
+    </list>
+    <group id="n251_8bcb" name="G_Custom_Clothes" xy="560,20" size="555,580" advanced="true" collapsed="true">
+      <gearDisplay controller="c1" pages="3"/>
+    </group>
+    <component id="n274_h6j1" name="B_Makeup_0" src="yob3l" fileName="Button/B_for_set.xml" xy="600,40" pivot="0.5,0.5" anchor="true" group="n272_n4uo">
+      <Button checked="true" title="眉" titleFontSize="30" controller="c6" page="0"/>
+    </component>
+    <component id="n275_h6j1" name="B_Makeup_1" src="yob3l" fileName="Button/B_for_set.xml" xy="600,100" pivot="0.5,0.5" anchor="true" group="n272_n4uo">
+      <Button title="目元" titleFontSize="30" controller="c6" page="1"/>
+    </component>
+    <component id="n276_h6j1" name="B_Makeup_2" src="yob3l" fileName="Button/B_for_set.xml" xy="600,160" pivot="0.5,0.5" anchor="true" group="n272_n4uo">
+      <Button title="目" titleFontSize="30" controller="c6" page="2"/>
+    </component>
+    <list id="n273_sgua" name="L_Makeup_0" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n272_n4uo" overflow="scroll">
+      <gearDisplay controller="c6" pages="0"/>
+    </list>
+    <list id="n277_h6j1" name="L_Makeup_1" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n272_n4uo" overflow="scroll">
+      <gearDisplay controller="c6" pages="1"/>
+    </list>
+    <list id="n278_h6j1" name="L_Makeup_2" xy="890,20" pivot="0.5,0" anchor="true" size="450,580" group="n272_n4uo" overflow="scroll">
+      <gearDisplay controller="c6" pages="2"/>
+    </list>
+    <group id="n272_n4uo" name="G_Custom_Makeup" xy="560,20" size="555,580" advanced="true" collapsed="true">
+      <gearDisplay controller="c1" pages="4"/>
+    </group>
+  </displayList>
+</component>

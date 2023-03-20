@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="200,50">
+  <displayList>
+    <component id="n2_e92f" name="n2" src="e92fo9p" fileName="Button/B_for_function.xml" xy="0,0" size="200,50"/>
+    <loader id="n1_e92f" name="item_icon" xy="200,0" pivot="1,0" anchor="true" size="50,50" align="center" vAlign="middle" fill="scale"/>
+    <text id="n4_e92f" name="item_name" xy="0,0" size="150,50" fontSize="12" autoSize="none" text="&#xA;"/>
+  </displayList>
+</component>
