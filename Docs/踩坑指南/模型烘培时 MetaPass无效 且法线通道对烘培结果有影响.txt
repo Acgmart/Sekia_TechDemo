@@ -1,0 +1,13 @@
+MetaPass是否已经失效
+    测试中只有Enlighten使用MetaPass
+    渐进式CPU/渐进式GPU/Bakery均不使用MetaPass
+
+通过修改模型的法线通道是否可以影响烘培的Lightmap结果
+    使用MetaPass时需要在代码中定义烘培逻辑
+    不使用MetaPass时使用内置黑盒逻辑 法线通道将影响烘培结果
+        比如在DDC软件中对法线通道进行球形化
+
+[MainTexture][MainColor]"RenderType"对烘培有影响
+    RenderType的有效值：Opaque/TransparentCutout/Transparent
+
+渐进式GPU似乎经常结果出错 切换到渐进式CPU就正常些
