@@ -9,5 +9,6 @@ MetaPass是否已经失效
 
 [MainTexture][MainColor]"RenderType"对烘培有影响
     RenderType的有效值：Opaque/TransparentCutout/Transparent
+    MainTexture：在TransparentCutout模式下强制用A通道进行透明裁剪 裁剪阈值强制为0.5
 
 渐进式GPU似乎经常结果出错 切换到渐进式CPU就正常些
