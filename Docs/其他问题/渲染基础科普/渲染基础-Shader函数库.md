@@ -4,44 +4,43 @@ shader底层是DXBC指令，DXBC更底层则是不同GPU对指令的实现。
 在Unity中对shader语法进行了一层包装，我们称之为ShaderLab语法。  
     不同渲染API的Shader有差异，如DX、Metal、Vulkan、OpenGL，而Unity是跨平台的。  
     我们能基于ShaderLab语法编写shader，根据DXBC指令进行算法优化。  
-<img src="_res_shader_library/cover.jpg" alt="Shader含数据" width="50%" height="50%">  
+<img src="_res_shader_library/cover.png" alt="Shader含数据" width="50%" height="50%">  
 
 ## 参考资料 
-1.[HLSL微软官方文档](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl "HLSL微软官方文档") 
-2.[Unity SRP Github](https://github.com/Unity-Technologies/ScriptableRenderPipeline "Unity SRP Github")
+1.[HLSL微软官方文档](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl "HLSL微软官方文档")  
+2.[Unity SRP Github](https://github.com/Unity-Technologies/ScriptableRenderPipeline "Unity SRP Github")  
 
 # HLSL语法
-在Unity中编写Shader、Compute Shader时，我们可以选择使用HLSL语言，这是推荐的做法。
-HLSL语法与C++类似，比如加减乘除余、变量/函数声明、循环控制、输入/输出等。
+编写Unity shader时，可以使用CG或HLSL风格的语法，在Unity推出SRP后普遍流行HLSL语法。  
+    两种语法差不多，代码定义包含在HLSLINCLUDE/ENDHLSL或CGINCLUDE/ENDCG内即可。  
+HLSL语法与C++类似，比如加减乘除余、变量/函数声明、循环控制、输入/输出等，但是也有自己的特色。  
 
-## 变量
-变量需要被声明、赋值，作用范围取决于声明的位置，有指定的存储位置和读写限制。
-Vector类型：float4 a = float4(b.xyz, 4.0); 
-	Vector类型变量包含1-4个标量分量，每个分量的存储类型一致； 
-	可以使用xyzw或rgba访问Vector的分量。 
-标量(Scalar)类型：常用的有bool、int、uint、float。
+## 基本类型
+shader中基本类型有bool、uint、float等，在移动端推荐使用半精度浮点数half；  
+GPU侧的并行运算效率非常高，推荐使用多分量的变量进行计算，比如float2~float4。  
+	可以使用xyzw或rgba访问分量  
 
 ## 语句
-例：float a = b * (c / d) - Func(e);
-一个表达式(语句)由许多变量、运算符和方法构成，以“；”结尾，包括“return”语句。
-	加减乘除余：+ - * % 
-	数组/矩阵取值操作：array[i] matrix[0] matrix[0][1] 
-	赋值操作：= += -= *= /= %= 
-	布尔操作：&& ?: 
-	比较操作：any(A4 < B4) all(A4 < B4) < > == != <= >= 
-	前后置操作：++ --
-		注：多元变量运算时通常每个分量单独计算。
-		注：比较操作仅限于单个分量。
-		注：多元布尔操作返回多元bool Vector。
-		注：matrix[0]返回多元Vector。
-	显式强制转换操作： (float)i4   等同于   float(i4.x)
-	                   (float4)i   等同于   float4(i, i, i, i)
-	                   asfloat(i)  asint(f) asuint(f) 
-		注：根据转换目标有精度损失。 
-	二进制操作(仅对int和uint有效)： ~  <<  >>  &  |  ^
-		注：<<为数字左移，高位移出，低位补0。
-		注：>>为数字右移，低位移出，高位补符号位(正数补0/负数补1)。
-		注：^二进制的逻辑异，不同既为真。
+例：float a = b * (c / d) - Func(e);  
+一个表达式(语句)由许多变量、运算符和方法构成，以“；”结尾，包括“return”语句。  
+	加减乘除余：+ - * %  
+	数组/矩阵取值操作：array[i] matrix[0] matrix[0][1]   
+	赋值操作：= += -= *= /= %=  
+	布尔操作：&& ?:  
+	比较操作：any(A4 < B4) all(A4 < B4) < > == != <= >=  
+	前后置操作：++ --  
+		注：多元变量运算时通常每个分量单独计算。  
+		注：比较操作仅限于单个分量。  
+		注：多元布尔操作返回多元bool Vector。  
+		注：matrix[0]返回多元Vector。  
+	显式强制转换操作： (float)i4   等同于   float(i4.x)  
+	                   (float4)i   等同于   float4(i, i, i, i)  
+	                   asfloat(i)  asint(f) asuint(f)   
+		注：根据转换目标有精度损失。  
+	二进制操作(仅对int和uint有效)： ~  <<  >>  &  |  ^  
+		注：<<为数字左移，高位移出，低位补0。  
+		注：>>为数字右移，低位移出，高位补符号位(正数补0/负数补1)。  
+		注：^二进制的逻辑异，不同既为真。  
 
 ## 流程控制
 if、for、while等C++风格的语法都可以使用。
