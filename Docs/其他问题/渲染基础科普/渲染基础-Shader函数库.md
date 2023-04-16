@@ -85,14 +85,14 @@ URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`
 `half4 value = tex2D(_Ramp, uv.xy);`  //使用自带采样器  
 `half4 value = SAMPLE_TEXTURE2D(_Ramp, Sampler, uv.xy);`  
 
-## 内置函数
-▲abort() 注：报错并终止DrawCall。  
-▲abs(x) 注：返回逐分量的绝对值，abs(-1)为1。  
-▲acos(x) 注：返回逐分量(在-1至1范围内)的反余玄值(弧度)，乘以57.29578转换为角度。  
-注：如果需要将角度转化为弧度，那么就是乘以0.0174532924。  
-▲all(x) 注：如果x的所有分量都不为0，返回true；否则返回false。  
-▲AllMemoryBarrier() 注：异步读写时，等待group内线程读写完毕。  
-▲AllMemoryBarrierWithGroupSync() 注：异步读写时，等待group内线程逻辑执行到此调用。  
+## 内置函数 
+
+### 三角函数
+▲abs(x) ：返回逐分量的绝对值，abs(-1)为1。  
+▲acos(x) ：返回逐分量(在-1至1范围内)的反余玄值(弧度)。  
+    弧度乘以57.29578转换为角度。  
+    如果需要将角度转化为弧度，那么就是乘以0.0174532924。  
+▲all(x) ：如果x的所有分量都不为0，返回true；否则返回false。  
 ▲any(x) 注：如果x的任一分量不为0，返回true；否则返回false。  
 ▲asdouble(x, y) 注：将2个uint Vector转换为1个double Vector，分量数不变。  
 ▲asfloat(x) 注：将1个任意Vector转换为float Vector。  
@@ -203,17 +203,31 @@ URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`
 ▲step(a, b) 注：等效于(b >= a) ? 1 : 0 
 ▲tan(x) 注：逐分量返回x(弧度)的正切值。 
 ▲tanh(x) 注：双曲线正切函数。 
-▲tex1D(s, t) ▲tex1D(s, t, ddx, ddy) 
-▲tex1Dbias ▲tex1Dgrad ▲tex1Dlod ▲tex1Dproj 
-▲tex2D(sampler, uv) 注：采样2D texture(pixel shader only)，自动选择Mipmap。 
-▲tex2D(sampler, uv, ddx, ddy) 注：相比tex2D，使用屏幕坐标x和y方向上的梯度指定Mipmap。 
-▲tex2Dbias(sampler, uv) 注：相比tex2D，uv.w中包含采样位置偏移量。 
-▲tex2Dgrad(sampler, uv, ddx, ddy) 注：相比tex2D，使用屏幕坐标x和y方向上的梯度指定Mipmap。 
-▲tex2Dlod(sampler, uv) 注：相比tex2D，uv.w中指定Mipmap层级。 
-▲tex2Dproj(tex, uv) 注：相比tex2D，UV除以w分量：uv.xy / uv.w。 
-▲tex3D(s, t) ▲tex3D(s, t, ddx, ddy) ▲tex3Dbias ▲tex3Dgrad ▲tex3Dlod ▲tex3Dproj ▲texCUBE(s, t) ▲texCUBE(s, t, ddx, ddy) ▲texCUBEbias ▲texCUBEgrad ▲texCUBElod ▲texCUBEproj 
-▲transpose(x) 注:返回x(矩阵)的转置矩阵(将行列互换)。 
-▲trunc(x) 注：逐分量去除小数部分，trunc(-2.3)= -2。
+
+
+### 矩阵操作
+▲transpose(x) 注:返回x(矩阵)的转置矩阵(将行列互换)。
+
+### 浮点数操作
+▲trunc(x) 注：逐分量去除小数部分，trunc(-2.3)= -2。  
+
+### 采样
+▲tex2D(sampler, uv) ：默认采样语法，仅用于片元shader。  
+    底层会基于uv的ddx和ddy推导mip等级，实现双线性/三线性过滤。  
+    因为在顶点Shader阶段没有生成片元，无法产生ddx和ddy，不能用于顶点Shader。   
+▲tex2D(sampler, uv, ddx, ddy) ：使用指定的偏导数替代uv的偏导数  
+▲tex2Dlod(sampler, uv) ：相比tex2D，在uv.w中指定mip等级。  
+    在只需要特定mip时tex2Dlod无需计算mip性能更优。
+    在3D场景贴图采样时tex2D自动计算mip纹理缓存命中率更高。  
+▲tex2Dbias(sampler, uv) ：相比tex2D，在uv.w中指定mip等级偏移。  
+▲tex2Dproj(sampler, uv) ：相比tex2D，uv是屏幕UV需要除以w分量：uv.xy / uv.w 
+▲tex2Dgrad(sampler, uv, ddx, ddy) ：同tex2D(sampler, uv, ddx, ddy)    
+▲Load(int3(unCoord2, lod)) ：加载指定像素坐标、指定mip的像素，无过滤。  
+▲Gather(sampler, coord2)：加载指定像素坐标的像素，不支持mip，有过滤。  
+    支持采样单通道：GatherRed/GatherGreen/GatherBlue/GatherAlpha  
+
+### 异步指令  
+▲AllMemoryBarrierWithGroupSync() ：异步读写时，等待group内线程逻辑执行到此调用。  
 
 # Legacy库
 
