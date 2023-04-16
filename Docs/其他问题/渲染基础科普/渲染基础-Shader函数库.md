@@ -223,7 +223,7 @@ URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`
 ▲tex2Dproj(sampler, uv) ：相比tex2D，uv是屏幕UV需要除以w分量：uv.xy / uv.w 
 ▲tex2Dgrad(sampler, uv, ddx, ddy) ：同tex2D(sampler, uv, ddx, ddy)    
 ▲Load(int3(unCoord2, lod)) ：加载指定像素坐标、指定mip的像素，无过滤。  
-▲Gather(sampler, coord2)：加载指定像素坐标的像素，不支持mip，有过滤。  
+▲Gather(sampler, coord2) ：加载指定像素坐标的像素，不支持mip，有过滤。  
     支持采样单通道：GatherRed/GatherGreen/GatherBlue/GatherAlpha  
 
 ### 异步指令  
