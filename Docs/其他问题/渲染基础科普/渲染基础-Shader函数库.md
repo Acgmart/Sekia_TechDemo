@@ -88,146 +88,146 @@ URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`
 ## 内置函数 
 
 ### 三角函数
-▲abs(x) ：返回逐分量的绝对值，abs(-1)为1。  
-▲acos(x) ：返回逐分量(在-1至1范围内)的反余玄值(弧度)。  
+abs(x) ：返回逐分量的绝对值，abs(-1)为1。  
+acos(x) ：返回逐分量(在-1至1范围内)的反余玄值(弧度)。  
     弧度乘以57.29578转换为角度。  
     如果需要将角度转化为弧度，那么就是乘以0.0174532924。  
-▲all(x) ：如果x的所有分量都不为0，返回true；否则返回false。  
-▲any(x) 注：如果x的任一分量不为0，返回true；否则返回false。  
-▲asdouble(x, y) 注：将2个uint Vector转换为1个double Vector，分量数不变。  
-▲asfloat(x) 注：将1个任意Vector转换为float Vector。  
-▲asin(x) 注：返回逐分量(在-1至1范围内)的反正玄值(弧度)，乘以57.29578转换为角度。  
-▲asint 注：将1个任意Vector转换为int Vector。  
-▲asuint 注：将1个任意Vector转换为uint Vector。  
-▲atan(x) 注：返回逐分量的反正切值(弧度)，乘以57.29578转换为角度。  
-▲atan2(y, x) 注：返回向量(x, y)与X轴的反正切值(弧度)，乘以57.29578转换为角度。  
-▲ceil(x) 注：如果x有小数部分，返回比x大的最小的整数。  
-▲CheckAccessFullyMapped(x)   
-▲clamp(a, x, y)   
+all(x) ：如果x的所有分量都不为0，返回true；否则返回false。  
+any(x) 注：如果x的任一分量不为0，返回true；否则返回false。  
+asdouble(x, y) 注：将2个uint Vector转换为1个double Vector，分量数不变。  
+asfloat(x) 注：将1个任意Vector转换为float Vector。  
+asin(x) 注：返回逐分量(在-1至1范围内)的反正玄值(弧度)，乘以57.29578转换为角度。  
+asint 注：将1个任意Vector转换为int Vector。  
+asuint 注：将1个任意Vector转换为uint Vector。  
+atan(x) 注：返回逐分量的反正切值(弧度)，乘以57.29578转换为角度。  
+atan2(y, x) 注：返回向量(x, y)与X轴的反正切值(弧度)，乘以57.29578转换为角度。  
+ceil(x) 注：如果x有小数部分，返回比x大的最小的整数。  
+CheckAccessFullyMapped(x)   
+clamp(a, x, y)   
 注：if(a < x) retrun x; if(a > y) retrun y; retrun a; 
-▲clip(x) 注：如果x的任意分量小于0，则忽略当前片元；也就是透明度测试alphatest。 
-▲cos(x) 注：返回x(弧度)的余玄值。 
-▲cosh(x) 注：[双曲线余玄函数](http://tushuo.jk51.com/tushuo/4461003.html "双曲线余玄函数")。 
-▲countbits(x) 注：返回逐分量(uint类型)的二进制格式中1的数量。 
-▲cross(x, y) 注：返回x和y(参数为多组件Vector类型)的叉积。 
-▲D3DCOLORtoUBYTE4(x) 注：返回x的UBYTE4表达形式。 
-▲ddx(x) 注：范围Vector x的[偏导数](https://blog.csdn.net/wylionheart/article/details/78026707 "偏导数")。 
-▲ddx\_coarse(x) 注：返回Vector x的低精度偏导数。 
-▲ddx\_fine(x) 注：返回Vector x的高精度偏导数。 
-▲ddy ▲ddy\_coarse 
-▲ddy\_fine 注：参考ddx。 
-▲degree(x) 注：将x(弧度)转化为角度。 
-▲determinant(x) 注：返回x(方形-浮点数-矩阵)的[行列式](https://baike.baidu.com/item/%E4%B8%89%E9%98%B6%E8%A1%8C%E5%88%97%E5%BC%8F/4466518?fr=aladdin "行列式")。 
-▲DeviceMemoryBarrier() 注：同步节点，group内所有线程完成对device memory的访问。 
-▲DeviceMemoryBarrierWithGroupSync() 注：同步节点，设备内存访问+逻辑同步。
-▲distance(x, y) 注：返回x和y(Vector)之间的距离，√((xa-xb)² + (ya-yb)²)。
-▲dot(x, y) 注：返回x和y(Vector)的点积，xa \* xb + ya \* yb。
-▲dst(x, y) 注：返回[(1, x.y \* y.y, x.z, y.w)](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dst---vs "(1, x.y * y.y, x.z, y.w)")。
-▲errof(string, ...) 注：将错误消息提交到信息队列。 
-▲EvaluateAttributeAtCentroid(x) 注：评估像素质心。 
-▲EvaluateAttributeAtSample(x, y) 注：评估采样位置。 
-▲EvaluateAttributeSnapped(x, y) 注：使用偏移量评估像素质心。 
-▲exp(x) 注：返回以自然数e(2.71828)为底数，x为指数的值。 
-▲exp2(x) 注：返回以2为底数，x为指数的值。 
-▲f16tof32(x) 注：返回x(被保存为unit的16位浮点数)的32位浮点数表达形式。 
-▲f32tof16(x) 注：返回x(32位浮点数)的16位浮点数表达形式(被保存为unit)。 
-▲faceforward(n1, v, n2) 注：使法线方向正对观察方向，-n1 \* sign(dot(v, n2))。 
-▲firstbithigh(x) 注：返回逐分量(int或uint)的二进制格式中从高位数第一个1的位置。 
-▲firstbitlow(x) 注：返回逐分量(uint)的二进制格式中从低位数第一个1的位置。 
-▲floor(x) 注：如果x有小数部分，返回比x小的最大整数，floor(-2.3) = -3。 
-▲fma(a, b, c) 注：参数为double类型，a \* b + c。 
-▲fmod(x, y) 注：返回x/y的小数部分。 
-▲frac(x) 注：返回x的小数部分。 
-▲frexp(x, exp) 注：返回输入值的小数部分和指数。 
-▲fwidth(x) 注：返回abs(ddx(x) + abs(ddy(x))。 
-▲GetRenderTargetSampleCount() 注：返回渲染目标的采样器数量。 
-▲GetRenderTargetSamplePosition(x) 注：返回采样器x对应的采样位置(x, y)。 
-▲GroupMemoryBarrier() 注：group shared内存访问同步节点。 
-▲GroupMemoryBarrierWithGroupSync() 注：group shared内存访问+逻辑同步节点。 
-▲InterlockedAdd(dest, value, original\_value) 
-▲InterlockedAnd(dest, value, original\_value) 
-▲InterlockedCompareExchange(dest, compare\_value, value, original\_value) 
-▲InterlockedCompareStore(dest, compare\_value, value) 
-▲InterlockedExchange(dest, value, original\_value) 
-▲InterlockedMax(dest, value, original\_value) 
-▲InterlockedMin(dest, value, original\_value) 
-▲InterlockedOr(dest, value, original\_value) 
-▲InterlockedXor(dest, value, original\_value) 
-▲isfinite(x) 注：逐分量判断浮点数的值是否为finite(有限的)。 
-▲isinf(x) 注：逐分量判断浮点数的值是否为infinite(无限的)。 
-▲isnan(x) 注：逐分量判断浮点数的值是否为NAN或QNAN。 
-▲ldexp(x, y) 注：逐分量返回x \* 2^y。 
-▲length(x) 注：返回x(Vector)的长度。 
-▲lerp(x, y, a) 注：等效于x + a(y-x)。 
-▲lit(NdotL, NdotH, 平滑度) 注：返回Blinn光照模型Vector4(环境光, 漫反射光, 镜面高光, 1)。 
-▲log(x) 注：求对数，返回以e为底数，x为值时对应的指数。 
-▲log10(x) 注：求对数，返回以10为底数，x为值时对应的指数。 
-▲log2(x) 注：求对数，返回以2位底数，x为值时对应的指数。 
-▲mad(a, x, y) 注：返回a \* x + y。 
-▲max(x, y) 注：返回逐分量最大值。 
-▲min(x, y) 注：返回逐分量最小值。 
-▲modf(x, a) 注：逐分量返回x的有符号的小数部分，将x的整数部分保存到a。 
-▲msad4(reference, source, accum) 
-▲mul(x, y) 注：矩阵相乘；矢量在右边时，被竖排序；矢量在左边时，被横排序。 
-▲noise(x) 注：Perlin噪声函数，返回值在-1至1内。 
-▲normalize(x) 注：归一化x(Vector)。 
-▲pow(x, y) 注：幂运算，x为底数，y为指数。 
-▲printf(string, ...) 注：将自定义着色器消息提交到信息队列。 
-▲Process2DQuadTessFactorsAvg(x, y, a, b, c) 
-▲Process2DQuadTessFactorsMax(x, y, a, b, c) 
-▲Process2DQuadTessFactorsMin(x, y, a, b, c) 
-▲ProcessIsolineTessFactors(x, y, a, b) 
-▲ProcessQuadTessFactorsAvg(x, y, a, b, c) 
-▲ProcessQuadTessFactorsMax(x, y, a, b, c) 
-▲ProcessQuadTessFactorsMin(x, y, a, b, c) 
-▲ProcessTriTessFactorsAvg(x, y, a, b, c) 
-▲ProcessTriTessFactorsMax(x, y, a, b, c) 
-▲ProcessTriTessFactorsMin(x, y, a, b, c) 
-▲radians(x) 注：将角度x转换为弧度。 
-▲rcp(x) 注：逐分量返回近似倒数。 
-▲reflect(input, normal) 注：求反射方向, input为入射方向，返回input - 2 \* normal \* dot(input, normal)。 
-▲refract(input, normal, 折射率) 注：求折射方向。 
-▲reversebits(x) 注：逐分量使x的高位和低位互换位置，0001 ⇒　1000。 
-▲round(x) 注：逐分量四舍五入。 
-▲rsqrt(x) 注：逐分量平方根的倒数。 
-▲saturate(a) 注：等效于clamp(a, 0, 1) 
-▲sign(x) 注：相当于if(x<0) return -1;if(x>0) return 1; return 0;。 
-▲sin(x) 注：返回x(弧度)的正玄值。 
-▲sincos(x, s, c) 注：void，将x(弧度)的sin值和cos值分别赋值到s和c。 
-▲sinh(x) 注：双曲线正玄函数。 
-▲smoothstep(x, y, a) 
+clip(x) 注：如果x的任意分量小于0，则忽略当前片元；也就是透明度测试alphatest。 
+cos(x) 注：返回x(弧度)的余玄值。 
+cosh(x) 注：[双曲线余玄函数](http://tushuo.jk51.com/tushuo/4461003.html "双曲线余玄函数")。 
+countbits(x) 注：返回逐分量(uint类型)的二进制格式中1的数量。 
+cross(x, y) 注：返回x和y(参数为多组件Vector类型)的叉积。 
+D3DCOLORtoUBYTE4(x) 注：返回x的UBYTE4表达形式。 
+ddx(x) 注：范围Vector x的[偏导数](https://blog.csdn.net/wylionheart/article/details/78026707 "偏导数")。 
+ddx\_coarse(x) 注：返回Vector x的低精度偏导数。 
+ddx\_fine(x) 注：返回Vector x的高精度偏导数。 
+ddy ddy\_coarse 
+ddy\_fine 注：参考ddx。 
+degree(x) 注：将x(弧度)转化为角度。 
+determinant(x) 注：返回x(方形-浮点数-矩阵)的[行列式](https://baike.baidu.com/item/%E4%B8%89%E9%98%B6%E8%A1%8C%E5%88%97%E5%BC%8F/4466518?fr=aladdin "行列式")。 
+DeviceMemoryBarrier() 注：同步节点，group内所有线程完成对device memory的访问。 
+DeviceMemoryBarrierWithGroupSync() 注：同步节点，设备内存访问+逻辑同步。
+distance(x, y) 注：返回x和y(Vector)之间的距离，√((xa-xb)² + (ya-yb)²)。
+dot(x, y) 注：返回x和y(Vector)的点积，xa \* xb + ya \* yb。
+dst(x, y) 注：返回[(1, x.y \* y.y, x.z, y.w)](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dst---vs "(1, x.y * y.y, x.z, y.w)")。
+errof(string, ...) 注：将错误消息提交到信息队列。 
+EvaluateAttributeAtCentroid(x) 注：评估像素质心。 
+EvaluateAttributeAtSample(x, y) 注：评估采样位置。 
+EvaluateAttributeSnapped(x, y) 注：使用偏移量评估像素质心。 
+exp(x) 注：返回以自然数e(2.71828)为底数，x为指数的值。 
+exp2(x) 注：返回以2为底数，x为指数的值。 
+f16tof32(x) 注：返回x(被保存为unit的16位浮点数)的32位浮点数表达形式。 
+f32tof16(x) 注：返回x(32位浮点数)的16位浮点数表达形式(被保存为unit)。 
+faceforward(n1, v, n2) 注：使法线方向正对观察方向，-n1 \* sign(dot(v, n2))。 
+firstbithigh(x) 注：返回逐分量(int或uint)的二进制格式中从高位数第一个1的位置。 
+firstbitlow(x) 注：返回逐分量(uint)的二进制格式中从低位数第一个1的位置。 
+floor(x) 注：如果x有小数部分，返回比x小的最大整数，floor(-2.3) = -3。 
+fma(a, b, c) 注：参数为double类型，a \* b + c。 
+fmod(x, y) 注：返回x/y的小数部分。 
+frac(x) 注：返回x的小数部分。 
+frexp(x, exp) 注：返回输入值的小数部分和指数。 
+fwidth(x) 注：返回abs(ddx(x) + abs(ddy(x))。 
+GetRenderTargetSampleCount() 注：返回渲染目标的采样器数量。 
+GetRenderTargetSamplePosition(x) 注：返回采样器x对应的采样位置(x, y)。 
+GroupMemoryBarrier() 注：group shared内存访问同步节点。 
+GroupMemoryBarrierWithGroupSync() 注：group shared内存访问+逻辑同步节点。 
+InterlockedAdd(dest, value, original\_value) 
+InterlockedAnd(dest, value, original\_value) 
+InterlockedCompareExchange(dest, compare\_value, value, original\_value) 
+InterlockedCompareStore(dest, compare\_value, value) 
+InterlockedExchange(dest, value, original\_value) 
+InterlockedMax(dest, value, original\_value) 
+InterlockedMin(dest, value, original\_value) 
+InterlockedOr(dest, value, original\_value) 
+InterlockedXor(dest, value, original\_value) 
+isfinite(x) 注：逐分量判断浮点数的值是否为finite(有限的)。 
+isinf(x) 注：逐分量判断浮点数的值是否为infinite(无限的)。 
+isnan(x) 注：逐分量判断浮点数的值是否为NAN或QNAN。 
+ldexp(x, y) 注：逐分量返回x \* 2^y。 
+length(x) 注：返回x(Vector)的长度。 
+lerp(x, y, a) 注：等效于x + a(y-x)。 
+lit(NdotL, NdotH, 平滑度) 注：返回Blinn光照模型Vector4(环境光, 漫反射光, 镜面高光, 1)。 
+log(x) 注：求对数，返回以e为底数，x为值时对应的指数。 
+log10(x) 注：求对数，返回以10为底数，x为值时对应的指数。 
+log2(x) 注：求对数，返回以2位底数，x为值时对应的指数。 
+mad(a, x, y) 注：返回a \* x + y。 
+max(x, y) 注：返回逐分量最大值。 
+min(x, y) 注：返回逐分量最小值。 
+modf(x, a) 注：逐分量返回x的有符号的小数部分，将x的整数部分保存到a。 
+msad4(reference, source, accum) 
+mul(x, y) 注：矩阵相乘；矢量在右边时，被竖排序；矢量在左边时，被横排序。 
+noise(x) 注：Perlin噪声函数，返回值在-1至1内。 
+normalize(x) 注：归一化x(Vector)。 
+pow(x, y) 注：幂运算，x为底数，y为指数。 
+printf(string, ...) 注：将自定义着色器消息提交到信息队列。 
+Process2DQuadTessFactorsAvg(x, y, a, b, c) 
+Process2DQuadTessFactorsMax(x, y, a, b, c) 
+Process2DQuadTessFactorsMin(x, y, a, b, c) 
+ProcessIsolineTessFactors(x, y, a, b) 
+ProcessQuadTessFactorsAvg(x, y, a, b, c) 
+ProcessQuadTessFactorsMax(x, y, a, b, c) 
+ProcessQuadTessFactorsMin(x, y, a, b, c) 
+ProcessTriTessFactorsAvg(x, y, a, b, c) 
+ProcessTriTessFactorsMax(x, y, a, b, c) 
+ProcessTriTessFactorsMin(x, y, a, b, c) 
+radians(x) 注：将角度x转换为弧度。 
+rcp(x) 注：逐分量返回近似倒数。 
+reflect(input, normal) 注：求反射方向, input为入射方向，返回input - 2 \* normal \* dot(input, normal)。 
+refract(input, normal, 折射率) 注：求折射方向。 
+reversebits(x) 注：逐分量使x的高位和低位互换位置，0001 ⇒　1000。 
+round(x) 注：逐分量四舍五入。 
+rsqrt(x) 注：逐分量平方根的倒数。 
+saturate(a) 注：等效于clamp(a, 0, 1) 
+sign(x) 注：相当于if(x<0) return -1;if(x>0) return 1; return 0;。 
+sin(x) 注：返回x(弧度)的正玄值。 
+sincos(x, s, c) 注：void，将x(弧度)的sin值和cos值分别赋值到s和c。 
+sinh(x) 注：双曲线正玄函数。 
+smoothstep(x, y, a) 
 注：平滑梯度，类似于clamp(a, x, y)； 
 当y>x时，a<x时返回0，a>y时返回1，腰部值根据曲线算。 
 当y<x时，a>x时返回0，a<y时返回1，腰部值根据曲线算。 
-▲sqrt(x) 注：逐分量返回x的平方根。 
-▲step(a, b) 注：等效于(b >= a) ? 1 : 0 
-▲tan(x) 注：逐分量返回x(弧度)的正切值。 
-▲tanh(x) 注：双曲线正切函数。 
+sqrt(x) 注：逐分量返回x的平方根。 
+step(a, b) 注：等效于(b >= a) ? 1 : 0 
+tan(x) 注：逐分量返回x(弧度)的正切值。 
+tanh(x) 注：双曲线正切函数。 
 
 
 ### 矩阵操作
-▲transpose(x) 注:返回x(矩阵)的转置矩阵(将行列互换)。
+transpose(x) 注:返回x(矩阵)的转置矩阵(将行列互换)。
 
 ### 浮点数操作
-▲trunc(x) 注：逐分量去除小数部分，trunc(-2.3)= -2。  
+trunc(x) 注：逐分量去除小数部分，trunc(-2.3)= -2。  
 
 ### 采样
-▲tex2D(sampler, uv) ：默认采样语法，仅用于片元shader。  
+tex2D(sampler, uv) ：默认采样语法，仅用于片元shader。  
     底层会基于uv的ddx和ddy推导mip等级，实现双线性/三线性过滤。  
     因为在顶点Shader阶段没有生成片元，无法产生ddx和ddy，不能用于顶点Shader。   
-▲tex2D(sampler, uv, ddx, ddy) ：使用指定的偏导数替代uv的偏导数  
-▲tex2Dlod(sampler, uv) ：相比tex2D，在uv.w中指定mip等级。  
+tex2D(sampler, uv, ddx, ddy) ：使用指定的偏导数替代uv的偏导数  
+tex2Dlod(sampler, uv) ：相比tex2D，在uv.w中指定mip等级。  
     在只需要特定mip时tex2Dlod无需计算mip性能更优。
     在3D场景贴图采样时tex2D自动计算mip纹理缓存命中率更高。  
-▲tex2Dbias(sampler, uv) ：相比tex2D，在uv.w中指定mip等级偏移。  
-▲tex2Dproj(sampler, uv) ：相比tex2D，uv是屏幕UV需要除以w分量：uv.xy / uv.w 
-▲tex2Dgrad(sampler, uv, ddx, ddy) ：同tex2D(sampler, uv, ddx, ddy)    
-▲Load(int3(unCoord2, lod)) ：加载指定像素坐标、指定mip的像素，无过滤。  
-▲Gather(sampler, coord2) ：加载指定像素坐标的像素，不支持mip，有过滤。  
+tex2Dbias(sampler, uv) ：相比tex2D，在uv.w中指定mip等级偏移。  
+tex2Dproj(sampler, uv) ：相比tex2D，uv是屏幕UV需要除以w分量：uv.xy / uv.w 
+tex2Dgrad(sampler, uv, ddx, ddy) ：同tex2D(sampler, uv, ddx, ddy)    
+Load(int3(unCoord2, lod)) ：加载指定像素坐标、指定mip的像素，无过滤。  
+Gather(sampler, coord2) ：加载指定像素坐标的像素，不支持mip，有过滤。  
     支持采样单通道：GatherRed/GatherGreen/GatherBlue/GatherAlpha  
 
 ### 异步指令  
-▲AllMemoryBarrierWithGroupSync() ：异步读写时，等待group内线程逻辑执行到此调用。  
+AllMemoryBarrierWithGroupSync() ：异步读写时，等待group内线程逻辑执行到此调用。  
 
 # Legacy库
 
