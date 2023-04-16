@@ -1,13 +1,12 @@
----
-title: 渲染基础-ShaderLibrary
-categories:
-- [渲染, 渲染基础]
-date: 2020-06-01 00:00:48
-description: HLSL函数、光照模型...
-cover: https://acgmart.oss-cn-hangzhou.aliyuncs.com/uploads/article/render/base/shader-library/cover.png
-sticky: 98
----
-参考资料： 
+# 渲染基础 ShaderLibrary
+shader语法和C++、C#等编程语言差不多，越是复杂的功能背后依赖的函数库就越多。  
+shader底层是DXBC指令，DXBC更底层则是不同GPU对指令的实现。  
+在Unity中对shader语法进行了一层包装，我们称之为ShaderLab语法。  
+    不同渲染API的Shader有差异，如DX、Metal、Vulkan、OpenGL，而Unity是跨平台的。  
+    我们能基于ShaderLab语法编写shader，根据DXBC指令进行算法优化。  
+<img src="_res_shader_library/cover.jpg" alt="Shader含数据" width="50%" height="50%">  
+
+## 参考资料 
 1.[HLSL微软官方文档](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl "HLSL微软官方文档") 
 2.[Unity SRP Github](https://github.com/Unity-Technologies/ScriptableRenderPipeline "Unity SRP Github")
 
