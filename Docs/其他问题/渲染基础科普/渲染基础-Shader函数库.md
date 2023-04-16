@@ -43,62 +43,67 @@ GPU侧的并行运算效率非常高，推荐使用多分量的变量进行计�
 		注：^二进制的逻辑异，不同既为真。  
 
 ## 流程控制
-if、for、while等C++风格的语法都可以使用。
+if、for、while等C++风格的语法都可以使用，但是性能方面非常堪忧。
 
 ## 语义
-语义可用来表示特殊的输入和输出，可声明在结构体内。
-这些语义分布在vertex函数输入/输出、frag函数输入/输出。
-vertex输入(模型空间数据)
-	float4 vertex : POSITION; //模型空间中的坐标 
-	float3 normal : NORMAL; //法线方向
-	float4 tangent : TANGENT; //切线方向 tangent.w用于确定副法线的方向
-	float4 texcoord0 : TEXCOORD0; //第一套纹理坐标
-	float4 texcoord1 : TEXCOORD1; //第二套纹理坐标
-	float4 texcoord2 : TEXCOORD2; //第三套纹理坐标
-	float4 texcoord3 : TEXCOORD3; //第四套纹理坐标
-	float4 color : COLOR; //顶点色
-	uint vid : SV_VertexID //顶点的index，与mesh.vertex中顺序一致。
-vertex输出
-	SV_POSITION //顶点在裁剪空间中的坐标
-frag输入
-	fixed facing : VFACE; //大于0表示当前三角形是正面朝向相机： 
-	UNITY_VPOS_TYPE screenPos :  VPOS //屏幕坐标
-fragment输出 
-	SV_TARGET //指向第一个颜色目标RT
+语义可用来表示特殊的输入和输出，可声明在结构体内。  
+这些语义分布在vertex函数输入/输出、frag函数输入/输出。  
+vertex输入(模型空间数据)  
+	float4 vertex : POSITION; //模型空间中的坐标   
+	float3 normal : NORMAL; //法线方向  
+	float4 tangent : TANGENT; //切线方向 tangent.w用于确定副法线的方向  
+	float4 texcoord0 : TEXCOORD0; //第一套纹理坐标  
+	float4 texcoord1 : TEXCOORD1; //第二套纹理坐标  
+	float4 texcoord2 : TEXCOORD2; //第三套纹理坐标  
+	float4 texcoord3 : TEXCOORD3; //第四套纹理坐标  
+	float4 color : COLOR; //顶点色  
+	uint vid : SV_VertexID //顶点的index，与mesh.vertex中顺序一致。  
+vertex输出  
+	SV_POSITION //顶点在裁剪空间中的坐标  
+frag输入  
+	fixed facing : VFACE; //大于0表示当前三角形是正面朝向相机：   
+	UNITY_VPOS_TYPE screenPos :  VPOS //屏幕坐标  
+fragment输出   
+	SV_TARGET //指向第一个颜色目标RT  
 
-## ComputeBuffer
-可以使用ComputeBuffer向GPU传递一个固定长度的struct队列。
+## Buffer
+ConstantBuffer：光栅shader常用的buffer，存储逐材质、逐帧、全局等分类的变量。  
+ComputeBuffer：ComputeShader个光栅shader都可以用的，可以传递指定长度的struct队列。  
 
 ## Sampler 采样器
-URP默认样式：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex); float4 _MainTex_TexelSize;`
-采样器中包含wrapping和filtering设置，有数量上限，建议将Texture2D和NoramlMap分别使用采样器。
-简写模式：`sampler2D _MainTex;` //这个声明方式自带采样器
-自定义采样器：`SAMPLER(sampler_Linear_Clamp);` //可使用字符串拼接的方式声明采样器
+shader中大量使用到了贴图采用，关于采样的细节原理参考“缓存命中率.md”。  
+URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`  
+    `float4 _MainTex_TexelSize; float4 _MainTex_HDR`  
+采样器中包含wrapping和filtering设置，有数量上限，同类型的贴图可以复用采样器。  
+    比如多层采样的地形shader服用Layer1的采样器。  
 
-采样操作语法： 
-`float4 value = _Ramp.Sample(sampler_Ramp, float2(intensity, 0));` 
-`float4 value = tex2D(_Ramp, uv.xy);`  //使用自带采样器
-`float4 value = SAMPLE_TEXTURE2D(_Ramp, Sampler, uv.xy);` 
+简写模式：`sampler2D _MainTex;` //这个声明方式自带采样器  
+自定义采样器：`SAMPLER(sampler_Linear_Clamp);` //可使用字符串拼接的方式声明采样器  
+
+采样语法： 
+`half4 value = _Ramp.Sample(sampler_Ramp, float2(intensity, 0));`  
+`half4 value = tex2D(_Ramp, uv.xy);`  //使用自带采样器  
+`half4 value = SAMPLE_TEXTURE2D(_Ramp, Sampler, uv.xy);`  
 
 ## 内置函数
-▲abort() 注：报错并终止DrawCall。
-▲abs(x) 注：返回逐分量的绝对值，abs(-1)为1。
-▲acos(x) 注：返回逐分量(在-1至1范围内)的反余玄值(弧度)，乘以57.29578转换为角度。
-注：如果需要将角度转化为弧度，那么就是乘以0.0174532924。
-▲all(x) 注：如果x的所有分量都不为0，返回true；否则返回false。
-▲AllMemoryBarrier() 注：异步读写时，等待group内线程读写完毕。
-▲AllMemoryBarrierWithGroupSync() 注：异步读写时，等待group内线程逻辑执行到此调用。
-▲any(x) 注：如果x的任一分量不为0，返回true；否则返回false。
-▲asdouble(x, y) 注：将2个uint Vector转换为1个double Vector，分量数不变。
-▲asfloat(x) 注：将1个任意Vector转换为float Vector。
-▲asin(x) 注：返回逐分量(在-1至1范围内)的反正玄值(弧度)，乘以57.29578转换为角度。
-▲asint 注：将1个任意Vector转换为int Vector。
-▲asuint 注：将1个任意Vector转换为uint Vector。
-▲atan(x) 注：返回逐分量的反正切值(弧度)，乘以57.29578转换为角度。
-▲atan2(y, x) 注：返回向量(x, y)与X轴的反正切值(弧度)，乘以57.29578转换为角度。
-▲ceil(x) 注：如果x有小数部分，返回比x大的最小的整数。
-▲CheckAccessFullyMapped(x) 
-▲clamp(a, x, y) 
+▲abort() 注：报错并终止DrawCall。  
+▲abs(x) 注：返回逐分量的绝对值，abs(-1)为1。  
+▲acos(x) 注：返回逐分量(在-1至1范围内)的反余玄值(弧度)，乘以57.29578转换为角度。  
+注：如果需要将角度转化为弧度，那么就是乘以0.0174532924。  
+▲all(x) 注：如果x的所有分量都不为0，返回true；否则返回false。  
+▲AllMemoryBarrier() 注：异步读写时，等待group内线程读写完毕。  
+▲AllMemoryBarrierWithGroupSync() 注：异步读写时，等待group内线程逻辑执行到此调用。  
+▲any(x) 注：如果x的任一分量不为0，返回true；否则返回false。  
+▲asdouble(x, y) 注：将2个uint Vector转换为1个double Vector，分量数不变。  
+▲asfloat(x) 注：将1个任意Vector转换为float Vector。  
+▲asin(x) 注：返回逐分量(在-1至1范围内)的反正玄值(弧度)，乘以57.29578转换为角度。  
+▲asint 注：将1个任意Vector转换为int Vector。  
+▲asuint 注：将1个任意Vector转换为uint Vector。  
+▲atan(x) 注：返回逐分量的反正切值(弧度)，乘以57.29578转换为角度。  
+▲atan2(y, x) 注：返回向量(x, y)与X轴的反正切值(弧度)，乘以57.29578转换为角度。  
+▲ceil(x) 注：如果x有小数部分，返回比x大的最小的整数。  
+▲CheckAccessFullyMapped(x)   
+▲clamp(a, x, y)   
 注：if(a < x) retrun x; if(a > y) retrun y; retrun a; 
 ▲clip(x) 注：如果x的任意分量小于0，则忽略当前片元；也就是透明度测试alphatest。 
 ▲cos(x) 注：返回x(弧度)的余玄值。 
