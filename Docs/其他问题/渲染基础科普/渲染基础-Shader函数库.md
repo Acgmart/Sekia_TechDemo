@@ -8,7 +8,7 @@ shader底层是DXBC指令，DXBC更底层则是不同GPU对指令的实现。
 
 ## 参考资料 
 1.[HLSL微软官方文档](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl "HLSL微软官方文档")  
-2.[Unity SRP Github](https://github.com/Unity-Technologies/ScriptableRenderPipeline "Unity SRP Github")  
+2.[Unity SRP Github](https://github.com/Unity-Technologies/Graphics "Unity SRP Github")  
 
 # HLSL语法
 编写Unity shader时，可以使用CG或HLSL风格的语法，在Unity推出SRP后普遍流行HLSL语法。  
@@ -43,7 +43,7 @@ GPU侧的并行运算效率非常高，推荐使用多分量的变量进行计�
 		注：^二进制的逻辑异，不同既为真。  
 
 ## 流程控制
-if、for、while等C++风格的语法都可以使用，但是性能方面非常堪忧。
+if、for、while等C++风格的语法都可以使用，但是性能堪忧。
 
 ## 语义
 语义可用来表示特殊的输入和输出，可声明在结构体内。  
@@ -72,6 +72,7 @@ ComputeBuffer：ComputeShader个光栅shader都可以用的，可以传递指定
 
 ## Sampler 采样器
 shader中大量使用到了贴图采用，关于采样的细节原理参考“缓存命中率.md”。  
+	贴图有sRGB、mip、压缩、过滤等基础特性。  
 URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`  
     `float4 _MainTex_TexelSize; float4 _MainTex_HDR`  
 采样器中包含wrapping和filtering设置，有数量上限，同类型的贴图可以复用采样器。  
@@ -86,74 +87,80 @@ URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`
 `half4 value = SAMPLE_TEXTURE2D(_Ramp, Sampler, uv.xy);`  
 
 ## 内置函数 
+内置函数是hlsl是已经存在的接口，经过ShaderLab的封装后供我们使用。  
+	很多列表里的函数实际上没被用到过，通常我们都是基于Unity使用经验来谈。  
+像normalize、smoothstep等函数实际上由多个指令构成，我们需要了解函数底层实现。  
 
 ### 类型转换
 asdouble(x, y) ：将2个uint Vector转换为1个double Vector，分量数不变。  
-asfloat(x) ：将1个任意Vector转换为float Vector。 
+asfloat(x) ：将1个任意Vector转换为float Vector。  
 asint ：将1个任意Vector转换为int Vector。  
 asuint ：将1个任意Vector转换为uint Vector。   
-f16tof32(x) ：返回x(被保存为unit的16位浮点数)的32位浮点数表达形式。 
-f32tof16(x) ：返回x(32位浮点数)的16位浮点数表达形式(被保存为unit)。 
+f16tof32(x) ：返回x(被保存为unit的16位浮点数)的32位浮点数表达形式。  
+f32tof16(x) ：返回x(32位浮点数)的16位浮点数表达形式(被保存为unit)。  
 
 ### 浮点数操作
-floor(x) ：如果x有小数部分，返回比x小的最大整数，floor(-2.3) = -3。 
+floor(x) ：如果x有小数部分，返回比x小的最大整数，floor(-2.3) = -3。  
 ceil(x) ：如果x有小数部分，返回比x大的最小的整数。  
 trunc(x) ：逐分量去除小数部分，trunc(-2.3)= -2。  
 abs(x) ：返回逐分量的绝对值，abs(-1)为1。   
 clamp(x, min, max) ：将X的值限制在min和max之间。  
     if(x < min) retrun min;  
     if(x > max) retrun max;  
-    else retrun x;  
-saturate(a) ：等效于clamp(x, 0, 1) 
+    else 		retrun x;  
+saturate(a) ：等效于clamp(x, 0, 1)  
 fmod(x, y) ：取余，返回x/y的小数部分。  
-frac(x) ：返回x的小数部分。 
-round(x) ：逐分量四舍五入。  
+frac(x) ：返回x的小数部分。  
+round(x) ：返回逐分量四舍五入。  
 max(x, y) ：返回逐分量最大值。  
 min(x, y) ：返回逐分量最小值。  
-sign(x) ：相当于if(x<0) return -1;if(x>0) return 1; return 0;。 
+sign(x) ：相当于if(x<0) return -1;if(x>0) return 1; return 0;。  
 
 ### 三角函数
+三角函数的使用容易引起手机发热，可适当优化。  
 弧度乘以57.29578转换为角度。  
 如果需要将角度转化为弧度，那么就是乘以0.0174532924。  
 
-sin(x) ：返回x(弧度)的正玄值。 
-cos(x) ：返回x(弧度)的余玄值。 
+sin(x) ：返回x(弧度)的正玄值。  
+cos(x) ：返回x(弧度)的余玄值。  
 tan(x) ：逐分量返回x(弧度)的正切值。  
 degree(x) ：将x(弧度)转化为角度。 
 radians(x) ：将角度x转换为弧度。  
-sincos(x, s, c) ：void，将x(弧度)的sin值和cos值分别赋值到s和c。 
+sincos(x, s, c) ：void，将x(弧度)的sin值和cos值分别赋值到s和c。  
 
-asin(x) ：返回逐分量(在-1至1范围内)的反正玄值(弧度)。 
+asin(x) ：返回逐分量(在-1至1范围内)的反正玄值(弧度)。  
 acos(x) ：返回逐分量(在-1至1范围内)的反余玄值(弧度)。  
-atan(x) ：返回逐分量的反正切值(弧度)。
-atan2(y, x) ：返回向量(x, y)与X轴的反正切值(弧度)。
-    由于x和y可以表达坐标所处在的象限，计算的结果比atan更稳定。
+atan(x) ：返回逐分量的反正切值(弧度)。  
+atan2(y, x) ：返回向量(x, y)与X轴的反正切值(弧度)。  
+    由于x和y可以表达坐标所处在的象限，计算的结果比atan更稳定。  
 
+双曲函数：https://zhuanlan.zhihu.com/p/548599449  
 sinh(x) ：双曲线正玄函数。 
-cosh(x) ：[双曲线余玄函数](http://tushuo.jk51.com/tushuo/4461003.html "双曲线余玄函数")。 
+cosh(x) ：双曲线余玄函数。 
 tanh(x) ：双曲线正切函数。 
 
 ### 逻辑运算
 all(x) ：如果x的所有分量都不为0，返回true；否则返回false。  
-any(x) ：如果x的任一分量不为0，返回true；否则返回false。 
+any(x) ：如果x的任一分量不为0，返回true；否则返回false。  
 countbits(x) ：返回逐分量(uint类型)的二进制格式中1的位数。   
-firstbithigh(x) ：返回逐分量(int或uint)的二进制格式中从高位数第一个1的位置。 
-firstbitlow(x) ：返回逐分量(uint)的二进制格式中从低位数第一个1的位置。 
-step(a, b) ：等效于(b >= a) ? 1 : 0 
+firstbithigh(x) ：返回逐分量(int或uint)的二进制格式中从高位数第一个1的位置。  
+firstbitlow(x) ：返回逐分量(uint)的二进制格式中从低位数第一个1的位置。  
+step(a, b) ：等效于(b >= a) ? 1 : 0  
 
 ### 特殊功能
-clip(x) ：如果x的任意分量小于0，则忽略当前片元；也就是透明度测试alphatest。 
-isfinite(x) ：逐分量判断浮点数的值是否为finite(有限的)。 
-isinf(x) ：逐分量判断浮点数的值是否为infinite(无限的)。 
-isnan(x) ：逐分量判断浮点数的值是否为NAN或QNAN。 
+clip(x) ：如果x的任意分量小于0，则忽略当前片元；也就是透明度测试AlphaTest。  
+isfinite(x) ：逐分量判断浮点数的值是否为finite(有限的)。  
+isinf(x) ：逐分量判断浮点数的值是否为infinite(无限的)。  
+isnan(x) ：逐分量判断浮点数的值是否为NAN或QNAN。  
 
-### 指数级别函数
-exp(x) ：返回以自然数e(2.71828)为底数，x为指数的值。 
-exp2(x) ：返回以2为底数，x为指数的值。 
-log(x) ：求对数，返回以e为底数，x为值时对应的指数。 
-log2(x) ：求对数，返回以2位底数，x为值时对应的指数。 
-log10(x) ：求对数，返回以10为底数，x为值时对应的指数。 
-pow(x, y) ：幂运算，x为底数，y为指数，等价于exp(log(x) * y)。 
+### 指数函数
+exp(x) ：返回以自然数e(2.71828)为底数，x为指数的值。  
+log(x) ：求对数，返回以e为底数，x为值时对应的指数。  
+exp2(x) ：返回以2为底数，x为指数的值。  
+log2(x) ：求对数，返回以2位底数，x为值时对应的指数。  
+log10(x) ：求对数，返回以10为底数，x为值时对应的指数。  
+pow(x, y) ：幂运算，x为底数，y为指数，等价于exp2(log2(x) * y)。  
+	底数为0时结果可能异常。  
 
 ### 常规函数
 rcp(x) ：逐分量返回近似倒数。  
