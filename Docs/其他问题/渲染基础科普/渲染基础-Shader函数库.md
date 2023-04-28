@@ -215,15 +215,21 @@ Builtin、URP、HDRP的Shader库都很有学习价值，在做效果方面连连
 常用函数可以说是无限多的，我们需要收集整理，总结出函数的使用经验。  
 Unity做了很多平台兼容和版本迭代，很多改动对特定项目来说都不是必要的，需要我们了解底层实现。  
 
+## 图片预处理类型函数
+噪音贴图对比度：控制噪音细节的强弱。  
+
 ## 矩阵类函数
 float3 TransformObjectToWorld(float3 positionOS)：模型空间to世界空间  
 float4 TransformWorldToHClip(float3 positionWS)：世界空间to裁剪空间  
 float3 TransformObjectToWorldNormal(float3 normalOS, bool doNormalize = true)：世界空间法线  
 	利用矩阵实现对顶点、向量的缩放、旋转、偏移等常规操作，需自行判断是否需要归一化。  
+	矩阵的运用非常灵活，比如渲染球型草时用顶点坐标当法线；用观察空间xy平面的坐标当投影平面。  
 
 ## 视口类函数
 float4 ComputeScreenPos(float4 positionCS)：计算屏幕空间UV  
 	该方法需要在顶点shader中调用，在片元shader中进行齐次去除补偿。  
+现在很多效果都要采样深度重建世界坐标，比如水、高度雾、场景扫描。  
+	拿水举例，水通常是一个面片，河底是地形系统，需要根据水面的水下深度进行透明渐变、折射。  
 	
 # 光照模型
 目前业界主要是PBR渲染和卡通渲染。  
