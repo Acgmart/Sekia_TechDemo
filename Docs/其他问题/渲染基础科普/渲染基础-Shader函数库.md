@@ -170,29 +170,30 @@ dot(x, y) ：返回x和y(Vector)的点积，xa * xb + ya * yb。
 mad(a, x, y) ：返回a * x + y，执行速度快。  
 fma(a, x, y) ：相比mad运算精度更高。  
 lerp(x, y, a) ：等效于x + a(y-x)。  
-noise(x) ：Perlin噪声函数，返回值在-1至1内。 
-normalize(x) ：归一化x(Vector)。 
-reflect(input, normal) ：求反射方向, input为入射方向，返回input - 2 \* normal \* dot(input, normal)。 
-refract(input, normal, 折射率) ：求折射方向。 
-rsqrt(x) ：逐分量平方根的倒数。
-smoothstep(x, y, a) ：类似于clamp(a, x, y)，做曲线映射, x * x * (3 - 2 * x)。   
-sqrt(x) ：逐分量返回x的平方根。 
+noise(x) ：Perlin噪声函数，返回值在-1至1内。  
+normalize(x) ：归一化x(Vector)。  
+reflect(input, normal) ：input为入射方向，求反射方向。  
+	return input - 2 * normal * dot(input, normal);  
+refract(input, normal, 折射率) ：求折射方向。  
+rsqrt(x) ：逐分量平方根的倒数。  
+smoothstep(x, y, a) ：类似于clamp(a, x, y)，做曲线映射, x * x * (3 - 2 * x)。  
+sqrt(x) ：逐分量返回x的平方根。  
 
 ### 矩阵操作
-mul(x, y) ：矩阵相乘；矢量在右边时，被竖排序；矢量在左边时，被横排序。 
-transpose(x) :返回x(矩阵)的转置矩阵(将行列互换)。
-cross(x, y) ：返回x和y(参数为多组件Vector类型)的叉积。 
+mul(x, y) ：矩阵相乘；矢量在右边时，被竖排序；矢量在左边时，被横排序。  
+transpose(x) :返回x(矩阵)的转置矩阵(将行列互换)。  
+cross(x, y) ：返回x和y(参数为多组件Vector类型)的叉积。  
 
 ### 采样
 tex2D(sampler, uv) ：默认采样语法，仅用于片元shader。  
     底层会基于uv的ddx和ddy推导mip等级，实现双线性/三线性过滤。  
-    因为在顶点Shader阶段没有生成片元，无法产生ddx和ddy，不能用于顶点Shader。   
+    因为在顶点Shader阶段没有生成片元，无法产生ddx和ddy，不能用于顶点Shader。  
 tex2D(sampler, uv, ddx, ddy) ：使用指定的偏导数替代uv的偏导数  
 tex2Dlod(sampler, uv) ：相比tex2D，在uv.w中指定mip等级。  
-    在只需要特定mip时tex2Dlod无需计算mip性能更优。
+    在只需要特定mip时tex2Dlod无需计算mip性能更优。  
     在3D场景贴图采样时tex2D自动计算mip纹理缓存命中率更高。  
 tex2Dbias(sampler, uv) ：相比tex2D，在uv.w中指定mip等级偏移。  
-tex2Dproj(sampler, uv) ：相比tex2D，uv是屏幕UV需要除以w分量：uv.xy / uv.w 
+tex2Dproj(sampler, uv) ：相比tex2D，uv是屏幕UV需要除以w分量：uv.xy / uv.w  
 tex2Dgrad(sampler, uv, ddx, ddy) ：同tex2D(sampler, uv, ddx, ddy)    
 Load(int3(unCoord2, lod)) ：加载指定像素坐标、指定mip的像素，无过滤。  
 Gather(sampler, coord2) ：加载指定像素坐标的像素，不支持mip，有过滤。  
