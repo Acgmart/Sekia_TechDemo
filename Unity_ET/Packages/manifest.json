@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "com.autodesk.fbx": "5.0.0",
-    "com.focus-creative-games.hybridclr_unity": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
     "com.unity.ai.navigation": "1.1.1",
     "com.unity.formats.fbx": "5.0.0",
     "com.unity.ide.rider": "3.0.18",

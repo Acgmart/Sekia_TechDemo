@@ -7,13 +7,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.focus-creative-games.hybridclr_unity": {
-      "version": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "f2b5f233df9710fe4edfc33526ce500f1933e747"
-    },
     "com.unity.ai.navigation": {
       "version": "1.1.1",
       "depth": 0,
