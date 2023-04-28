@@ -199,69 +199,35 @@ Load(int3(unCoord2, lod)) ：加载指定像素坐标、指定mip的像素，无
 Gather(sampler, coord2) ：加载指定像素坐标的像素，不支持mip，有过滤。  
     支持采样单通道：GatherRed/GatherGreen/GatherBlue/GatherAlpha  
 
-### 异步指令  
-GroupMemoryBarrierWithGroupSync() ：异步读写时，等待group内线程逻辑执行到此调用。 
-ddx(x)：范围Vector x的[偏导数](https://blog.csdn.net/wylionheart/article/details/78026707 "偏导数")。   
-ddx_coarse(x) ：返回Vector x的低精度偏导数。  
-ddx_fine(x) ：返回Vector x的高精度偏导数。  
+### 异步指令
+GroupMemoryBarrierWithGroupSync() ：异步读写时，等待group内线程逻辑执行到此调用。  
+ddx(x)：求返回变量x在向量像素之间的落差(偏导数)。  
+	片元2x2作为一组并行执行，假设x为世界空间高度，那么ddx可以计算横向向量像素的高度差。  
+	通过ddx、ddy、世界坐标，可以得出某一点的世界空间法线。  
+	因为变量在不同像素里值不一样于是产生了梯度，如果x是衡量那么产生的梯度为0.  
+ddx_coarse(x) ：返回x的低精度偏导数。  
+ddx_fine(x) ：返回x的高精度偏导数。  
 ddy(y)/ddy_coarse/ddy_fine ：参考ddx。  
 fwidth(x) ：返回abs(ddx(x)) + abs(ddy(x))。  
 
+# 常用函数
+Builtin、URP、HDRP的Shader库都很有学习价值，在做效果方面连连看的节点库非常实用。  
+常用函数可以说是无限多的，我们需要收集整理，总结出函数的使用经验。  
+Unity做了很多平台兼容和版本迭代，很多改动对特定项目来说都不是必要的，需要我们了解底层实现。  
 
-# Legacy库
+## 矩阵类函数
+float3 TransformObjectToWorld(float3 positionOS)：模型空间to世界空间  
+float4 TransformWorldToHClip(float3 positionWS)：世界空间to裁剪空间  
+float3 TransformObjectToWorldNormal(float3 normalOS, bool doNormalize = true)：世界空间法线  
+	利用矩阵实现对顶点、向量的缩放、旋转、偏移等常规操作，需自行判断是否需要归一化。  
 
-由于目前大部分网络上的资料都由内置管线编写，Legacy库依然有学习价值。 ▲ComputeGrabScreenPos(float4)
-
-```
-inline float4 ComputeGrabScreenPos (float4 pos) //输入Clip空间4元坐标
-{
-    #if UNITY_UV_STARTS_AT_TOP
-    float scale = -1.0;
-    #else
-    float scale = 1.0;
-    #endif
-    float4 o = pos * 0.5f;
-    o.xy = float2(o.x, o.y*scale) + o.w; //输出x分量为pos.w * (pos.x / pos.w + 1) * 0.5
-#ifdef UNITY_SINGLE_PASS_STEREO          //输出y分量会额外在DX平台反转
-    o.xy = TransformStereoScreenSpaceTex(o.xy, pos.w);
-#endif
-    o.zw = pos.zw;                       //输出zw分量为pos.zw
-    return o;
-}
-```
-
-ComputeGrabScreenPos用于计算屏幕空间的位置，在vertex中调用，fragment中xy分量除以w分量(tex2Dproj)后可作为UV坐标使用。提供DX平台的UV反转，使DX平台屏幕左下角对应(0, 1)，可直接使用tex2Dproj采样基于屏幕空间的Texture，tex2Dproj采样结果与Screen空间(0-1的2D坐标系)位置对应，区别于通常tex2D采样结果与Object空间位置对应。也就是，将A相机看到的结果提供给B相机采样。
-
-# SRP-Core库
-
-SpaceTransforms.hlsl ▲GetObjectToWorldMatrix() 注：返回Object-World矩阵。 ▲GetWorldToObjectMatrix() 注：返回World-Object矩阵。 ▲GetWorldToViewMatrix() 注：返回World-View矩阵。 ▲GetWorldToHClipMatrix() 注：返回World-Clip矩阵。 ▲GetViewToHClipMatrix() 注：返回View-Clip矩阵。 ▲GetAbsolutePositionWS(x) ▲GetCameraRelativePositionWS(x) ▲GetOddNegativeScale ▲TransformObjectToWorld ▲TransformWorldToObject ▲TransformWorldToView ▲TransformObjectToHClip ▲TransformWorldToHClip ▲TransformWViewToHClip ▲TransformObjectToWorldDir ▲TransformWorldToObjectDir ▲TransformWorldToViewDir ▲TransformWorldToHClipDir ▲TransformObjectToWorldNormal ▲CreateTangentToWorld ▲TransformTangentToWorld ▲TransformWorldToTangent ▲TransformTangentToObject ▲TransformObjectToTangent
-
-# SRP-URP库
-
-# SRP-HDRP库
-
-# C#库
-
-在C#中经常需要设置矩阵、向量，实现旋转、反射等效果，也需要图形方面的计算。 ▲Matrix4x4类型结构体 Matrix4x4 test = new Matrix4x4(Vector4.one, new Vector4(2F, 3F, 4F, 5F), Vector4.one, Vector4.one); Matrix4x4结构使用4个Vector4参数填充矩阵的每一列。 test = test1 \* test2; //矩阵相乘，对应mul(a, b)操作，作图时a在左侧，b在上侧。 test = test.transpose; //矩阵置转，交换行列。 test = test.inverse; //矩阵求逆，不一定有逆矩阵。 Debug.Log(test.m03); //可以查看矩阵的分量，两个数字分布代表所在行和列。 Debug.Log(test\[4\]); //使用数组取值方式时，参数为列排序，test\[4\]相当于test.m01。 Debug.Log(test); //可以直接查看矩阵的值。 test.MultiplyPoint3x4(pos); //使用矩阵转移顶点。 test.MultiplyVector(normal); //使用矩阵转移向量。 ▲Vect4类型结构体 Vector4.Dot(test1, test2); //对应dot(a, b)操作。
-
-# Unity内置参数
-
-## UnityShaderVariables.cginc
-
-包含了很多内置的全局变量，这个文件会被自动包含。 参考[Unity用户手册](https://docs.unity3d.com/Manual/SL-UnityShaderVariables.html)。 时间 float4 \_Time;float4\_SinTime;float4\_CosTime;float4 unity\_DeltaTime 常用矩阵 UNITY\_MATRIX\_M 将顶点/矢量从模型空间变换到世界空间。 UNITY\_MATRIX\_V 将顶点/矢量从世界空间变换到观察空间。 UNITY\_MATRIX\_P 将顶点/矢量从观察空间变换到裁剪空间。 UNITY\_MATRIX\_MV 将顶点/方向矢量从模型空间变换到观察空间。 UNITY\_MATRIX\_VP 将顶点/矢量从世界空间变换到裁剪空间。 UNITY\_MATRIX\_MVP 将顶点/方向矢量从模型空间变换到裁剪空间。 经常被UnityObjectToClipPos(v.vertex)函数替换。 UNITY\_MATRIX\_I\_V UNITY\_MATRIX\_V的逆矩阵 UNITY\_MATRIX\_T\_MV UNITY\_MATRIX\_MV的转置矩阵。 unity\_WorldToObject UNITY\_MATRIX\_M的逆矩阵。 全局光照变量 UNITY\_LIGHTMODEL\_AMBIENT 环境光颜色，可在Lighting Settings中确认。 float4 \_WorldSpaceLightPos0 光源方向，对于平行光，w分量为0；对于非平行光，w分量为1。 需要取其xyz分量作为矢量并归一化，只可在ForwardBase/ForwardAdd中使用。 float4 unity\_4LightPosX0;float4 unity\_4LightPosY0;float4 unity\_4LightPosZ0;float4 unity\_4LightAtten0;half4 unity\_LightColor\[4\]; 仅用于ForwardBase，在顶点着色器中计算4个逐顶点光照，作为Shade4PointLights函数的参数。 全局相机参数 \_WorldSpaceCameraPos float3 该相机在世界空间中的位置。 用于减去顶点/片元在世界空间中的坐标，也就是xyz分量，得到摄像机方向。 \_ProjectionParams float4 Near和Far。 \_ScreenParams float4 render target的像素宽度和高度，x为像素宽度，y为像素高度，单位为像素。 \_ZBufferParams float4 x=1−Far/Near，y=Far/Near，z=x/Far，w=y/Far。 unity\_OrthoParams float4 正交相机的W和H。 unity\_CameraProjection float4x4 该相机的投影矩阵。 unity\_CameraInvProjection float4x4 该相机的投影矩阵的逆矩阵。 unity\_CameraWorldClipPlanes\[6\] float4 该相机的6个裁剪面在世界空间下的等式。
-
-## UnityCG.cginc
-
-包含了最常使用的帮助函数、宏、结构体等。 视角方向 float3 UnityWorldSpaceViewDir(float3 worldPos) 输入一个世界空间中的顶点位置，返回世界空间中从该点到相机的观察方向。 在世界空间下，用相机位置减去顶点位置，没有被归一化。 float3 WorldSpaceViewDir(float4 v) 输入模型空间中的顶点位置，返回世界空间中从该点到相机的观察方向。 先将顶点从模型空间转换到世界空间，再使用UnityWorldSpaceViewDir函数，没有被归一化。 float3 ObjSpaceViewDir(float4 v) 输入一个模型空间中的顶点位置，返回模型空间中从该点到相机的观察方向。 将相机位置转换到模型空间，再减去顶点位置。没有被归一化。 光源方向 仅可用于ForwardBase/ForwardAdd。 float3 UnityWorldSpaceLightDir(float3 worldPos) 输入一个世界空间中的顶点位置，返回世界空间中从该点到光源的光照方向。 在世界空间下，用光源位置减去顶点位置。没有被归一化。 float3 WorldSpaceLightDir(float4 v) 输入一个模型空间中的顶点位置，返回世界空间中从该点到光源的光照方向。 先将顶点位置从模型空间转换到世界空间，再使用UnityWorldSpaceLightDir函数。没有被归一化。 float3 ObjSpaceLightDir(float4 v) 输入一个模型空间中的顶点位置，返回模型空间中从该点到光源的光照方向。 将光源的位置从世界空间转换到模型空间，再减去减去顶点位置。没有被归一化。 空间转换 float3 UnityObjectToWorldNormal(float3 norm) 把法线方向从模型空间转换到世界空间中。 判断模型是否统一缩放，非统一缩放时使用**逆转置矩阵**。已归一化。 float3 UnityObjectToWorldDir(float3 dir) 把方向矢量从模型空间转换到世界空间中。 使用unity\_ObjectToWorld函数的3x3简化版本。已归一化。 float3 UnityWorldToObjectDir(float3 dir) 把方向矢量从世界空间转换到模型空间中。 使用unity\_WorldToObject矩阵的3x3简化版本。已归一化。 TANGENT\_SPACE\_ROTATION; 这个宏相当于以下代码，需要提前定义好法线和切线，矩阵rotation可将矢量从模型空间转换到切线空间。 float3 binormal = cross( normalize(v.normal), normalize(v.tangent.xyz) ) \* v.tangent.w; float3x3 rotation = float3x3( v.tangent.xyz, binormal, v.normal ) UnityObjectToClipPos(v.vertex); 顶点着色器中，将顶点从模型空间转换到裁剪空间，用于实现顶点着色器的基础任务。 功能函数/宏 float4 ComputeScreenPos(float4 pos) 输入：裁剪空间中的顶点坐标，4元数，o.screenPos = ComputeScreenPos(o.clipPos);。 输出：x分量等于clipx/2+clipw/2；y分量等于clipy/2+clipw/2；z分量等于clipz；w分量等于clipw。 xy分量相当于对裁剪空间中的顶点转换到视口空间，但是没有除以w分量。 当ComputeScreenPos的输出结果作为vertex函数的输出时，参与了三角形遍历过程中的差值处理。 需要在fragment函数中除以w分量，float4 screenPos = in.screenPos / in.screenPos.w。 处理后，xy分量相当于(clip/2+0.5) 左下角为(0,0) 左上角为(1,1)，可用于采样屏幕贴图。 float2 TRANSFORM\_TEX(v.texcoord,\_Maintex) 顶点着色器中用于得到偏移后的UV坐标。参数为第一套UV坐标和贴图纹理，返回经过了缩放和平移后的UV坐标。 内部计算：v.texcoord.xy \* \_MainTex\_ST.xy + \_MainTex\_ST.zw; 变换后xy值可能超出\[0,1\]，Repeat平铺模式，超出1的部分会无限重复；Clamp平铺模式则保持边缘值。 fixed4 tex2D(\_NormalMap,i.uv); 片元着色器中对贴图采样，输入2D纹理贴图和UV坐标，得到指定位置的rgba值。 当UV值超出\[0,1\]时根据平铺模式返回值。使用Clamp平铺模式可解决Repeat平铺模式的边缘杂色。 对切线空间下的法线贴图的采样：需要将\[-1,1\]范围的值转化到\[0,1\]；转化过程：y=x/2+0.5 对渐变纹理的采样：采样用的UV参数可以使用想要影响的颜色的系数，如通过光照角度实现渐变的反照率。 对遮罩纹理的采样：使用和纹理贴图一样的UV，实现像素级别的控制想要影响的颜色的系数。 fixed3 UnpackNormal(float4 packednormal) 法线纹理解压，当纹理贴图的导入设置中Texture Type被标记为Normal map时，Unity对贴图进行压缩。 压缩过程中只保留了rgba其中两个通道的值，我们无需关心Unity针对哪个平台使用了那种压缩方式。 normal.xy = packednormal.wy \* 2 - 1;normal.z = sqrt(1 - saturate(dot(normal.xy, normal.xy))); 输入采样得到的float4值，得到解压后的rgb值，是一个单位向量。 当法线值为(0,0,1)时，表示平滑表面，可以通过缩放xy分量来增强法线的倾斜效果。 float3 Shade4PointLights(unity\_4LightPosX0, unity\_4LightPosY0, unity\_4LightPosZ0,unity\_LightColor\[0\].rgb, unity\_LightColor\[1\].rgb, unity\_LightColor\[2\].rgb, unity\_LightColor\[3\].rgb, unity\_4LightAtten0, o.worldPos, o.worldNormal); ForwardBase的vertex函数中，一次性计算4个逐顶点光照颜色值。 half3 ShadeSH9 (float4(o.worldNormal, 1.0)) ForwardBase的vertex函数中，一次计算所有SH光源的光照颜色值，包含环境光。
-
-## Lighting.cginc
-
-包含了各种内置的光照模型。 \_LightColor0 该Pass处理的逐像素光源的颜色，用于向前渲染。 USING\_DIRECTIONAL\_LIGHT keyword，判定光源类型是否为平行光。
-
-## AutoLight.cginc
-
-\_LightMatrix0;unity\_WorldToLight float4X4，从世界空间到光源空间的变换矩阵。可用于采样cookie和光强衰减纹理。 使用unity\_WorldToLight替代\_LightMatrix0；光源空间中，光源位置(0,0,0)，光边缘处LightCoord模为1。 \_LightTexture0;\_LightTextureB0 \_LightTexture0为点光源的衰减纹理，\_LightTextureB0为聚光灯的衰减纹理。 POINT;SPOT;POINT\_COOKIE;DIRECTIONAL\_COOKIE 光源模式定义，通过判断keyword正确执行衰减纹理采样。 ForwardAdd中进行光源空间中的光强衰减采样 #if defined (POINT) //如果是点光源 float3 lightCoord = mul(unity\_WorldToLight, float4(i.worldPos, 1)).xyz; fixed atten = tex2D(\_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY\_ATTEN\_CHANNEL; #elif defined (SPOT) //如果是聚光灯，转换矩阵会不同，w分量代表同距离时不同角度处的光照衰减。 float4 lightCoord = mul(unity\_WorldToLight, float4(i.worldPos, 1)); fixed atten = (lightCoord.z > 0) \* tex2D(\_LightTexture0, lightCoord.xy / lightCoord.w + 0.5).w \* tex2D(\_LightTextureB0, dot(lightCoord, lightCoord).rr).UNITY\_ATTEN\_CHANNEL; #endif 聚光灯空间是一个三维空间，光源为(0,0,0)，+Z轴方向为聚光灯方向，受光影响的区域是一个圆锥+球形截面。 在距离光源距离为1的地方光衰减为0，即时在距离1范围内，根据角度不同也有衰减，可创建demo场景进行观察。 0<n<1，所有距离光源距离为n的点构成了一个球形截面，光源-点的矢量与+Z轴之间的夹角越大衰减越大，如下图： ![](https://img.acgmart.com/uploads/233b3a90-85dc-11e6-9e1b-7b1653b4313c.png) lightCoord.xy / lightCoord.w + 0.5的意义就是得到这个夹角，并进行采样。 SHADOW\_COORDS(a);TRANSFER\_SHADOW(o);fixed SHAOW\_ATTENUATION(i) 阴影三剑客，分别用于声明v2f成员(阴影采样uv)、计算uv偏移、采样阴影值。 LIGHTING\_COORDS(a,b);TRANSFER\_VERTEX\_TO\_FRAGMENT(o);fixed LIGHT\_ATTENUATION(i); 衰减三剑客，同时计算了阴影衰减和光照衰减。a和b是下一个可用的差值寄存器序列。 分别用于声明v2f成员(光照衰减采样uv、阴影采样uv)、计算uv偏移、采样阴影值。 UNITY\_LIGHT\_ATTENUATION(atten, i, i.worldPos); 配合阴影三剑客前2个宏，atten为阴影衰减x光照衰减，输入的世界坐标用于光照采样。 VERTEXLIGHT\_ON keyword，判断是否存在有效的顶点光照。
-
+## 视口类函数
+float4 ComputeScreenPos(float4 positionCS)：计算屏幕空间UV  
+	该方法需要在顶点shader中调用，在片元shader中进行齐次去除补偿。  
+	
 # 光照模型
-
-漫反射颜色\=光源色\*漫反射系数\*反照率；**与观察方向无关**。 漫反射系数：代表物体对光的吸收/漫反射的性质，用rgb分量表示漫反射光的比率(强度)。 兰伯特漫反射反照率=光线方向·法线方向；矢量归一化→积→saturate；反射光线的强度与**表面法线和光源方向之间夹角的余玄值**成正比。 镜面反射颜色\=光源色\*高光系数\*镜面反射率；与观察方向有关 高光系数：对镜面反射颜色的rgb分量进行额外修正，不确定是否有科学依据。 Phong光照模型**镜面反射率**\=pow(saturate(反光方向·视角方向),平滑度) Blinn光照模型**镜面反射率**\=pow(saturate(法线方向·(光源方向+视角方向)),平滑度) 平滑度：这里平滑度值越高，得到的反光率越小，呈指数级别的变化，仅作为参考模型。 环境光\=全局环境光\*漫反射系数 模拟所有的间接光，在物体之间的夹角环境光变弱，也就是环境光遮蔽(AO)。 自发光：一般不会影响周围物体，仅作为一般颜色来源。 片元颜色\=自发光+环境光+漫反射颜色+镜面反射颜色 女神书第6章中提供的兰伯特模型与PBR中的镜面反射/光泽度工作流中有差别。 镜面反射/光泽度工作流 平滑度：灰度-线性，白色(1.0)表示光滑表面，黑色(0.0)表示粗糙表面。 能量守恒：光的总量是一定的，分别参与了漫反射和高光反射，导电性越高的物体参与漫反射的比率越低。 在PBR的Shader中，能量守恒由shader负责计算，这样参与漫反射比率低的金属可以反射更多的光。 半兰伯特模型 漫反射颜色=光源色\*漫反射系数\*半兰伯特系数 半兰伯特系数=(光线方向·法线方向)\*0.5+0.5；矢量先归一化 半兰伯特模型削减了漫反射颜色的变化率，使非光源正面区域也有一定亮度
+目前业界主要是PBR渲染和卡通渲染。  
+PBR渲染：光照分为4个部分相加构成，环境漫反射、环境镜面反射、直接光漫反射、直接光镜面反射。  
+卡通渲染：基础色、漫反射、镜面反射、自发光。  
+	漫反射：一般使用兰伯特漫反射，有比较柔和的渐变。  
+	镜面反射：基于观察方向和光源方向提供局部强烈的小光斑效果，比如BlinnPhong高光、GGX微表面反射。  
