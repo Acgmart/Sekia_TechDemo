@@ -16,6 +16,29 @@
 	#endif
 }
 
+half3 UnpackNormalWithScale(half4 packedNormal, half normalScale = half(1.0))
+{
+	#if defined(UNITY_ASTC_NORMALMAP_ENCODING)
+		half3 normal;
+		normal.xy = packedNormal.ag * half(2.0) - half(1.0);
+        normal.xy *= normalScale;
+		normal.z = sqrt(half(1.0) - saturate(dot(normal.xy, normal.xy)));
+		return normal;
+	#elif defined(UNITY_NO_DXT5nm)
+		half3 normal = packedNormal.rgb * half(2.0) - half(1.0);
+        normal.xy *= normalScale;
+		normal.z = sqrt(half(1.0) - saturate(dot(normal.xy, normal.xy)));
+		return normal;
+	#else
+		packedNormal.a *= packedNormal.r;
+		half3 normal;
+		normal.xy = packedNormal.ag * half(2.0) - half(1.0);
+        normal.xy *= normalScale;
+		normal.z = sqrt(half(1.0) - saturate(dot(normal.xy, normal.xy)));
+		return normal;
+	#endif
+}
+
 bool IsGammaSpace()
 {
     #ifdef UNITY_COLORSPACE_GAMMA
