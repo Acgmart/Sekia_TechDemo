@@ -202,9 +202,12 @@ Gather(sampler, coord2) ：加载指定像素坐标的像素，不支持mip，�
 ### 异步指令
 GroupMemoryBarrierWithGroupSync() ：异步读写时，等待group内线程逻辑执行到此调用。  
 ddx(x)：求返回变量x在向量像素之间的落差(偏导数)。  
-	片元2x2作为一组并行执行，假设x为世界空间高度，那么ddx可以计算横向向量像素的高度差。  
+	片元2x2作为一组并行执行，假设x为世界空间高度，那么ddx可以计算横向2个像素的高度差。  
+		如果x是衡量那么产生的高度差为0。  
 	通过ddx、ddy、世界坐标，可以得出某一点的世界空间法线。  
-	因为变量在不同像素里值不一样于是产生了梯度，如果x是衡量那么产生的梯度为0.  
+	偏导数求法线：normalWS = normalize(cross(ddy(positionWS), ddx(positionWS)));  
+		法线在三角形之间不连续，缺少顶点法线的平滑组效果，不能用于光照。  
+		三角形边缘不足2x2的部分会返回无穷大值出现异常。  
 ddx_coarse(x) ：返回x的低精度偏导数。  
 ddx_fine(x) ：返回x的高精度偏导数。  
 ddy(y)/ddy_coarse/ddy_fine ：参考ddx。  
