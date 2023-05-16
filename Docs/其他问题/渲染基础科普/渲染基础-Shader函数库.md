@@ -176,7 +176,9 @@ reflect(input, normal) ：input为入射方向，求反射方向。
 	return input - 2 * normal * dot(input, normal);  
 refract(input, normal, 折射率) ：求折射方向。  
 rsqrt(x) ：逐分量平方根的倒数。  
-smoothstep(x, y, a) ：类似于clamp(a, x, y)，做曲线映射, x * x * (3 - 2 * x)。  
+smoothstep(x, y, a) ：类似于clamp(a, x, y)，做曲线映射，将结果限制在0至1。  
+	smoothstep(0, 1, a) 最简化版：a * a * (3 - 2 * a)。  
+	smoothstep(x, y, a) 需要先额外将xy转换为01：saturate((a - x) / (y - x))。  
 sqrt(x) ：逐分量返回x的平方根。  
 
 ### 矩阵操作
