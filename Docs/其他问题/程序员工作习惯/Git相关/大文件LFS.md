@@ -6,7 +6,7 @@ git lfs install
 
 # 标记大文件
 git lfs track "相对路径"
-相对路径可以在文件列表右键菜单"copy relative path"获取
+相对路径可以在文件列表右键菜单"Copy relative file path"获取
 
 添加成功后，在.gitattributes文件中会新增一行，如：
 Assets/Editor/x64/Bakery/cudnn64_7.dll filter=lfs diff=lfs merge=lfs -text
