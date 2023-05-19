@@ -23,7 +23,7 @@ Render Mode选择：Full Lighting/Indirect/Shadowmask...
     AmbientOcclutionOnly：逐物体高精度AO，做实时光照时突出轮廓。  
         实时后处理AO的清晰度太低了，只能简单满足多物体之间的遮蔽交互。  
         间接光照需要AO解决暗部漏光的问题。  
-        BentNormal
+        BentNormal描述表面光源主要通过方向，可用于实现正确的AO效果。  
 
 # 问题
 1.UV出现overlapping  
