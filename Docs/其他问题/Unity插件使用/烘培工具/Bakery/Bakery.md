@@ -24,6 +24,10 @@ Render Mode选择：Full Lighting/Indirect/Shadowmask...
         实时后处理AO的清晰度太低了，只能简单满足多物体之间的遮蔽交互。  
         间接光照需要AO解决暗部漏光的问题。  
         BentNormal描述表面光源主要通过方向，可用于实现正确的AO效果。  
+Directional Mode选择：None...
+    None模式下不生成方向图，丢失了环境光的方向性信息，容易漏光。  
+    BakedNormalMaps模式也不生成方向图，但是生成Lightmap时考虑法线贴图。  
+    DominantDirection模式记录主要光源方向(BentNormal)。  
 
 # 问题
 1.UV出现overlapping  
