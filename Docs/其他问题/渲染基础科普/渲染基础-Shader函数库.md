@@ -75,8 +75,10 @@ shader中大量使用到了贴图采用，关于采样的细节原理参考“�
 	贴图有sRGB、mip、压缩、过滤等基础特性。  
 URP默认贴图声明：`TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);`  
     `float4 _MainTex_TexelSize; float4 _MainTex_HDR`  
+	后缀为TexelSize声明的zw分量为分辨率宽高，xy分量为分辨率的倒数。  
+	后缀为HDR声明的各分量用于HDR解压，参考lightmap、cubemap反射等解压。  
 采样器中包含wrapping和filtering设置，有数量上限，同类型的贴图可以复用采样器。  
-    比如多层采样的地形shader服用Layer1的采样器。  
+    比如多层采样的地形shader复用Layer1的采样器。  
 
 简写模式：`sampler2D _MainTex;` //这个声明方式自带采样器  
 自定义采样器：`SAMPLER(sampler_Linear_Clamp);` //可使用字符串拼接的方式声明采样器  
