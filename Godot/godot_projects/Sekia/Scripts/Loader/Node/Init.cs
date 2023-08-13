@@ -6,7 +6,7 @@ using Godot;
 
 namespace ET
 {
-	public partial class Init: Node
+	public partial class Init : Node
 	{
 		public override void _EnterTree()
 		{
@@ -35,8 +35,8 @@ namespace ET
 
 		public override void _Notification(int what)
 		{
-			if(what == NotificationWMCloseRequest)
-			{ 
+			if (what == NotificationWMCloseRequest)
+			{
 				GD.Print("OnApplicationQuit");
 			}
 		}
@@ -81,6 +81,6 @@ namespace ET
 		}
 		*/
 	}
-	
-	
+
+
 }

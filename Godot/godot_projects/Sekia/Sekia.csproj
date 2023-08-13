@@ -3,4 +3,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MemoryPack" Version="1.9.16" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>Plugins\MongoDB\MongoDB.Bson.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
