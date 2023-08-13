@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://bo00oemfrac18"]
+
+[ext_resource type="PackedScene" uid="uid://2h1sgyw4kbug" path="res://Res/Models/MiniSophia/mini_sophia.glb" id="1_5555i"]
+[ext_resource type="Script" path="res://Scripts/Loader/Node/Init.cs" id="1_eklic"]
+[ext_resource type="Script" path="res://Scripts/testScripts/Snake.cs" id="2_xs7v6"]
+[ext_resource type="Script" path="res://Scripts/testScripts/SnakeBody.cs" id="3_cwkn4"]
+[ext_resource type="Script" path="res://Scripts/testScripts/Apple.cs" id="4_b26k3"]
+
+[node name="SophiaSkin" type="Node3D"]
+script = ExtResource("1_eklic")
+
+[node name="mini_sophia" parent="." instance=ExtResource("1_5555i")]
+
+[node name="Snake" type="Node2D" parent="."]
+script = ExtResource("2_xs7v6")
+
+[node name="SnakeBody" type="Sprite2D" parent="Snake"]
+script = ExtResource("3_cwkn4")
+
+[node name="Apple" type="Sprite2D" parent="Snake"]
+script = ExtResource("4_b26k3")
