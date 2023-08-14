@@ -4,20 +4,17 @@
     {
         public override string ToString()
         {
-            //return MongoHelper.ToJson(this);
-            return null;
+            return MongoHelper.ToJson(this);
         }
         
         public string ToJson()
         {
-            //return MongoHelper.ToJson(this);
-            return null;
+            return MongoHelper.ToJson(this);
         }
         
         public byte[] ToBson()
         {
-            //return MongoHelper.Serialize(this);
-            return null;
+            return MongoHelper.Serialize(this);
         }
     }
 }

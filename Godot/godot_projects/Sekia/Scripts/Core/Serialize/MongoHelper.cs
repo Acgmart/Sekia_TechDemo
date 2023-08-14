@@ -8,14 +8,14 @@ using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.Serializers;
-//using TrueSync;
-//using Unity.Mathematics;
+using TrueSync;
+using Unity.Mathematics;
 
 namespace ET
 {
     public static class MongoHelper
     {
-        private class StructBsonSerialize<TValue> : StructSerializerBase<TValue> where TValue : struct
+        private class StructBsonSerialize<TValue>: StructSerializerBase<TValue> where TValue : struct
         {
             public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, TValue value)
             {
@@ -49,27 +49,27 @@ namespace ET
                     switch (bsonReader.State)
                     {
                         case BsonReaderState.Name:
+                        {
+                            string name = bsonReader.ReadName(Utf8NameDecoder.Instance);
+                            FieldInfo field = actualType.GetField(name);
+                            if (field != null)
                             {
-                                string name = bsonReader.ReadName(Utf8NameDecoder.Instance);
-                                FieldInfo field = actualType.GetField(name);
-                                if (field != null)
-                                {
-                                    object value = BsonSerializer.Deserialize(bsonReader, field.FieldType);
-                                    field.SetValue(obj, value);
-                                }
+                                object value = BsonSerializer.Deserialize(bsonReader, field.FieldType);
+                                field.SetValue(obj, value);
+                            }
 
-                                break;
-                            }
+                            break;
+                        }
                         case BsonReaderState.Type:
-                            {
-                                bsonReader.ReadBsonType();
-                                break;
-                            }
+                        {
+                            bsonReader.ReadBsonType();
+                            break;
+                        }
                         case BsonReaderState.Value:
-                            {
-                                bsonReader.SkipValue();
-                                break;
-                            }
+                        {
+                            bsonReader.SkipValue();
+                            break;
+                        }
                     }
                 }
 
@@ -79,6 +79,7 @@ namespace ET
             }
         }
 
+        [StaticField]
         private static readonly JsonWriterSettings defaultSettings = new() { OutputMode = JsonOutputMode.RelaxedExtendedJson };
 
         public static void Register()
@@ -88,21 +89,21 @@ namespace ET
 
             ConventionRegistry.Register("IgnoreExtraElements", conventionPack, type => true);
 
-            //RegisterStruct<float2>();
-            //RegisterStruct<float3>();
-            //RegisterStruct<float4>();
-            //RegisterStruct<quaternion>();
+            RegisterStruct<float2>();
+            RegisterStruct<float3>();
+            RegisterStruct<float4>();
+            RegisterStruct<quaternion>();
+            
+            RegisterStruct<FP>();
+            RegisterStruct<TSVector>();
+            RegisterStruct<TSVector2>();
+            RegisterStruct<TSVector4>();
+            RegisterStruct<TSQuaternion>();
 
-            //RegisterStruct<FP>();
-            //RegisterStruct<TSVector>();
-            //RegisterStruct<TSVector2>();
-            //RegisterStruct<TSVector4>();
-            //RegisterStruct<TSQuaternion>();
-
-            Dictionary<string, Type> types = null;// CodeTypes.Instance.GetTypes();
+            Dictionary<string, Type> types = CodeTypes.Instance.GetTypes();
             foreach (Type type in types.Values)
             {
-                if (!type.IsSubclassOf(typeof(Object)))
+                if (!type.IsSubclassOf(typeof (Object)))
                 {
                     continue;
                 }
@@ -118,7 +119,7 @@ namespace ET
 
         public static void RegisterStruct<T>() where T : struct
         {
-            BsonSerializer.RegisterSerializer(typeof(T), new StructBsonSerialize<T>());
+            BsonSerializer.RegisterSerializer(typeof (T), new StructBsonSerialize<T>());
         }
 
         public static string ToJson(object obj)
@@ -171,12 +172,12 @@ namespace ET
             {
                 supportInitialize.BeginInit();
             }
-
+            
             using (BsonBinaryWriter bsonWriter = new BsonBinaryWriter(stream, BsonBinaryWriterSettings.Defaults))
             {
                 BsonSerializationContext context = BsonSerializationContext.CreateRoot(bsonWriter);
                 BsonSerializationArgs args = default;
-                args.NominalType = typeof(object);
+                args.NominalType = typeof (object);
                 IBsonSerializer serializer = BsonSerializer.LookupSerializer(args.NominalType);
                 serializer.Serialize(context, args, message);
             }
@@ -227,18 +228,18 @@ namespace ET
             {
                 using (MemoryStream memoryStream = new MemoryStream(bytes))
                 {
-                    return (T)BsonSerializer.Deserialize(memoryStream, typeof(T));
+                    return (T)BsonSerializer.Deserialize(memoryStream, typeof (T));
                 }
             }
             catch (Exception e)
             {
-                throw new Exception($"from bson error: {typeof(T).FullName} {bytes.Length}", e);
+                throw new Exception($"from bson error: {typeof (T).FullName} {bytes.Length}", e);
             }
         }
 
         public static T Deserialize<T>(byte[] bytes, int index, int count)
         {
-            return (T)Deserialize(typeof(T), bytes, index, count);
+            return (T)Deserialize(typeof (T), bytes, index, count);
         }
 
         public static T Clone<T>(T t)
