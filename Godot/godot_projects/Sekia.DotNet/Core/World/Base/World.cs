@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    public class World: IDisposable
+    public class World : IDisposable
     {
-        [StaticField]
         private static World instance;
 
-        [StaticField]
         public static World Instance
         {
             get
@@ -19,15 +17,15 @@ namespace ET
 
         private readonly Stack<Type> stack = new();
         private readonly Dictionary<Type, ASingleton> singletons = new();
-        
+
         private World()
         {
         }
-        
+
         public void Dispose()
         {
             instance = null;
-            
+
             lock (this)
             {
                 while (this.stack.Count > 0)
@@ -55,7 +53,7 @@ namespace ET
             AddSingleton(singleton);
             return singleton;
         }
-        
+
         public T AddSingleton<T, A>(A a) where T : ASingleton, ISingletonAwake<A>, new()
         {
             T singleton = new();
@@ -64,7 +62,7 @@ namespace ET
             AddSingleton(singleton);
             return singleton;
         }
-        
+
         public T AddSingleton<T, A, B>(A a, B b) where T : ASingleton, ISingletonAwake<A, B>, new()
         {
             T singleton = new();
@@ -73,7 +71,7 @@ namespace ET
             AddSingleton(singleton);
             return singleton;
         }
-        
+
         public T AddSingleton<T, A, B, C>(A a, B b, C c) where T : ASingleton, ISingletonAwake<A, B, C>, new()
         {
             T singleton = new();

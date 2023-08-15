@@ -23,6 +23,7 @@ window/size/viewport_height=360
 [dotnet]
 
 project/assembly_name="Sekia"
+project/solution_directory="../Sekia.sln"
 
 [input]
 

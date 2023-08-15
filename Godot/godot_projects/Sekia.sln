@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sekia", "Sekia\Sekia.csproj", "{9A315D33-E5DD-4018-B162-095D5182C4B5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A35A5F35-8C46-45DD-AE43-3C0C72E29FF0} = {A35A5F35-8C46-45DD-AE43-3C0C72E29FF0}
+		{BDE77ECA-950A-4642-A5C6-D954D2894654} = {BDE77ECA-950A-4642-A5C6-D954D2894654}
+		{E2D6C966-CE32-4A34-B7F5-D6E1877238D1} = {E2D6C966-CE32-4A34-B7F5-D6E1877238D1}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Sekia.DotNet\Core\Core.csproj", "{90160A70-D44D-4F20-9124-CBFD76DD3D2B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BDE77ECA-950A-4642-A5C6-D954D2894654} = {BDE77ECA-950A-4642-A5C6-D954D2894654}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Sekia.DotNet\Model\Model.csproj", "{E2D6C966-CE32-4A34-B7F5-D6E1877238D1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{90160A70-D44D-4F20-9124-CBFD76DD3D2B} = {90160A70-D44D-4F20-9124-CBFD76DD3D2B}
+		{BDE77ECA-950A-4642-A5C6-D954D2894654} = {BDE77ECA-950A-4642-A5C6-D954D2894654}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelView", "Sekia.DotNet\ModelView\ModelView.csproj", "{A35A5F35-8C46-45DD-AE43-3C0C72E29FF0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{90160A70-D44D-4F20-9124-CBFD76DD3D2B} = {90160A70-D44D-4F20-9124-CBFD76DD3D2B}
+		{BDE77ECA-950A-4642-A5C6-D954D2894654} = {BDE77ECA-950A-4642-A5C6-D954D2894654}
+		{E2D6C966-CE32-4A34-B7F5-D6E1877238D1} = {E2D6C966-CE32-4A34-B7F5-D6E1877238D1}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThirdParty", "Sekia.DotNet\ThirdParty\ThirdParty.csproj", "{BDE77ECA-950A-4642-A5C6-D954D2894654}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A315D33-E5DD-4018-B162-095D5182C4B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A315D33-E5DD-4018-B162-095D5182C4B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90160A70-D44D-4F20-9124-CBFD76DD3D2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90160A70-D44D-4F20-9124-CBFD76DD3D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2D6C966-CE32-4A34-B7F5-D6E1877238D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2D6C966-CE32-4A34-B7F5-D6E1877238D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A35A5F35-8C46-45DD-AE43-3C0C72E29FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A35A5F35-8C46-45DD-AE43-3C0C72E29FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE77ECA-950A-4642-A5C6-D954D2894654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE77ECA-950A-4642-A5C6-D954D2894654}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {99669D4A-D7DA-4170-8536-1203E09A7F3D}
+	EndGlobalSection
+EndGlobal

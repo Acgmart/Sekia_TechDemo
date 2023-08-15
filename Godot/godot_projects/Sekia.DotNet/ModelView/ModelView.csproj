@@ -10,14 +10,8 @@
     <PackageReference Include="NLog" Version="4.7.15" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sekia.DotNet\Core\Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>Plugins\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>Plugins\MongoDB\MongoDB.Bson.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\ThirdParty\ThirdParty.csproj" />
   </ItemGroup>
 </Project>
