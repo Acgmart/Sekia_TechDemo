@@ -5,7 +5,16 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <Compile Remove="Scripts\HotfixView\**" />
+    <Compile Remove="Scripts\Hotfix\**" />
+    <Compile Remove="Scripts\ModelView\**" />
+    <Compile Remove="Scripts\Model\**" />
+    <EmbeddedResource Remove="Scripts\HotfixView\**" />
+    <EmbeddedResource Remove="Scripts\Hotfix\**" />
+    <EmbeddedResource Remove="Scripts\ModelView\**" />
+    <EmbeddedResource Remove="Scripts\Model\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MemoryPack" Version="1.9.16" />
     <PackageReference Include="NLog" Version="4.7.15" />
   </ItemGroup>
