@@ -28,6 +28,13 @@ docker run -d --name InStockDbService \
     "https://docker.m.daocloud.io"
   ]
 
+## 给本地仓库脚本可执行权限
+ls -l /Users/sekia/Desktop/Git/stock/instock/bin/*.sh
+chmod +x /Users/sekia/Desktop/Git/stock/instock/bin/run_job.sh
+chmod +x /Users/sekia/Desktop/Git/stock/instock/bin/run_web.sh
+chmod +x /Users/sekia/Desktop/Git/stock/instock/bin/run_cron.sh
+chmod +x /Users/sekia/Desktop/Git/stock/instock/bin/restart_web.sh
+
 ## Start InStock
 docker run -dit --name InStock \
   --network InStockService \
