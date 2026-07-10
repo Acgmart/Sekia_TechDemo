@@ -1,3 +1,6 @@
+1.renderdoc开启Global Hook
+Tools-Settings-General-All global process hooking
+
 老版的MuMu支持OpenGL 新版本不支持 但是支持Vulkan
 有时候是老版本的RenderDoc可以截帧新版本不行 以前用RenderDoc1.6 + win10好使过
 
